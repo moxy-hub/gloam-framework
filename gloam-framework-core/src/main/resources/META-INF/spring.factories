@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.gloamframework.core.GloamCoreConfigure
+org.springframework.boot.diagnostics.FailureAnalyzer=com.gloamframework.core.boot.diagnostics.GloamStartExceptionDiagnostics

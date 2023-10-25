@@ -58,24 +58,28 @@
             <dependency>
                 <groupId>com.gloamframework</groupId>
                 <artifactId>gloam-framework-common</artifactId>
+                <version>${project.version}</version>
             </dependency>
 
             <!-- gloam-core -->
             <dependency>
                 <groupId>com.gloamframework</groupId>
                 <artifactId>gloam-framework-core</artifactId>
+                <version>${project.version}</version>
             </dependency>
 
             <!-- gloam-data -->
             <dependency>
                 <groupId>com.gloamframework</groupId>
                 <artifactId>gloam-framework-data</artifactId>
+                <version>${project.version}</version>
             </dependency>
 
             <!-- gloam-security -->
             <dependency>
                 <groupId>com.gloamframework</groupId>
                 <artifactId>gloam-framework-security</artifactId>
+                <version>${project.version}</version>
             </dependency>
 
         </dependencies>
