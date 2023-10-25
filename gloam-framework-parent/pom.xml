@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- 默认使用spring cloud Hoxton.SR9 spring boot 2.3.5.RELEASE-->
+    <parent>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-parent</artifactId>
+        <version>Hoxton.SR9</version>
+        <relativePath/>
+    </parent>
+
+    <groupId>com.gloamframework</groupId>
+    <artifactId>gloam-framework-parent</artifactId>
+    <version>1.0.SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <description>这是一个基于spring的快速开发脚手架，内置常用功能，帮您快速开发项目</description>
+
+    <developers>
+        <developer>
+            <id>Moxy</id>
+            <name>马晓龙</name>
+            <email>moxy.mxl@gmail.com</email>
+            <url>https://moxy-hub.gitee.io/</url>
+        </developer>
+    </developers>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <alibaba.version>2.2.6.RELEASE</alibaba.version>
+    </properties>
+
+    <dependencies>
+        <!-- 基于lombok开发 -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+    </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+
+            <!-- spring cloud alibaba-sentinel -->
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>${alibaba.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- gloam-common -->
+            <dependency>
+                <groupId>com.gloamframework</groupId>
+                <artifactId>gloam-framework-common</artifactId>
+            </dependency>
+
+            <!-- gloam-core -->
+            <dependency>
+                <groupId>com.gloamframework</groupId>
+                <artifactId>gloam-framework-core</artifactId>
+            </dependency>
+
+            <!-- gloam-data -->
+            <dependency>
+                <groupId>com.gloamframework</groupId>
+                <artifactId>gloam-framework-data</artifactId>
+            </dependency>
+
+            <!-- gloam-security -->
+            <dependency>
+                <groupId>com.gloamframework</groupId>
+                <artifactId>gloam-framework-security</artifactId>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <!-- 上传源码 -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>3.0.1</version>
+                    <configuration>
+                        <attach>true</attach>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <phase>compile</phase>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <!-- apcectj编译器编译源码 -->
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>aspectj-maven-plugin</artifactId>
+                    <version>1.4</version>
+                    <configuration>
+                        <source>1.8</source>
+                        <target>1.8</target>
+                        <complianceLevel>1.8</complianceLevel>
+                    </configuration>
+                </plugin>
+
+                <!-- java编译器 -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <configuration>
+                        <source>1.8</source>
+                        <target>1.8</target>
+                    </configuration>
+                </plugin>
+
+                <!-- spring boot打包 -->
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>repackage</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                    <include>**/*.vm</include>
+                    <include>**/*.bpmn</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
+
+</project>
