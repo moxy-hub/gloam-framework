@@ -19,11 +19,10 @@ import java.util.List;
 @Slf4j
 public class TestScanner {
 
-	private final ResourceScanner resourceScanner = PathMatchingResourceScanner.instance();
+	private final ResourceScanner resourceScanner = ResourceScanner.getDefault();
 
 	@Test
 	public void testScannerResource() throws IOException {
-
 		Resource[] resources = resourceScanner.scannerForResource("com.gloamframework", null, null);
 		for (Resource resource : resources) {
 			log.info("资源：{}", resource.getURI());

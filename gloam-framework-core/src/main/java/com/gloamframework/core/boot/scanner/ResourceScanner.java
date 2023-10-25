@@ -12,6 +12,10 @@ import java.util.List;
  */
 public interface ResourceScanner {
 
+	static  ResourceScanner getDefault(){
+		return PathMatchingResourceScanner.instance();
+	}
+
 	/**
 	 * 扫描对应的包以下，获取对应资源
 	 *

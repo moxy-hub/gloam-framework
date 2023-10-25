@@ -1,6 +1,7 @@
 package com.gloamframework.core.boot.env;
 
 import com.gloamframework.core.boot.banner.GloamBanner;
+import com.gloamframework.core.boot.scanner.ResourceScanner;
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.env.EnvironmentPostProcessor;
@@ -17,6 +18,11 @@ public class GloamEnvironmentPostProcessor implements EnvironmentPostProcessor {
 	 * gloam banner
 	 */
 	private static final Banner GLOAM_BANNER = new GloamBanner();
+
+	/**
+	 * gloam scanner
+	 */
+	private static final ResourceScanner resourceScanner = ResourceScanner.getDefault();
 
 	@Override
 	public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {

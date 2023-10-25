@@ -20,7 +20,7 @@ import java.util.List;
  * @author 晓龙
  */
 @Slf4j
-public class PathMatchingResourceScanner implements ResourceScanner {
+final class PathMatchingResourceScanner implements ResourceScanner {
 
 	private static final PathMatchingResourceScanner pathMatchingResourceScanner = new PathMatchingResourceScanner();
 
@@ -30,7 +30,7 @@ public class PathMatchingResourceScanner implements ResourceScanner {
 	}
 
 	@SuppressWarnings("unused")
-	public static PathMatchingResourceScanner instance() {
+	static PathMatchingResourceScanner instance() {
 		return pathMatchingResourceScanner;
 	}
 
