@@ -21,9 +21,11 @@ public class GloamBanner implements Banner {
 			"| |_| | |__| |_| / ___ \\| |  | |\n" +
 			" \\____|_____\\___/_/   \\_\\_|  |_|\n";
 
-	private static final String SPRING_BOOT = "Spring Boot :: ";
-	private static final String AUTHOR = "Author      ::";
-	private static final String BLOB = "BLOB        ::";
+	private static final String AUTHOR = "Author          ::";
+	private static final String SPRING_BOOT = "Spring Boot     :: ";
+	private static final String SPRING_CLOUD = "Spring Cloud    ::";
+	private static final String SPRING_ALIBABA = "Spring Alibaba  ::";
+
 	private static final int STRAP_LINE_SIZE = 30;
 
 	@Override
@@ -31,17 +33,19 @@ public class GloamBanner implements Banner {
 		// 打印基础banner
 		printStream.println(AnsiOutput.toString(AnsiColor.CYAN, BANNER));
 		String version = SpringBootVersion.getVersion();
-		version = (version != null) ? " (v" + version + ")" : "";
+		version = (version != null) ? " v-" + version : "";
 		StringBuilder padding = new StringBuilder();
 		while (padding.length() < STRAP_LINE_SIZE - (version.length() + SPRING_BOOT.length())) {
 			padding.append(" ");
 		}
-		String author = "  moxy";
-		String blob = "  https://moxy-hub.gitee.io";
+		String author = "  Moxy";
+		String springCloudVersion = "  v-Hoxton.SR9";
+		String springAlibabaVersion = "  v-2.2.6.RELEASE";
 		// 打印版本
-		printStream.println(AnsiOutput.toString(AnsiColor.GREEN, SPRING_BOOT, AnsiColor.DEFAULT, padding.toString(), AnsiStyle.FAINT, version));
 		printStream.println(AnsiOutput.toString(AnsiColor.GREEN, AUTHOR, AnsiColor.DEFAULT, padding.toString(), AnsiStyle.FAINT, author));
-		printStream.println(AnsiOutput.toString(AnsiColor.GREEN, BLOB, AnsiColor.DEFAULT, padding.toString(), AnsiStyle.FAINT, blob));
+		printStream.println(AnsiOutput.toString(AnsiColor.GREEN, SPRING_BOOT, AnsiColor.DEFAULT, padding.toString(), AnsiStyle.FAINT, version));
+		printStream.println(AnsiOutput.toString(AnsiColor.GREEN, SPRING_CLOUD, AnsiColor.DEFAULT, padding.toString(), AnsiStyle.FAINT, springCloudVersion));
+		printStream.println(AnsiOutput.toString(AnsiColor.GREEN, SPRING_ALIBABA, AnsiColor.DEFAULT, padding.toString(), AnsiStyle.FAINT, springAlibabaVersion));
 		printStream.println();
 	}
 }
