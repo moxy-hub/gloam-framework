@@ -90,7 +90,7 @@ final class PathMatchingResourceScanner implements ResourceScanner {
             MetadataReader reader = metadataReaderFactory.getMetadataReader(resource);
             return ClassUtils.forName(reader.getClassMetadata().getClassName(), classLoader);
         } catch (ClassNotFoundException | LinkageError ex) {
-            log.error("Ignoring candidate class resource:{} due to {}", resource, ex);
+            log.error("Ignoring candidate class resource:{} due to ", resource, ex);
             return null;
         } catch (Throwable ex) {
             log.warn("Unexpected failure when loading class resource:{} ", resource, ex);
