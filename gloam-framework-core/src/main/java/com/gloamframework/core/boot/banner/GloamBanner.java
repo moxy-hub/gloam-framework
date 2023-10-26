@@ -25,7 +25,6 @@ public class GloamBanner implements Banner {
 	private static final String SPRING_BOOT = "Spring Boot     :: ";
 	private static final String SPRING_CLOUD = "Spring Cloud    ::";
 	private static final String SPRING_ALIBABA = "Spring Alibaba  ::";
-
 	private static final int STRAP_LINE_SIZE = 30;
 
 	@Override
