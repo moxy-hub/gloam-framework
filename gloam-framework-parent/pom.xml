@@ -32,6 +32,9 @@
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <alibaba.version>2.2.6.RELEASE</alibaba.version>
+        <swaager.models.version>1.5.21</swaager.models.version>
+        <swaager.2.version>2.9.2</swaager.2.version>
+        <swaager.bootstrap.ui.version>1.9.6</swaager.bootstrap.ui.version>
     </properties>
 
     <dependencies>
@@ -52,6 +55,27 @@
                 <version>${alibaba.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+
+            <!-- swagger -->
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger2</artifactId>
+                <version>${swaager.2.version}</version>
+            </dependency>
+
+            <!-- swagger models -->
+            <dependency>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-models</artifactId>
+                <version>${swaager.models.version}</version>
+            </dependency>
+
+            <!-- swagger ui -->
+            <dependency>
+                <groupId>com.github.xiaoymin</groupId>
+                <artifactId>swagger-bootstrap-ui</artifactId>
+                <version>${swaager.bootstrap.ui.version}</version>
             </dependency>
 
             <!-- gloam-common -->
