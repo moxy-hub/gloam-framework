@@ -1,6 +1,7 @@
 package com.gloamframework.core.web.doc;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.StrUtil;
 import com.github.xiaoymin.swaggerbootstrapui.annotations.EnableSwaggerBootstrapUI;
 import com.gloamframework.core.boot.scanner.ResourceScanner;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +32,7 @@ public class HttpDocConfigure {
      */
     private static final ResourceScanner resourceScanner = ResourceScanner.getDefault();
 
-    private static final String HTTP_DOCKET_BEAN_NAME = "http-doc-%s";
+    private static final String HTTP_DOCKET_BEAN_NAME = "http-doc-{}";
 
     @PostConstruct
     private void log() {
@@ -43,7 +44,7 @@ public class HttpDocConfigure {
         DefaultListableBeanFactory beanFactory = (DefaultListableBeanFactory) context.getBeanFactory();
         RootBeanDefinition beanDf = new RootBeanDefinition(HttpDocDocket.class);
         beanDf.setConstructorArgumentValues(cav);
-        beanFactory.registerBeanDefinition(String.format(HTTP_DOCKET_BEAN_NAME, UUID.randomUUID()), beanDf);
+        beanFactory.registerBeanDefinition(StrUtil.format(HTTP_DOCKET_BEAN_NAME, UUID.randomUUID()), beanDf);
     }
 
     @Autowired
