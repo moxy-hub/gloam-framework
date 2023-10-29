@@ -9,7 +9,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.web.server.Compression;
 import org.springframework.context.annotation.Configuration;
 
-@Configuration
+//@Configuration
 @EnableConfigurationProperties(TestOverrideClass.class)
 public class TestEnvConfiguration {
 

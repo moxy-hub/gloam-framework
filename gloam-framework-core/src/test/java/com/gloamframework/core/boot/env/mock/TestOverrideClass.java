@@ -14,14 +14,8 @@ import java.net.UnknownHostException;
 @Data
 public class TestOverrideClass {
 
-    @OverrideProperty("server.address")
-    private InetAddress t1;
-
     @OverrideProperty("server.port")
     @NestedConfigurationProperty
-    private Integer t2 = 9897;
+    private Integer t2 = 666;
 
-    public TestOverrideClass() throws UnknownHostException {
-        this.t1 = InetAddress.getLocalHost();
-    }
 }
