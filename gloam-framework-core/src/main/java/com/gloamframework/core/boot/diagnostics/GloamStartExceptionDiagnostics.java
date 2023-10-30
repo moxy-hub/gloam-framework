@@ -10,9 +10,9 @@ import org.springframework.boot.diagnostics.FailureAnalysis;
  */
 public class GloamStartExceptionDiagnostics extends AbstractFailureAnalyzer<GloamStartException> {
 
-	@Override
-	protected FailureAnalysis analyze(Throwable rootFailure, GloamStartException cause) {
-		return new FailureAnalysis(cause.getDescription(), cause.getAction(), cause.getCause() == null ? cause : cause.getCause());
-	}
+    @Override
+    protected FailureAnalysis analyze(Throwable rootFailure, GloamStartException cause) {
+        return new FailureAnalysis(cause.getDescription(), cause.getAction(), cause.getCause() == null ? cause : cause.getCause());
+    }
 
 }

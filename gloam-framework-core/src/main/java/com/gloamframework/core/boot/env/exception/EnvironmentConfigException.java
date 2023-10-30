@@ -1,6 +1,5 @@
 package com.gloamframework.core.boot.env.exception;
 
-import com.gloamframework.core.boot.diagnostics.GloamStartException;
 import com.gloamframework.core.boot.exception.GloamRuntimeException;
 
 public class EnvironmentConfigException extends GloamRuntimeException {

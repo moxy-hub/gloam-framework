@@ -18,4 +18,14 @@ public @interface OverrideProperty {
 
     @AliasFor("value")
     String target() default "";
+
+    Class<?> nestedPropertyType() default NoNestedProperty.class;
+
+    /**
+     * 用于识别，不进行嵌套处理的配置
+     */
+    @SuppressWarnings("unused")
+    final class NoNestedProperty {
+    }
+
 }
