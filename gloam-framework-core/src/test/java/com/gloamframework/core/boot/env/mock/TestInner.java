@@ -1,14 +1,12 @@
 package com.gloamframework.core.boot.env.mock;
 
-import com.gloamframework.core.boot.env.NestedOverrideClass;
-import com.gloamframework.core.boot.env.OverrideProperty;
+import com.gloamframework.core.boot.properties.annotation.MappingConfigurationProperty;
 import lombok.Data;
 
-@NestedOverrideClass
 @Data
 public class TestInner {
 
-    @OverrideProperty("url")
+    @MappingConfigurationProperty("url")
     private String url = "66887yyyy";
 
 }
