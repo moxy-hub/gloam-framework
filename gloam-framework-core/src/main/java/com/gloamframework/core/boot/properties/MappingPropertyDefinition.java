@@ -2,6 +2,7 @@ package com.gloamframework.core.boot.properties;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
@@ -14,6 +15,7 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @NoArgsConstructor
 @Accessors(chain = true)
+@EqualsAndHashCode
 public class MappingPropertyDefinition {
 
     /**

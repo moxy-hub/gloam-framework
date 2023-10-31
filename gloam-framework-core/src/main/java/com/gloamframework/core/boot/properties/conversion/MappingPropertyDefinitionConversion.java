@@ -2,7 +2,7 @@ package com.gloamframework.core.boot.properties.conversion;
 
 import com.gloamframework.core.boot.properties.MappingPropertyDefinition;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * 配置映射定义转换器
@@ -20,6 +20,6 @@ public interface MappingPropertyDefinitionConversion {
      * @param defaultProperty 默认值
      * @return 映射定义对象集合
      */
-    List<MappingPropertyDefinition> convert(String originalPath, String mappingPath, Class<?> mappingClass, Object defaultProperty);
+    Set<MappingPropertyDefinition> convert(String originalPath, String mappingPath, Class<?> mappingClass, Object defaultProperty);
 
 }

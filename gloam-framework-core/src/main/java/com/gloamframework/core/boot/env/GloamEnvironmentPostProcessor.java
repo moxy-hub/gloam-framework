@@ -12,7 +12,7 @@ import org.springframework.boot.env.EnvironmentPostProcessor;
 import org.springframework.core.Ordered;
 import org.springframework.core.env.ConfigurableEnvironment;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * Gloam环境后置处理器
@@ -47,7 +47,7 @@ public class GloamEnvironmentPostProcessor implements EnvironmentPostProcessor, 
         // 创建映射服务
         MappingProperty mappingProperty = new GloamMappingProperty(environment, mappingPropertyDefinitionConversion, application.getClassLoader());
         // 收集对应的映射定义
-        List<MappingPropertyDefinition> definitions = mappingProperty.collectMappingPropertyDefinitions(ASSEMBLE_BASE_PACKAGE, application.getMainApplicationClass().getPackage().getName());
+        Set<MappingPropertyDefinition> definitions = mappingProperty.collectMappingPropertyDefinitions(ASSEMBLE_BASE_PACKAGE, application.getMainApplicationClass().getPackage().getName());
         // 执行映射
         mappingProperty.doMapping(definitions);
     }

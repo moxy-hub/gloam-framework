@@ -10,10 +10,7 @@ import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MapPropertySource;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 处理映射
@@ -62,7 +59,7 @@ public abstract class AbstractMappingProperty implements MappingProperty {
     }
 
     @Override
-    public void doMapping(List<MappingPropertyDefinition> mappingPropertyDefinitions) {
+    public void doMapping(Set<MappingPropertyDefinition> mappingPropertyDefinitions) {
         if (mappingPropertyDefinitions == null) {
             throw new MappingPropertyException("映射配置失败，配置定义集合为null");
         }

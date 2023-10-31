@@ -8,8 +8,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.env.ConfigurableEnvironment;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * gloam映射执行类
@@ -39,8 +40,8 @@ public class GloamMappingProperty extends AbstractMappingProperty {
     }
 
     @Override
-    public List<MappingPropertyDefinition> collectMappingPropertyDefinitions(String... packagePath) {
-        List<MappingPropertyDefinition> definitions = new ArrayList<>();
+    public Set<MappingPropertyDefinition> collectMappingPropertyDefinitions(String... packagePath) {
+        Set<MappingPropertyDefinition> definitions = new HashSet<>();
         if (ArrayUtil.isEmpty(packagePath)) {
             return definitions;
         }
@@ -60,7 +61,7 @@ public class GloamMappingProperty extends AbstractMappingProperty {
     }
 
     @Override
-    public List<MappingPropertyDefinition> assembleMappingPropertyDefinition(String originalPath, String mappingPath, Class<?> mappingClass, Object defaultProperty) {
+    public Set<MappingPropertyDefinition> assembleMappingPropertyDefinition(String originalPath, String mappingPath, Class<?> mappingClass, Object defaultProperty) {
         return conversionService.convert(originalPath, mappingPath, mappingClass, defaultProperty);
     }
 }

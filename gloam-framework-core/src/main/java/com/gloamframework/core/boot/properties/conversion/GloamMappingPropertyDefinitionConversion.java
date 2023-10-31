@@ -47,8 +47,8 @@ public class GloamMappingPropertyDefinitionConversion implements MappingProperty
     }
 
     @Override
-    public List<MappingPropertyDefinition> convert(String originalPath, String mappingPath, Class<?> mappingClass, Object defaultProperty) {
-        List<MappingPropertyDefinition> definitions = new ArrayList<>();
+    public Set<MappingPropertyDefinition> convert(String originalPath, String mappingPath, Class<?> mappingClass, Object defaultProperty) {
+        Set<MappingPropertyDefinition> definitions = new HashSet<>();
         // 检查传入的配置类型spring是否可以直接解析
         if (conversionService.canConvert(String.class, mappingClass)) {
             String defaultValue = null;
@@ -99,7 +99,7 @@ public class GloamMappingPropertyDefinitionConversion implements MappingProperty
     /**
      * 重写字段的注入
      */
-    private void mappingFieldInjectSpringSupport(String originalPath, String mappingPath, Field field, Object mappingObject, MappingConfigurationProperty mappingConfigurationProperty, List<MappingPropertyDefinition> definitions) {
+    private void mappingFieldInjectSpringSupport(String originalPath, String mappingPath, Field field, Object mappingObject, MappingConfigurationProperty mappingConfigurationProperty, Set<MappingPropertyDefinition> definitions) {
         // 处理路径
         String originPropertyPath = originalPath + this.convertFieldName2ConfigName(field.getName());
         // 目标路径
@@ -130,7 +130,7 @@ public class GloamMappingPropertyDefinitionConversion implements MappingProperty
      * 目前只处理三种
      * MAP类型、Collection类型、Array类型
      */
-    private void mappingFieldGloamSupport(String originalPath, String mappingPath, Field field, Object mappingObject, MappingConfigurationProperty mappingConfigurationProperty, List<MappingPropertyDefinition> definitions) {
+    private void mappingFieldGloamSupport(String originalPath, String mappingPath, Field field, Object mappingObject, MappingConfigurationProperty mappingConfigurationProperty, Set<MappingPropertyDefinition> definitions) {
         /*
          * 主要解决的问题是将特殊类型的路径进行拼接
          * 1、循环本地的配置，将路径和默认值存储
