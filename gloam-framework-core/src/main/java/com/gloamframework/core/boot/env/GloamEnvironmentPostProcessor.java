@@ -28,7 +28,7 @@ public class GloamEnvironmentPostProcessor implements EnvironmentPostProcessor, 
     /**
      * gloam扫描基础包
      */
-    private static final String ASSEMBLE_BASE_PACKAGE = "com.gloam";
+    private static final String ASSEMBLE_BASE_PACKAGE = "com.gloamframework";
 
     /**
      * 设置环境设置触发优先级
