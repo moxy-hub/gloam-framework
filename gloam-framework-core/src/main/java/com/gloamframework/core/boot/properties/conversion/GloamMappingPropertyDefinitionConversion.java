@@ -230,11 +230,11 @@ public class GloamMappingPropertyDefinitionConversion implements MappingProperty
         }
         pathDefaultPropertyMappings.forEach((origin, value) -> {
             // 目标值
-            String target = pathDefaultPropertyMappings.getFirst(origin);
+            String mapping = value.getValue1();
             // 默认值
-            Object defaultProperty = pathDefaultPropertyMappings.getSecond(origin);
+            Object defaultProperty = value.getValue2();
             // 递归进行拿值
-            definitions.addAll(this.convert(origin, target, finalNestedPropertyType, defaultProperty));
+            definitions.addAll(this.convert(origin, mapping, finalNestedPropertyType, defaultProperty));
         });
     }
 
