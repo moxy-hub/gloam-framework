@@ -4,15 +4,15 @@ import io.swagger.annotations.ApiModel;
 import org.springframework.http.HttpStatus;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 /**
  * @author 晓龙
  */
 @ApiModel(description = "LIST类型响应对象")
-public class WebList<T> extends Result<List<T>> {
+public class WebList<T> extends Result<Collection<T>> {
 
-    private WebList(List<T> data, HttpStatus status, boolean success, String message, Object... params) {
+    private WebList(Collection<T> data, HttpStatus status, boolean success, String message, Object... params) {
         super(data, status, success, message, params);
     }
 
@@ -22,11 +22,11 @@ public class WebList<T> extends Result<List<T>> {
      * @param data    传输数据
      * @param message 传输消息
      */
-    public static <T> WebList<T> success(List<T> data, String message, Object... params) {
+    public static <T> WebList<T> success(Collection<T> data, String message, Object... params) {
         return new WebList<>(data, HttpStatus.OK, true, message, params);
     }
 
-    public static <T> WebList<T> success(List<T> data) {
+    public static <T> WebList<T> success(Collection<T> data) {
         return success(data, null);
     }
 

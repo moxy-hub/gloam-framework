@@ -6,7 +6,7 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 /**
  * 分页返回类
@@ -15,7 +15,7 @@ import java.util.List;
  */
 @Getter
 @ApiModel(description = "PAGE类型响应对象")
-public class WebPage<T> extends Result<List<T>> {
+public class WebPage<T> extends Result<Collection<T>> {
 
     private static final int DEFAULT_PAGE_NUM = 1;
     private static final int DEFAULT_PAGE_SIZE = 10;
@@ -30,7 +30,7 @@ public class WebPage<T> extends Result<List<T>> {
     @ApiModelProperty(value = "分页总数")
     private final int total;
 
-    private WebPage(List<T> data, HttpStatus status, boolean success, String message, int pageNum, int pageSize, int total, Object... params) {
+    private WebPage(Collection<T> data, HttpStatus status, boolean success, String message, int pageNum, int pageSize, int total, Object... params) {
         super(data, status, success, message, params);
         this.pageNum = pageNum;
         this.pageSize = pageSize;
@@ -43,11 +43,11 @@ public class WebPage<T> extends Result<List<T>> {
      * @param data    传输数据
      * @param message 传输消息
      */
-    public static <T> WebPage<T> success(List<T> data, int pageNum, int pageSize, int total, String message, Object... params) {
+    public static <T> WebPage<T> success(Collection<T> data, int pageNum, int pageSize, int total, String message, Object... params) {
         return new WebPage<>(data, HttpStatus.OK, true, message, pageNum, pageSize, total, params);
     }
 
-    public static <T> WebPage<T> success(List<T> data, int pageNum, int pageSize, int total) {
+    public static <T> WebPage<T> success(Collection<T> data, int pageNum, int pageSize, int total) {
         return success(data, pageNum, pageSize, total, null);
     }
 
