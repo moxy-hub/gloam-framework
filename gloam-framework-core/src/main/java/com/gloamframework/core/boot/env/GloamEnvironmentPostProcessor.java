@@ -1,7 +1,7 @@
 package com.gloamframework.core.boot.env;
 
 import com.gloamframework.core.boot.banner.GloamBanner;
-import com.gloamframework.core.boot.env.convert.GloamConverterDiscover;
+import com.gloamframework.core.boot.convert.GloamConverterDiscover;
 import com.gloamframework.core.boot.properties.GloamMappingProperty;
 import com.gloamframework.core.boot.properties.MappingProperty;
 import com.gloamframework.core.boot.properties.MappingPropertyDefinition;
@@ -55,6 +55,7 @@ public class GloamEnvironmentPostProcessor implements EnvironmentPostProcessor, 
         // 配置转换器
         GloamConverterDiscover gloamConverterDiscover = new GloamConverterDiscover(environment.getConversionService(), application.getClassLoader());
         log.trace("create GloamConverterDiscover with conversionService:" + environment.getConversionService().getClass().getName());
+        // 执行注册
         gloamConverterDiscover.doRegister(ASSEMBLE_BASE_PACKAGE, application.getMainApplicationClass().getPackage().getName());
         // 创建映射对象转换器
         MappingPropertyDefinitionConversion mappingPropertyDefinitionConversion = new GloamMappingPropertyDefinitionConversion(environment);

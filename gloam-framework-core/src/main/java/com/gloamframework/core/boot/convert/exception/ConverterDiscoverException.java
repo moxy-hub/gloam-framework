@@ -1,4 +1,4 @@
-package com.gloamframework.core.boot.env.convert.exception;
+package com.gloamframework.core.boot.convert.exception;
 
 import com.gloamframework.core.boot.exception.GloamRuntimeException;
 
