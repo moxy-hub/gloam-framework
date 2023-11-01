@@ -1,0 +1,50 @@
+package com.gloamframework.core.web.response;
+
+import io.swagger.annotations.ApiModel;
+import org.springframework.http.HttpStatus;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * @author 晓龙
+ */
+@ApiModel(description = "LIST类型响应对象")
+public class WebList<T> extends Result<List<T>> {
+
+    private WebList(List<T> data, HttpStatus status, boolean success, String message, Object... params) {
+        super(data, status, success, message, params);
+    }
+
+    /**
+     * 请求成功
+     *
+     * @param data    传输数据
+     * @param message 传输消息
+     */
+    public static <T> WebList<T> success(List<T> data, String message, Object... params) {
+        return new WebList<>(data, HttpStatus.OK, true, message, params);
+    }
+
+    public static <T> WebList<T> success(List<T> data) {
+        return success(data, null);
+    }
+
+    public static <T> WebList<T> success() {
+        return success(new ArrayList<>());
+    }
+
+    /**
+     * 请求失败，返回的状态是200，表示请求后端成功处理，但是业务不支持
+     *
+     * @param message 传输消息
+     */
+    public static <T> WebList<T> fail(String message, Object... params) {
+        return new WebList<>(new ArrayList<>(), HttpStatus.OK, false, message, params);
+    }
+
+    public static <T> WebList<T> fail() {
+        return WebList.fail(null);
+    }
+
+}
