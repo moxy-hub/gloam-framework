@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.beans.factory.config.ConstructorArgumentValues;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.support.RootBeanDefinition;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.util.StringUtils;
@@ -24,6 +25,7 @@ import java.util.UUID;
 @EnableSwagger2
 @EnableSwaggerBootstrapUI
 @Configurable
+@ConditionalOnWebApplication
 @Slf4j
 public class HttpDocConfigure {
 

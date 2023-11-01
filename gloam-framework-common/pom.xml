@@ -17,6 +17,7 @@
     <properties>
         <hutool.version>5.3.8</hutool.version>
         <fast.json.version>1.2.83</fast.json.version>
+        <user.agent.utils.version>1.21</user.agent.utils.version>
     </properties>
 
     <dependencies>
@@ -33,5 +34,6 @@
             <artifactId>fastjson</artifactId>
             <version>${fast.json.version}</version>
         </dependency>
+
     </dependencies>
 </project>
