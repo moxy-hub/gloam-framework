@@ -1,6 +1,6 @@
 package com.gloamframework.core.boot.diagnostics;
 
-import com.gloamframework.core.boot.exception.GloamRuntimeException;
+import com.gloamframework.core.exception.GloamRuntimeException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.slf4j.helpers.MessageFormatter;

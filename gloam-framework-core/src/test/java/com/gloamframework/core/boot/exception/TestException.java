@@ -1,6 +1,7 @@
 package com.gloamframework.core.boot.exception;
 
 import com.gloamframework.core.Application;
+import com.gloamframework.core.exception.GloamRuntimeException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;

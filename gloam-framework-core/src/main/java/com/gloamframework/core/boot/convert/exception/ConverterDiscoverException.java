@@ -1,6 +1,6 @@
 package com.gloamframework.core.boot.convert.exception;
 
-import com.gloamframework.core.boot.exception.GloamRuntimeException;
+import com.gloamframework.core.exception.GloamRuntimeException;
 
 /**
  * @author 晓龙

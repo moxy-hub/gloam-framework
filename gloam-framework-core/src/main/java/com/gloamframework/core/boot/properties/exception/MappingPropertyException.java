@@ -1,6 +1,6 @@
 package com.gloamframework.core.boot.properties.exception;
 
-import com.gloamframework.core.boot.exception.GloamRuntimeException;
+import com.gloamframework.core.exception.GloamRuntimeException;
 
 @SuppressWarnings("unused")
 public class MappingPropertyException extends GloamRuntimeException {

@@ -1,4 +1,4 @@
-package com.gloamframework.core.boot.exception;
+package com.gloamframework.core.exception;
 
 import org.slf4j.helpers.MessageFormatter;
 

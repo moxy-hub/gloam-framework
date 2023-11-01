@@ -3,7 +3,7 @@ package com.gloamframework.core.boot.properties.conversion;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
-import com.gloamframework.core.boot.map.TernaryHashMap;
+import com.gloamframework.core.map.TernaryHashMap;
 import com.gloamframework.core.boot.properties.MappingPropertyDefinition;
 import com.gloamframework.core.boot.properties.annotation.MappingConfigurationProperty;
 import com.gloamframework.core.boot.properties.exception.MappingPropertyException;

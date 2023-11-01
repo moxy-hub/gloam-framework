@@ -1,4 +1,4 @@
-package com.gloamframework.core.boot.map;
+package com.gloamframework.core.map;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
