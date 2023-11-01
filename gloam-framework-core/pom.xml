@@ -87,13 +87,6 @@
             <artifactId>gloam-framework-common</artifactId>
         </dependency>
 
-        <!--客户端信息获取-->
-        <dependency>
-            <groupId>eu.bitwalker</groupId>
-            <artifactId>UserAgentUtils</artifactId>
-            <version>1.21</version>
-        </dependency>
-
         <!-- 测试 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
