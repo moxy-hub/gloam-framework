@@ -1,10 +1,11 @@
 package com.gloamframework.core.boot.properties;
 
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.gloamframework.core.boot.properties.exception.MappingPropertyException;
 import com.gloamframework.core.boot.properties.exception.MappingPropertyScannerException;
 import com.gloamframework.core.boot.scanner.ResourceScanner;
+import com.gloamframework.core.logging.GloamLog;
+import org.apache.commons.logging.Log;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MapPropertySource;
@@ -19,6 +20,10 @@ import java.util.*;
  */
 public abstract class AbstractMappingProperty implements MappingProperty {
 
+    /**
+     * gloam log
+     */
+    private static final Log log = GloamLog.getLogger();
     /**
      * gloam scanner
      */
@@ -75,11 +80,9 @@ public abstract class AbstractMappingProperty implements MappingProperty {
             if (StrUtil.isNotBlank(definition.getValue())) {
                 value = definition.getValue();
             }
-            if (StrUtil.isBlank(value)) {
-                System.out.println(StrUtil.format("mapping configuration property: {} is null,skip this property"));
-            } else {
+            if (StrUtil.isNotBlank(value)) {
                 mapPropertySource.put(definition.getMappingPath(), value);
-                System.out.println(StrUtil.format("{}: {} --- [mapping configuration property: {} -> {} = {}]", environmentNamespace, DateUtil.date(), definition.getOriginalPath(), definition.getMappingPath(), value));
+                log.debug(StrUtil.format("mapping configuration property -> original:[{}] - mapping:[{}] - value:[{}]", definition.getOriginalPath(), definition.getMappingPath(), value));
             }
         });
 

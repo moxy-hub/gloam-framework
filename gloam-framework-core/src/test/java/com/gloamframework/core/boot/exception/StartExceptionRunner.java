@@ -2,7 +2,6 @@ package com.gloamframework.core.boot.exception;
 
 import com.gloamframework.core.boot.diagnostics.GloamStartException;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.stereotype.Component;
 
 //@Component
 public class StartExceptionRunner implements CommandLineRunner {

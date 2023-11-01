@@ -104,19 +104,23 @@ public class GloamMappingPropertyDefinitionConversion implements MappingProperty
         String originPropertyPath = originalPath + this.convertFieldName2ConfigName(field.getName());
         // 目标路径
         String mappingProperPath = StrUtil.isBlank(mappingPath) ? mappingConfigurationProperty.mappingFor() : mappingPath + mappingConfigurationProperty.mappingFor();
-        // 判断字段类型，对map，collection，array处理
         Class<?> propertyType = field.getType();
-        if (Map.class.isAssignableFrom(propertyType) || Collection.class.isAssignableFrom(propertyType) || propertyType.isArray()) {
-            this.mappingFieldGloamSupport(originPropertyPath, mappingProperPath, field, mappingObject, mappingConfigurationProperty, definitions);
-            return;
-        }
         // 嵌套类型递归解析
         if (AnnotationUtils.findAnnotation(field, NestedConfigurationProperty.class) != null) {
             definitions.addAll(this.convert(originPropertyPath, mappingProperPath, propertyType, null));
             return;
         }
+        // 判断字段类型，对map，collection，array处理
+        if (Map.class.isAssignableFrom(propertyType) || Collection.class.isAssignableFrom(propertyType) || propertyType.isArray()) {
+            this.mappingFieldGloamSupport(originPropertyPath, mappingProperPath, field, mappingObject, mappingConfigurationProperty, definitions);
+            return;
+        }
         // 默认值
-        String defaultValue = conversionService.convert(ReflectUtil.getFieldValue(mappingObject, field), String.class);
+        String defaultValue = null;
+        Object fieldValue = ReflectUtil.getFieldValue(mappingObject, field);
+        if (fieldValue != null && conversionService.canConvert(String.class, fieldValue.getClass())) {
+            defaultValue = conversionService.convert(fieldValue, String.class);
+        }
         if (StrUtil.isBlank(defaultValue)) {
             defaultValue = "";
         }
@@ -167,9 +171,12 @@ public class GloamMappingPropertyDefinitionConversion implements MappingProperty
                 if (StrUtil.isBlank(mapConfig)) {
                     continue;
                 }
-                int index;
-                if ((index = mapConfig.lastIndexOf(CONFIG_SPLIT)) != -1) {
-                    mapConfig = mapConfig.substring(0, index);
+                // 如果map的value是嵌套对象，则截取后面值
+                if (!String.class.isAssignableFrom(nestedPropertyType)) {
+                    int index;
+                    if ((index = mapConfig.lastIndexOf(CONFIG_SPLIT)) != -1) {
+                        mapConfig = mapConfig.substring(0, index);
+                    }
                 }
                 String origin = originalPath + mapConfig;
                 String mapping = mappingPath + mapConfig;

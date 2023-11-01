@@ -1,6 +1,6 @@
 package com.gloamframework.core.logging;
 
-import com.gloamframework.core.logging.config.LoggingConfig;
+import com.gloamframework.core.logging.properties.LoggingProperties;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
@@ -11,6 +11,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
  * @date 2023年10月31日 17:29
  */
 @Configurable
-@EnableConfigurationProperties(LoggingConfig.class)
-public class GloamLoggingConfigure {
+@EnableConfigurationProperties(LoggingProperties.class)
+public class LoggingConfigure {
 }

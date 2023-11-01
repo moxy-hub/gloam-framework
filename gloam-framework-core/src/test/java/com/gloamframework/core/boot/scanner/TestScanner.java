@@ -19,21 +19,21 @@ import java.util.List;
 @Slf4j
 public class TestScanner {
 
-	private final ResourceScanner resourceScanner = ResourceScanner.getDefault();
+    private final ResourceScanner resourceScanner = ResourceScanner.getDefault();
 
-	@Test
-	public void testScannerResource() throws IOException {
-		Resource[] resources = resourceScanner.scannerForResource("com.gloamframework", null, null);
-		for (Resource resource : resources) {
-			log.info("资源：{}", resource.getURI());
-		}
-	}
+    @Test
+    public void testScannerResource() throws IOException {
+        Resource[] resources = resourceScanner.scannerForResource("com.gloamframework", null, null);
+        for (Resource resource : resources) {
+            log.info("资源：{}", resource.getURI());
+        }
+    }
 
-	@Test
-	public void testScannerClasses() throws IOException {
-		List<Class<?>> classes = resourceScanner.scannerForClasses("com.gloamframework", null, "PathMatchingResourceScanner");
-		for (Class<?> aClass : classes) {
-			log.info("class:{}", aClass.getName());
-		}
-	}
+    @Test
+    public void testScannerClasses() throws IOException {
+        List<Class<?>> classes = resourceScanner.scannerForClasses("com.gloamframework", null, "PathMatchingResourceScanner");
+        for (Class<?> aClass : classes) {
+            log.info("class:{}", aClass.getName());
+        }
+    }
 }
