@@ -51,6 +51,9 @@ public class TomcatConfigure {
     @ConditionalOnProperty(value = "com.gloam.web.server.ssl.enabled", havingValue = "true")
     @ConditionalOnBean(TomcatServletWebServerFactory.class)
     public WebServerFactoryCustomizer<TomcatServletWebServerFactory> tomcatContainer(WebServerProperties webServerProperties) {
+        if (webServerProperties.getHttpPort()<0){
+            return tomcat->{};
+        }
         return tomcat -> {
             tomcat.addAdditionalTomcatConnectors(httpConnector(webServerProperties));
             if (!webServerProperties.getSsl().isEnabledHttp2Https()) {

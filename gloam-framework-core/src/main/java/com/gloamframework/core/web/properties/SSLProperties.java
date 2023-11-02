@@ -20,6 +20,7 @@ public class SSLProperties {
 
     /**
      * 是否开启http转https，默认不开启，因为默认SSL开启后必须要客户端证书，所以保留http端口
+     * 相关支持需要引入gloam-framework-starter-tomcat或gloam-framework-starter-undertow
      */
     private boolean enabledHttp2Https = false;
 

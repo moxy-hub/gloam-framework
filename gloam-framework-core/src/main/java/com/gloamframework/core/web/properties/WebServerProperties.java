@@ -25,7 +25,8 @@ public class WebServerProperties {
     private Integer port = 6387;
 
     /**
-     * 如果开启ssl，http端口将使用以下配置
+     * 如果开启ssl，http端口将使用以下配置，如果为-1或小于0则不开启http端口
+     * 相关支持需要引入gloam-framework-starter-tomcat或gloam-framework-starter-undertow
      */
     private Integer httpPort = 6386;
 
