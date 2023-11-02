@@ -60,7 +60,8 @@ public class WebServerProperties {
     @MappingConfigurationProperty("server.ssl")
     private SSLProperties ssl = new SSLProperties();
 
-//
-//    @NestedConfigurationProperty
-//    private final Compression compression = new Compression();
+    @NestedConfigurationProperty
+    @MappingConfigurationProperty("server.compression")
+    private CompressionProperties compression = new CompressionProperties();
+
 }

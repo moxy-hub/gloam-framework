@@ -19,9 +19,9 @@ public class SSLProperties {
     private boolean enabled = false;
 
     /**
-     * 是否开启http转https，默认开启
+     * 是否开启http转https，默认不开启，因为默认SSL开启后必须要客户端证书，所以保留http端口
      */
-    private boolean enabledHttp2Https = true;
+    private boolean enabledHttp2Https = false;
 
     /**
      * 认证模式,默认为WANT
@@ -30,7 +30,7 @@ public class SSLProperties {
      * <li>NEED:客户端必须使用证书
      */
     @MappingConfigurationProperty("client-auth")
-    private Ssl.ClientAuth clientAuth = Ssl.ClientAuth.WANT;
+    private Ssl.ClientAuth clientAuth = Ssl.ClientAuth.NEED;
 
     /**
      * 证书类型，gloam提供的默认证书的类型为JKS

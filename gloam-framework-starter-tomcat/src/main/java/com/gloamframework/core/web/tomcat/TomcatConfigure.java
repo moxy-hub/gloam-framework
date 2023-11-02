@@ -53,6 +53,9 @@ public class TomcatConfigure {
     public WebServerFactoryCustomizer<TomcatServletWebServerFactory> tomcatContainer(WebServerProperties webServerProperties) {
         return tomcat -> {
             tomcat.addAdditionalTomcatConnectors(httpConnector(webServerProperties));
+            if (!webServerProperties.getSsl().isEnabledHttp2Https()) {
+                return;
+            }
             tomcat.addContextCustomizers(context -> {
                 org.apache.tomcat.util.descriptor.web.SecurityConstraint securityConstraint = new org.apache.tomcat.util.descriptor.web.SecurityConstraint();
                 securityConstraint.setUserConstraint("CONFIDENTIAL");
