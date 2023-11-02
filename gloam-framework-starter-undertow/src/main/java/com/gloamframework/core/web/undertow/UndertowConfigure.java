@@ -40,8 +40,9 @@ public class UndertowConfigure {
     @ConditionalOnBean(UndertowServletWebServerFactory.class)
     @ConditionalOnClass(Undertow.class)
     public WebServerFactoryCustomizer<UndertowServletWebServerFactory> undertowContainer(WebServerProperties webServerProperties) {
-        if (webServerProperties.getHttpPort()<0){
-            return undertow->{};
+        if (webServerProperties.getHttpPort() < 0) {
+            return undertow -> {
+            };
         }
         return undertow -> {
             undertow.addBuilderCustomizers(builder -> {

@@ -1,8 +1,11 @@
 package com.gloam.web.undertow;
 
 import com.gloamframework.core.web.doc.EnableHttpDoc;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.web.ServerProperties;
 
 /**
  * @author 晓龙
@@ -12,10 +15,18 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 @SpringBootApplication
 @EnableHttpDoc
-public class Application {
+public class Application implements CommandLineRunner {
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class);
     }
-    
+
+    @Autowired
+    private ServerProperties serverProperties;
+
+    @Override
+    public void run(String... args) throws Exception {
+        ServerProperties.Undertow undertow = serverProperties.getUndertow();
+        System.out.println(undertow.toString());
+    }
 }
