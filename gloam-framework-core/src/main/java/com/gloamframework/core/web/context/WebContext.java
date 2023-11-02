@@ -119,7 +119,7 @@ public class WebContext {
             ip = request.getRemoteAddr();
             if (LOCALHOST_IP1.equalsIgnoreCase(ip) || LOCALHOST_IP.equalsIgnoreCase(ip)) {
                 // 根据网卡取本机配置的IP
-                InetAddress inetAddress ;
+                InetAddress inetAddress;
                 try {
                     inetAddress = InetAddress.getLocalHost();
                 } catch (UnknownHostException e) {

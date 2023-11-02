@@ -9,7 +9,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
  * 启动aop代理
  */
 @Configurable
-@EnableAspectJAutoProxy(exposeProxy=true, proxyTargetClass=true)
+@EnableAspectJAutoProxy(exposeProxy = true, proxyTargetClass = true)
 public class BootConfigure {
 
     @Bean

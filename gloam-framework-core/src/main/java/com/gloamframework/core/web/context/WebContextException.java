@@ -4,6 +4,7 @@ import com.gloamframework.core.exception.GloamRuntimeException;
 
 /**
  * web上下文异常
+ *
  * @author 晓龙
  */
 public class WebContextException extends GloamRuntimeException {

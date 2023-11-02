@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 
 /**
  * undertow配置注册
+ *
  * @author 晓龙
  */
 @ConditionalOnWebApplication
@@ -16,7 +17,7 @@ import org.springframework.context.annotation.Bean;
 public class UndertowConfigure {
 
     @Bean
-    public BufferPoolCustomizer bufferPoolCustomizer(UndertowProperties properties){
+    public BufferPoolCustomizer bufferPoolCustomizer(UndertowProperties properties) {
         return new BufferPoolCustomizer(properties.getBufferPool());
     }
 

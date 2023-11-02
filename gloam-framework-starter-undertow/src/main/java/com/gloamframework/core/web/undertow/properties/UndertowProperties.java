@@ -7,6 +7,7 @@ import org.springframework.util.unit.DataSize;
 
 /**
  * undertow配置重写
+ *
  * @author 晓龙
  */
 @ConfigurationProperties("com.gloam.web.undertow")
@@ -20,7 +21,7 @@ public class UndertowProperties {
     private BufferPool bufferPool = new BufferPool();
 
     @Data
-    public static class BufferPool{
+    public static class BufferPool {
 
         /**
          * 缓冲池缓冲大小，默认2048b
