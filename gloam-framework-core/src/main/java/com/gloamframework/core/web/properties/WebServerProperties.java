@@ -3,6 +3,7 @@ package com.gloamframework.core.web.properties;
 import com.gloamframework.core.boot.properties.annotation.MappingConfigurationProperty;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.boot.web.server.Shutdown;
 import org.springframework.util.unit.DataSize;
 
@@ -18,10 +19,15 @@ import java.net.InetAddress;
 public class WebServerProperties {
 
     /**
-     * 服务http端口，默认6387
+     * 服务http/https端口，默认6387,如果开启ssl，该配置则为https端口
      */
     @MappingConfigurationProperty("server.port")
     private Integer port = 6387;
+
+    /**
+     * 如果开启ssl，http端口将使用以下配置
+     */
+    private Integer httpPort = 6386;
 
     /**
      * 服务绑定的ip地址
@@ -47,8 +53,13 @@ public class WebServerProperties {
     @MappingConfigurationProperty("server.shutdown")
     private Shutdown shutdown = Shutdown.GRACEFUL;
 
-//    @NestedConfigurationProperty
-//    private Ssl ssl;
+    /**
+     * 配置ssl
+     */
+    @NestedConfigurationProperty
+    @MappingConfigurationProperty("server.ssl")
+    private SSLProperties ssl = new SSLProperties();
+
 //
 //    @NestedConfigurationProperty
 //    private final Compression compression = new Compression();

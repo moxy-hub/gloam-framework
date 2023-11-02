@@ -1,5 +1,6 @@
 package com.gloam.web.tomcat;
 
+import com.gloamframework.core.web.doc.EnableHttpDoc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -10,6 +11,7 @@ import org.springframework.boot.autoconfigure.web.ServerProperties;
  * @author 晓龙
  */
 @SpringBootApplication
+@EnableHttpDoc
 public class Application implements CommandLineRunner {
 
     public static void main(String[] args) {

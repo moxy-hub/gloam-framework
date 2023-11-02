@@ -26,6 +26,7 @@ public class GlomaHandlerExceptionResolver implements HandlerExceptionResolver, 
     }
 
     @Override
+    @SuppressWarnings("all")
     public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
         log.error("IP:[{}] 请求资源:[{}:{}] 发生异常,异常类型:{},异常原因:{}", WebContext.obtainIp(request), request.getMethod(), request.getRequestURI(), ex.getClass(), ex.getMessage(), ex);
         log.warn("如果需要自定义异常返回,请对异常:{} 进行统一处理,默认返回500", ex.getClass());
