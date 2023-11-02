@@ -99,10 +99,24 @@
                 <version>${project.version}</version>
             </dependency>
 
-            <!-- gloam-security -->
+            <!-- gloam-starter-security -->
             <dependency>
                 <groupId>com.gloamframework</groupId>
-                <artifactId>gloam-framework-security</artifactId>
+                <artifactId>gloam-framework-starter-security</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!-- gloam-starter-tomcat -->
+            <dependency>
+                <groupId>com.gloamframework</groupId>
+                <artifactId>gloam-framework-starter-tomcat</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!-- gloam-starter-tomcat -->
+            <dependency>
+                <groupId>com.gloamframework</groupId>
+                <artifactId>gloam-framework-starter-undertow</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

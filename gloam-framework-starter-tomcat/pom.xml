@@ -11,17 +11,22 @@
         <relativePath/>
     </parent>
 
-    <artifactId>gloam-framework-module</artifactId>
-    <packaging>pom</packaging>
+    <artifactId>gloam-framework-starter-tomcat</artifactId>
 
-    <modules>
-        <module>../gloam-framework-parent</module>
-        <module>../gloam-framework-common</module>
-        <module>../gloam-framework-core</module>
-        <module>../gloam-framework-data</module>
-        <module>../gloam-framework-starter-security</module>
-        <module>../gloam-framework-starter-tomcat</module>
-        <module>../gloam-framework-starter-undertow</module>
-    </modules>
+    <dependencies>
+
+        <!-- gloam core -->
+        <dependency>
+            <groupId>com.gloamframework</groupId>
+            <artifactId>gloam-framework-core</artifactId>
+        </dependency>
+
+        <!-- tomcat -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+        </dependency>
+
+    </dependencies>
 
 </project>

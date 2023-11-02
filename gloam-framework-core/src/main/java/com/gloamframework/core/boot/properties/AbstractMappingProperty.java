@@ -68,6 +68,7 @@ public abstract class AbstractMappingProperty implements MappingProperty {
         if (mappingPropertyDefinitions == null) {
             throw new MappingPropertyException("映射配置失败，配置定义集合为null");
         }
+        log.debug("start mapping configuration properties whit annotation @MappingConfigurationProperty");
         MapPropertySource propertySource = (MapPropertySource) environment.getPropertySources().get(environmentNamespace);
         if (propertySource == null) {
             propertySource = new MapPropertySource(environmentNamespace, new HashMap<>());
@@ -82,7 +83,7 @@ public abstract class AbstractMappingProperty implements MappingProperty {
             }
             if (StrUtil.isNotBlank(value)) {
                 mapPropertySource.put(definition.getMappingPath(), value);
-                log.debug(StrUtil.format("mapping configuration property -> original:[{}] - mapping:[{}] - value:[{}]", definition.getOriginalPath(), definition.getMappingPath(), value));
+                log.trace(StrUtil.format("mapping configuration property -> original:[{}] - mapping:[{}] - value:[{}]", definition.getOriginalPath(), definition.getMappingPath(), value));
             }
         });
 

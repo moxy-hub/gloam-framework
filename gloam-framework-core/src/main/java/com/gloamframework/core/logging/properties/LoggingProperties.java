@@ -15,7 +15,7 @@ import java.util.Map;
  *
  * @author 晓龙
  */
-@ConfigurationProperties("com.gloamframework.logging")
+@ConfigurationProperties("com.gloam.logging")
 @Data
 public class LoggingProperties {
 
