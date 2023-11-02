@@ -52,7 +52,7 @@ public class GloamConverterDiscover {
                 }
                 GenericConverter converter = (GenericConverter) converterClass.newInstance();
                 conversionService.addConverter(converter);
-                log.debug("conversionService register converter:" + converterClass);
+                log.trace("conversionService register converter:" + converterClass);
             }
         } catch (IOException e) {
             throw new ConverterDiscoverException("发现转换器失败", e);

@@ -1,8 +1,8 @@
 package com.gloamframework.core.web.view;
 
 import cn.hutool.core.collection.CollectionUtil;
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.support.spring.FastJsonJsonView;
+import com.gloamframework.common.lang.BeanUtil;
 
 import java.util.Map;
 
@@ -15,10 +15,8 @@ import java.util.Map;
 public class GloamView extends FastJsonJsonView {
 
     public <M> GloamView(M model) {
-        // 通过json序列化方式进行，将model解析为map
-        String modelJson = JSON.toJSONString(model);
-        @SuppressWarnings("unchecked")
-        Map<String, ?> modelMap = JSON.parseObject(modelJson, Map.class);
+        // 将model解析为map
+        Map<String, ?> modelMap = BeanUtil.beanToMap(model);
         if (CollectionUtil.isNotEmpty(modelMap)) {
             super.setAttributesMap(modelMap);
         }

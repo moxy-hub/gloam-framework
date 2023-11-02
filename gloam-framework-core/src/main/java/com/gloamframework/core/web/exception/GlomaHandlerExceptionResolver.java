@@ -1,5 +1,6 @@
 package com.gloamframework.core.web.exception;
 
+import com.gloamframework.core.web.context.WebContext;
 import com.gloamframework.core.web.response.WebResult;
 import com.gloamframework.core.web.view.GloamView;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +27,8 @@ public class GlomaHandlerExceptionResolver implements HandlerExceptionResolver, 
 
     @Override
     public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
-        log.error("如果需要，请对异常进行统一处理，默认返回500", ex);
+        log.error("IP:[{}] 请求资源:[{}:{}] 发生异常,异常类型:{},异常原因:{}", WebContext.obtainIp(request), request.getMethod(), request.getRequestURI(), ex.getClass(), ex.getMessage(), ex);
+        log.warn("如果需要自定义异常返回,请对异常:{} 进行统一处理,默认返回500", ex.getClass());
         ModelAndView modelAndView = new ModelAndView();
         GloamView gloamView = new GloamView(WebResult.refuse("服务器无法处理您的请求"));
         modelAndView.setViewName(gloamView.getBeanName());
