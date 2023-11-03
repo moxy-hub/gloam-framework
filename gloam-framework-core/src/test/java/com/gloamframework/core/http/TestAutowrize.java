@@ -1,6 +1,7 @@
 package com.gloamframework.core.http;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.gloamframework.core.http.annotation.WebServiceInject;
+import com.gloamframework.core.http.manager.OkHttpClientManager;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -13,12 +14,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class TestAutowrize implements CommandLineRunner {
 
-    @Autowired
+    @WebServiceInject
     private HttpTestBean httpTestBean;
 
+    @WebServiceInject
+    private HttpTestBean httpTestBean2;
+
+    @WebServiceInject
+    private OkHttpClientManager okHttpClientManager;
 
     @Override
     public void run(String... args) throws Exception {
-        httpTestBean.list("hello");
+        String list = httpTestBean.list();
+        System.out.println(list);
     }
 }

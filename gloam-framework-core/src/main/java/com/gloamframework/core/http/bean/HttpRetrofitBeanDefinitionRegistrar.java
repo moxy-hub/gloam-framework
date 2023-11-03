@@ -1,7 +1,7 @@
 package com.gloamframework.core.http.bean;
 
 import com.gloamframework.core.boot.scanner.ResourceScanner;
-import com.gloamframework.core.http.annotation.RemoteClient;
+import com.gloamframework.core.http.annotation.WebService;
 import com.gloamframework.core.http.exception.HttpInterfaceBeanRegisterException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
@@ -60,7 +60,7 @@ public class HttpRetrofitBeanDefinitionRegistrar implements ImportBeanDefinition
         Set<Class<?>> allClasses = new HashSet<>();
         packages.forEach(eachPackage -> {
             try {
-                allClasses.addAll(resourceScanner.scannerForClassesWithAnnotation(eachPackage, this.getClass().getClassLoader(), RemoteClient.class));
+                allClasses.addAll(resourceScanner.scannerForClassesWithAnnotation(eachPackage, this.getClass().getClassLoader(), WebService.class));
             } catch (IOException e) {
                 throw new HttpInterfaceBeanRegisterException("IO异常", "加载RemoteClient资源失败", e);
             }
@@ -68,20 +68,19 @@ public class HttpRetrofitBeanDefinitionRegistrar implements ImportBeanDefinition
         // 对符合的class创建beanDefinition
         allClasses.forEach(beanClass -> {
             if (!beanClass.isInterface() || beanClass.isAnnotation()) {
-                throw new HttpInterfaceBeanRegisterException("标注@RemoteClient必须是接口！", "创建retrofit2BeanDefinition失败");
+                throw new HttpInterfaceBeanRegisterException("标注@WebService必须是接口！", "创建retrofit2BeanDefinition失败");
             }
             // 创建BeanDefinition
             GenericBeanDefinition beanDefinition = new GenericBeanDefinition();
             // 设置工厂bean的构造器参数
-            beanDefinition.getConstructorArgumentValues()
-                    .addGenericArgumentValue(beanClass);
+            beanDefinition.getConstructorArgumentValues().addGenericArgumentValue(beanClass);
             // 将beanClass设置为工厂bean的代理对象
             beanDefinition.setBeanClass(HttpRetrofitFactoryBean.class);
             // 生成beanName
             String beanName = beanNameGenerator.generateBeanName(beanDefinition, registry);
             // 注册
             registry.registerBeanDefinition(beanName, beanDefinition);
-            log.trace("create http retrofit bean:{} from:{}", beanName, beanClass);
+            log.trace("register beanDefinition:[{}] to spring", beanDefinition);
         });
     }
 
