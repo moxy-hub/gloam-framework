@@ -70,7 +70,7 @@ final class PathMatchingResourceScanner implements ResourceScanner {
             if (clazz == null) {
                 continue;
             }
-            log.debug("扫描到资源文件:{},目标位置:{}", clazz.getSimpleName(), clazz.getName());
+            log.trace("扫描到资源文件:{},目标位置:{}", clazz.getSimpleName(), clazz.getName());
             foundClasses.add(clazz);
         }
         return foundClasses;

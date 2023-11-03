@@ -24,7 +24,7 @@
         <!-- gloam core -->
         <dependency>
             <groupId>com.gloamframework</groupId>
-            <artifactId>gloam-framework-core</artifactId>
+            <artifactId>gloam-framework-web</artifactId>
         </dependency>
 
         <!-- undertow -->

@@ -18,6 +18,7 @@
         <module>../gloam-framework-parent</module>
         <module>../gloam-framework-common</module>
         <module>../gloam-framework-core</module>
+        <module>../gloam-framework-web</module>
         <module>../gloam-framework-data</module>
         <module>../gloam-framework-starter-security</module>
         <module>../gloam-framework-starter-tomcat</module>

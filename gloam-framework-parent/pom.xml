@@ -35,6 +35,7 @@
         <swaager.models.version>1.5.21</swaager.models.version>
         <swaager.2.version>2.9.2</swaager.2.version>
         <swaager.bootstrap.ui.version>1.9.6</swaager.bootstrap.ui.version>
+        <retrofit2.version>2.9.0</retrofit2.version>
     </properties>
 
     <dependencies>
@@ -78,6 +79,20 @@
                 <version>${swaager.bootstrap.ui.version}</version>
             </dependency>
 
+            <!-- 内置retrofit2http框架-->
+            <dependency>
+                <groupId>com.squareup.retrofit2</groupId>
+                <artifactId>retrofit</artifactId>
+                <version>${retrofit2.version}</version>
+            </dependency>
+
+            <!-- 默认使用json -->
+            <dependency>
+                <groupId>com.squareup.retrofit2</groupId>
+                <artifactId>converter-jackson</artifactId>
+                <version>${retrofit2.version}</version>
+            </dependency>
+
             <!-- gloam-common -->
             <dependency>
                 <groupId>com.gloamframework</groupId>
@@ -89,6 +104,13 @@
             <dependency>
                 <groupId>com.gloamframework</groupId>
                 <artifactId>gloam-framework-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!-- gloam-web -->
+            <dependency>
+                <groupId>com.gloamframework</groupId>
+                <artifactId>gloam-framework-web</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

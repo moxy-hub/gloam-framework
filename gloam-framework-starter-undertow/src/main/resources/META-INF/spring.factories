@@ -1,1 +1,1 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.gloamframework.core.web.undertow.UndertowConfigure
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.gloamframework.web.undertow.UndertowConfigure
