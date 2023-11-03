@@ -34,7 +34,8 @@ public class ManagerConfigure {
             return builder
                     .connectTimeout(clientProperties.getConnectTimeout(), TimeUnit.SECONDS)
                     .readTimeout(clientProperties.getReadTimeout(), TimeUnit.SECONDS)
-                    .writeTimeout(clientProperties.getWriteTimeout(), TimeUnit.SECONDS);
+                    .writeTimeout(clientProperties.getWriteTimeout(), TimeUnit.SECONDS)
+                    .callTimeout(clientProperties.getCallTimeout(), TimeUnit.SECONDS);
         };
     }
 
@@ -44,6 +45,7 @@ public class ManagerConfigure {
     @Bean
     public OkHttpClientAssembler okHttpClientInterceptorAssembler() {
         return builder -> {
+            // todo:默认拦截器配置
             return builder;
         };
     }
