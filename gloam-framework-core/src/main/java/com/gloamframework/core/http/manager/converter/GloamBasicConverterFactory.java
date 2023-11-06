@@ -72,7 +72,7 @@ public class GloamBasicConverterFactory extends Converter.Factory {
                 }
             }
             // 使用默认
-            log.debug("unfound gloam http response converter set,fallback  to use default json parser");
+            log.debug("unfound gloam http response converter set,fallback to use default json parser");
             return JSON.parseObject(responseBody.string(), type);
         }
 
