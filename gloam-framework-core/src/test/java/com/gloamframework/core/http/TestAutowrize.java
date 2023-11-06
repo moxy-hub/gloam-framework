@@ -1,7 +1,6 @@
 package com.gloamframework.core.http;
 
 import com.gloamframework.core.http.annotation.WebServiceInject;
-import com.gloamframework.core.http.manager.OkHttpClientManager;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -17,15 +16,10 @@ public class TestAutowrize implements CommandLineRunner {
     @WebServiceInject
     private HttpTestBean httpTestBean;
 
-    @WebServiceInject
-    private HttpTestBean httpTestBean2;
-
-    @WebServiceInject
-    private OkHttpClientManager okHttpClientManager;
-
     @Override
     public void run(String... args) throws Exception {
-        String list = httpTestBean.list();
-        System.out.println(list);
+        TestModel token = httpTestBean.token("authorization_code", "http://10.8.11.246/#/login", "222");
+        System.out.println(token.getCode());
+        System.out.println(token.getMessage());
     }
 }

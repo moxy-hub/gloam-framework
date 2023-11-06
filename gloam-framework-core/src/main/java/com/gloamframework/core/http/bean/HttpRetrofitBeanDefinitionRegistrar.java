@@ -74,10 +74,11 @@ public class HttpRetrofitBeanDefinitionRegistrar implements ImportBeanDefinition
             GenericBeanDefinition beanDefinition = new GenericBeanDefinition();
             // 设置工厂bean的构造器参数
             beanDefinition.getConstructorArgumentValues().addGenericArgumentValue(beanClass);
+            // 生成beanName
+            beanDefinition.setBeanClass(beanClass);
+            String beanName = beanNameGenerator.generateBeanName(beanDefinition, registry);
             // 将beanClass设置为工厂bean的代理对象
             beanDefinition.setBeanClass(HttpRetrofitFactoryBean.class);
-            // 生成beanName
-            String beanName = beanNameGenerator.generateBeanName(beanDefinition, registry);
             // 注册
             registry.registerBeanDefinition(beanName, beanDefinition);
             log.trace("register beanDefinition:[{}] to spring", beanDefinition);

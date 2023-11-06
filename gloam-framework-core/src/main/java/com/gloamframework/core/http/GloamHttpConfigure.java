@@ -19,6 +19,9 @@ import org.springframework.context.annotation.Import;
 @EnableConfigurationProperties(HttpProperties.class)
 public class GloamHttpConfigure {
 
+    /**
+     * 注解@WebServiceInject实现
+     */
     @Bean
     public WebServiceInjectAnnotationBeanPostProcessor webServiceInjectAnnotationBeanPostProcessor() {
         return new WebServiceInjectAnnotationBeanPostProcessor();

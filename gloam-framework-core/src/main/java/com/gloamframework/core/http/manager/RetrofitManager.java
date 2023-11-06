@@ -4,10 +4,11 @@ import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
 import com.gloamframework.core.http.annotation.WebService;
 import com.gloamframework.core.http.manager.assembler.RetrofitAssembler;
+import com.gloamframework.core.http.manager.converter.GloamBasicConverterFactory;
+import com.gloamframework.core.http.manager.converter.GloamHttpResponseConverter;
 import com.gloamframework.core.http.manager.exception.RetrofitException;
-import okhttp3.Interceptor;
-import okhttp3.OkHttpClient;
 import org.springframework.beans.factory.ListableBeanFactory;
+import retrofit2.CallAdapter;
 import retrofit2.Retrofit;
 
 import java.util.HashSet;
@@ -52,23 +53,25 @@ public class RetrofitManager {
         return webServiceBuild(webService, builder).build();
     }
 
+    @SuppressWarnings("all")
     private Retrofit.Builder webServiceBuild(WebService webService, Retrofit.Builder builder) {
         // 先解析地址
         if (StrUtil.isBlank(webService.remoteURL())) {
             throw new RetrofitException("请在@WebService注解中配置远程连接路径", "Retrofit配置失败");
         }
-        // httpclient
-        OkHttpClient okHttpClient = httpClientManager.obtainClient();
-        if (ArrayUtil.isNotEmpty(webService.interceptors())) {
-            OkHttpClient.Builder clientBuilder = okHttpClient.newBuilder();
-            for (Class<Interceptor> interceptorClass : webService.interceptors()) {
-                // 获取spring中注册的拦截器
-                clientBuilder.addInterceptor(beanFactory.getBean(interceptorClass));
+        // 配置默认的gloam支持转换器
+        GloamBasicConverterFactory.Builder converterBuilder = new GloamBasicConverterFactory.Builder();
+        for (Class<? extends GloamHttpResponseConverter> converter : webService.converters()) {
+            converterBuilder.addHttpConverter(beanFactory.getBean(converter));
+        }
+        if (ArrayUtil.isNotEmpty(webService.callAdapterFactories())) {
+            for (Class<? extends CallAdapter.Factory> callAdapterFactory : webService.callAdapterFactories()) {
+                builder.addCallAdapterFactory(beanFactory.getBean(callAdapterFactory));
             }
-            okHttpClient = clientBuilder.build();
         }
         return builder.baseUrl(webService.remoteURL())
+                .addConverterFactory(converterBuilder.build())
                 // OKHttpClient
-                .client(okHttpClient);
+                .client(httpClientManager.obtainClient(webService));
     }
 }
