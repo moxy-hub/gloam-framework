@@ -1,0 +1,21 @@
+package com.gloamframewprk.data;
+
+import com.gloamframework.data.druid.EnableDruidMonitor;
+import com.gloamframework.web.doc.EnableHttpDoc;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+/**
+ * @author 晓龙
+ * @version 1.8.271
+ * @protectName gloam-framework
+ * @date 2023年11月07日 11:07
+ */
+@SpringBootApplication
+@EnableHttpDoc
+@EnableDruidMonitor(username = "qqq", password = "123")
+public class DataApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(DataApplication.class);
+    }
+}

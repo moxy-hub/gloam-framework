@@ -17,7 +17,7 @@ public class TestApiController {
     private AuthWebService authWebService;
 
     @GetMapping("/auth")
-    public WebResult<Model> auth(){
+    public WebResult<Model> auth() {
         return WebResult.success(authWebService.auth());
     }
 
