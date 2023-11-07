@@ -1,6 +1,7 @@
-package com.gloamframewprk.data.datastore.mapper;
+package com.gloam.mybatis.flex.datastore.mapper;
 
-import com.gloamframewprk.data.datastore.entity.Account;
+
+import com.gloam.mybatis.flex.datastore.entity.Account;
 import com.mybatisflex.annotation.UseDataSource;
 import com.mybatisflex.core.BaseMapper;
 

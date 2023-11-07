@@ -1,7 +1,7 @@
-package com.gloamframewprk.data.service;
+package com.gloam.mybatis.flex.service;
 
-import com.gloamframewprk.data.datastore.entity.Account;
-import com.gloamframewprk.data.datastore.mapper.AccountMapper;
+import com.gloam.mybatis.flex.datastore.entity.Account;
+import com.gloam.mybatis.flex.datastore.mapper.AccountMapper;
 import com.mybatisflex.core.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,9 +1,9 @@
-package com.gloamframewprk.data.controller;
+package com.gloamframework.data.controller;
 
+import com.gloamframework.data.datastore.entity.Account;
+import com.gloamframework.data.datastore.mapper.AccountMasterMapper;
+import com.gloamframework.data.service.AccountService;
 import com.gloamframework.web.response.WebList;
-import com.gloamframewprk.data.datastore.entity.Account;
-import com.gloamframewprk.data.datastore.mapper.AccountMasterMapper;
-import com.gloamframewprk.data.service.AccountService;
 import com.mybatisflex.core.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,4 +1,4 @@
-package com.gloamframewprk.data.datastore.entity;
+package com.gloam.mybatis.flex.datastore.entity;
 
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.KeyType;

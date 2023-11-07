@@ -36,8 +36,10 @@
         <swaager.2.version>2.9.2</swaager.2.version>
         <swaager.bootstrap.ui.version>1.9.6</swaager.bootstrap.ui.version>
         <retrofit2.version>2.9.0</retrofit2.version>
-        <mybatis-flex.version>1.5.6</mybatis-flex.version>
+        <mybatis-flex.version>1.7.3</mybatis-flex.version>
         <druid.version>1.2.4</druid.version>
+        <dynamic.version>3.3.1</dynamic.version>
+        <servlet.version>2.5</servlet.version>
     </properties>
 
     <dependencies>
@@ -60,6 +62,20 @@
                 <scope>import</scope>
             </dependency>
 
+            <!-- servlet api -->
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>servlet-api</artifactId>
+                <version>${servlet.version}</version>
+            </dependency>
+
+            <!-- 动态数据源切换 -->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
+                <version>${dynamic.version}</version>
+            </dependency>
+
             <!-- mybatis flex -->
             <dependency>
                 <groupId>com.mybatis-flex</groupId>
@@ -76,7 +92,7 @@
             <!--阿里数据库连接池 -->
             <dependency>
                 <groupId>com.alibaba</groupId>
-                <artifactId>druid-spring-boot-starter</artifactId>
+                <artifactId>druid</artifactId>
                 <version>${druid.version}</version>
             </dependency>
 
@@ -140,6 +156,13 @@
             <dependency>
                 <groupId>com.gloamframework</groupId>
                 <artifactId>gloam-framework-data</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!-- gloam-mybatis-flex -->
+            <dependency>
+                <groupId>com.gloamframework</groupId>
+                <artifactId>gloam-framework-starter-mybatis-flex</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

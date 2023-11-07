@@ -8,32 +8,36 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import java.util.Map;
 
 /**
- * MybatisFlex配置
+ * gloam数据源配置
  *
  * @author 晓龙
  */
 @ConfigurationProperties("com.gloam.data")
 @Data
-public class MybatisFlexProperties {
+public class GloamDataProperties {
 
+    /**
+     * 默认的主数据源名字
+     */
     private static final String DEFAULT_DATASOURCE_DYNAMIC_PRIMARY = "master";
 
     /**
-     * mapper接口扫描的基础包路径,默认com.gloam.**.mapper
+     * 指定默认的数据源，只会对配置进行重写，不会由spring进行配置
      */
-    private String mapperScanPackage = "com.gloam.**.mapper";
+    @MappingConfigurationProperty("spring.datasource.dynamic.primary")
+    private final String primaryDatasourceName = DEFAULT_DATASOURCE_DYNAMIC_PRIMARY;
 
     /**
-     * 配置主数据源
+     * 配置主数据源相关配置
      */
     @NestedConfigurationProperty
-    @MappingConfigurationProperty("mybatis-flex.datasource." + DEFAULT_DATASOURCE_DYNAMIC_PRIMARY)
+    @MappingConfigurationProperty("spring.datasource.dynamic.datasource." + DEFAULT_DATASOURCE_DYNAMIC_PRIMARY)
     private DataSourceProperties masterDatasource;
 
     /**
-     * 多数据源,通常用于读写分离的场景 但是并不推荐在应用里使用多数据源,会增加系统的复杂度和配置维护难度 应该交由Mycat数据库中间件统一管理跨库的问题
+     * 多数据源配置
      */
-    @MappingConfigurationProperty(value = "mybatis-flex.datasource.", nestedPropertyType = DataSourceProperties.class)
+    @MappingConfigurationProperty(value = "spring.datasource.dynamic.datasource", nestedPropertyType = DataSourceProperties.class)
     private Map<String, DataSourceProperties> datasource;
 
 }

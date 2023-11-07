@@ -14,38 +14,49 @@
 
     <dependencies>
 
+        <!-- gloam-core -->
         <dependency>
             <groupId>com.gloamframework</groupId>
             <artifactId>gloam-framework-core</artifactId>
         </dependency>
 
+        <!-- 动态数据源切换 -->
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-jdbc</artifactId>
-        </dependency>
-
-        <!-- 接入mybatis flex -->
-        <dependency>
-            <groupId>com.mybatis-flex</groupId>
-            <artifactId>mybatis-flex-spring-boot-starter</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.mybatis-flex</groupId>
-            <artifactId>mybatis-flex-processor</artifactId>
-            <scope>provided</scope>
+            <groupId>com.baomidou</groupId>
+            <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
         </dependency>
 
         <!-- 数据库连接池 -->
         <dependency>
             <groupId>com.alibaba</groupId>
-            <artifactId>druid-spring-boot-starter</artifactId>
+            <artifactId>druid</artifactId>
         </dependency>
 
-        <!-- for test only -->
+        <!-- servlet 对druid监控进行支持 -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <scope>provided</scope>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- test only -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.gloamframework</groupId>
+            <artifactId>gloam-framework-starter-tomcat</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- 测试接入mybatis flex-->
+        <dependency>
+            <groupId>com.mybatis-flex</groupId>
+            <artifactId>mybatis-flex-spring-boot-starter</artifactId>
             <scope>test</scope>
         </dependency>
 
@@ -55,12 +66,6 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>com.gloamframework</groupId>
-            <artifactId>gloam-framework-starter-tomcat</artifactId>
-            <scope>provided</scope>
-            <optional>true</optional>
-        </dependency>
     </dependencies>
 
 </project>

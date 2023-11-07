@@ -1,7 +1,13 @@
 package com.gloamframework.data.properties;
 
+import com.alibaba.druid.pool.DruidDataSource;
 import com.gloamframework.core.boot.properties.annotation.MappingConfigurationProperty;
+import com.gloamframework.data.properties.pool.DruidProperties;
+import com.gloamframework.data.properties.pool.HikariProperties;
 import lombok.Data;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
+
+import javax.sql.DataSource;
 
 /**
  * 数据源配置
@@ -30,81 +36,29 @@ public class DataSourceProperties {
     private String password;
 
     /**
-     * 连接池方式
+     * 驱动，默认为mysql
+     */
+    @MappingConfigurationProperty("driver-class-name")
+    private String driverClassName = "com.mysql.cj.jdbc.Driver";
+
+    /**
+     * 连接池方式，默认为druid
      */
     @MappingConfigurationProperty("type")
-    private String type = "com.alibaba.druid.pool.DruidDataSource";
+    private Class<? extends DataSource> type = DruidDataSource.class;
 
     /**
-     * 初始连接数
+     * druid配置
      */
-    @MappingConfigurationProperty("initial-size")
-    private int initialSize = 5;
+    @MappingConfigurationProperty("druid")
+    @NestedConfigurationProperty
+    private final DruidProperties druid = new DruidProperties();
 
     /**
-     * 最小连接池数量
+     * hikari配置，系统默认引入druid，如果使用hikari，请导入相关依赖
      */
-    @MappingConfigurationProperty("min-idle")
-    private int minIdle = 10;
-
-    /**
-     * 最大连接池数量
-     */
-    @MappingConfigurationProperty("max-active")
-    private int maxActive = 20;
-
-    /**
-     * 配置获取连接等待超时的时间
-     */
-    @MappingConfigurationProperty("max-wait")
-    private int maxWait = 60000;
-
-    /**
-     * 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
-     */
-    @MappingConfigurationProperty("time-between-eviction-runs-millis")
-    private int timeBetweenEvictionRunsMillis = 60000;
-
-    /**
-     * 配置一个连接在池中最小生存的时间，单位是毫秒
-     */
-    @MappingConfigurationProperty("min-evictable-idle-time-millis")
-    private int minEvictableIdleTimeMillis = 300000;
-
-    /**
-     * 配置一个连接在池中最大生存的时间，单位是毫秒
-     */
-    @MappingConfigurationProperty("max-evictable-idle-time-millis")
-    private int maxEvictableIdleTimeMillis = 900000;
-
-    /**
-     * 配置检测连接是否有效
-     */
-    @MappingConfigurationProperty("validation-query")
-    private String validationQuery = "SELECT 1 FROM DUAL";
-
-    /**
-     * 如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效
-     */
-    @MappingConfigurationProperty("test-while-idle")
-    private boolean testWhileIdle = true;
-
-    /**
-     * 申请连接时执行validationQuery检测连接是否有效，配置后会降低性能
-     */
-    @MappingConfigurationProperty("test-on-borrow")
-    private boolean testOnBorrow = false;
-
-    /**
-     * 归还连接时执行validationQuery检测连接是否有效，配置后会降低性能
-     */
-    @MappingConfigurationProperty("test-on-return")
-    private boolean testOnReturn = false;
-
-    /**
-     * 监控统计拦截的filters
-     */
-    @MappingConfigurationProperty("filters")
-    private String filters = "stat,wall,slf4j";
+    @MappingConfigurationProperty("hikari")
+    @NestedConfigurationProperty
+    private final HikariProperties hikari = new HikariProperties();
 
 }
