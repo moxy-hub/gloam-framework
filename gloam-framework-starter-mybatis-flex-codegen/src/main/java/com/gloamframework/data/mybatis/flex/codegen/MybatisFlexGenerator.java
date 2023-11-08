@@ -34,9 +34,8 @@ public class MybatisFlexGenerator {
     }
 
     public void generate(boolean enableSwagger2, boolean enableLombok, boolean enableOverride, String[] tablePrefix, String modulePackage, String[] tables) {
-        Generator generator = new Generator(this.dataSource, createGlobalConfig(enableSwagger2, enableLombok, enableOverride, tablePrefix, modulePackage, tables));
-        //生成代码
-        generator.generate();
+        // 生成代码
+        new Generator(this.dataSource, createGlobalConfig(enableSwagger2, enableLombok, enableOverride, tablePrefix, modulePackage, tables)).generate();
     }
 
     private GlobalConfig createGlobalConfig(boolean enableSwagger2, boolean enableLombok, boolean enableOverride, String[] tablePrefix, String modulePackage, String[] tables) {
