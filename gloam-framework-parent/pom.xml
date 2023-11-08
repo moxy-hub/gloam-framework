@@ -172,6 +172,12 @@
                 <version>${project.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.gloamframework</groupId>
+                <artifactId>gloam-framework-starter-mybatis-flex-codegen</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
             <!-- gloam-starter-security -->
             <dependency>
                 <groupId>com.gloamframework</groupId>
