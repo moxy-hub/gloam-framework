@@ -39,5 +39,19 @@
             <artifactId>guava</artifactId>
         </dependency>
 
+        <!-- 不进行传递 -->
+        <dependency>
+            <groupId>com.gloamframework</groupId>
+            <artifactId>gloam-framework-starter-tomcat</artifactId>
+            <scope>provided</scope>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- test -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+        </dependency>
+
     </dependencies>
 </project>
