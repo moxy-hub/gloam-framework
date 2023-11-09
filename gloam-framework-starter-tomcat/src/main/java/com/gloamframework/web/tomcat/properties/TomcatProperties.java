@@ -14,7 +14,7 @@ import java.time.Duration;
  *
  * @author 晓龙
  */
-@ConfigurationProperties("com.gloam.web.tomcat")
+@ConfigurationProperties("gloam.web.tomcat")
 @Data
 public class TomcatProperties {
 

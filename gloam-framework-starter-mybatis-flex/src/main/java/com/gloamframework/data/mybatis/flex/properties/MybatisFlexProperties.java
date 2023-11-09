@@ -11,7 +11,7 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
  * @author 晓龙
  */
 @Data
-@ConfigurationProperties("com.gloam.data.mybatis.flex")
+@ConfigurationProperties("gloam.data.mybatis.flex")
 public class MybatisFlexProperties {
 
     /**

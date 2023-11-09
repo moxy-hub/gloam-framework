@@ -8,7 +8,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  *
  * @author 晓龙
  */
-@ConfigurationProperties("com.gloam.http")
+@ConfigurationProperties("gloam.http")
 @Data
 public class HttpProperties {
 

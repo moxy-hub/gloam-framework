@@ -12,7 +12,7 @@ import java.util.Map;
  *
  * @author 晓龙
  */
-@ConfigurationProperties("com.gloam.data")
+@ConfigurationProperties("gloam.data")
 @Data
 public class GloamDataProperties {
 

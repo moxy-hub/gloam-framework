@@ -11,6 +11,7 @@
     </parent>
 
     <artifactId>gloam-framework-starter-security</artifactId>
+    <description>接入sa-token和spring-security的安全套件</description>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -18,4 +19,25 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <dependencies>
+
+        <!-- gloam core -->
+        <dependency>
+            <groupId>com.gloamframework</groupId>
+            <artifactId>gloam-framework-core</artifactId>
+        </dependency>
+
+        <!-- spring-security -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
+        <!-- guava -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+
+    </dependencies>
 </project>

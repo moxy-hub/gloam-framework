@@ -24,7 +24,7 @@ import java.time.Duration;
  *
  * @author 晓龙
  */
-@ConfigurationProperties("com.gloam.web.undertow")
+@ConfigurationProperties("gloam.web.undertow")
 @Data
 public class UndertowProperties {
 

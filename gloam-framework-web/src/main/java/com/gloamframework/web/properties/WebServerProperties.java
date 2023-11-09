@@ -14,7 +14,7 @@ import java.net.InetAddress;
  *
  * @author 晓龙
  */
-@ConfigurationProperties("com.gloam.web.server")
+@ConfigurationProperties("gloam.web.server")
 @Data
 public class WebServerProperties {
 
