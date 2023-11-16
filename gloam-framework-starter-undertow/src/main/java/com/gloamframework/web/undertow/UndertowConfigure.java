@@ -36,7 +36,7 @@ public class UndertowConfigure {
     }
 
     @Bean
-    @ConditionalOnProperty(value = "com.gloam.web.server.ssl.enabled", havingValue = "true")
+    @ConditionalOnProperty(value = "gloam.web.server.ssl.enabled", havingValue = "true")
     @ConditionalOnBean(UndertowServletWebServerFactory.class)
     @ConditionalOnClass(Undertow.class)
     public WebServerFactoryCustomizer<UndertowServletWebServerFactory> undertowContainer(WebServerProperties webServerProperties) {

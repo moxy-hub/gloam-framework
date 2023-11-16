@@ -1,5 +1,6 @@
 package com.gloamframework.core.http.bean;
 
+import com.gloamframework.core.boot.env.GloamAutoScannerPackages;
 import com.gloamframework.core.boot.scanner.ResourceScanner;
 import com.gloamframework.core.http.annotation.WebService;
 import com.gloamframework.core.http.exception.HttpInterfaceBeanRegisterException;
@@ -10,7 +11,6 @@ import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanNameGenerator;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
-import org.springframework.boot.autoconfigure.AutoConfigurationPackages;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.type.AnnotationMetadata;
 
@@ -25,8 +25,6 @@ import java.util.Set;
  */
 @Slf4j
 public class HttpRetrofitBeanDefinitionRegistrar implements ImportBeanDefinitionRegistrar, BeanFactoryAware {
-
-    private static final String DEFAULT_SCANNER_PACKAGE = "com.gloamframework";
 
     /**
      * gloam scanner
@@ -49,16 +47,10 @@ public class HttpRetrofitBeanDefinitionRegistrar implements ImportBeanDefinition
     @Override
     public void registerBeanDefinitions(AnnotationMetadata annotationMetadata, BeanDefinitionRegistry registry, BeanNameGenerator beanNameGenerator) {
         // 获取spring的扫描路径
-        Set<String> packages = new HashSet<>();
-        if (!AutoConfigurationPackages.has(this.beanFactory)) {
-            packages.add(DEFAULT_SCANNER_PACKAGE);
-            log.warn("Could not obtain auto-configuration package, fallback use default:{}", DEFAULT_SCANNER_PACKAGE);
-        } else {
-            packages.addAll(AutoConfigurationPackages.get(this.beanFactory));
-        }
-        log.info("http retrofit2 start in package:{}", packages);
+        GloamAutoScannerPackages.installSpring(this.beanFactory);
+        log.info("http retrofit2 start in package:{}", GloamAutoScannerPackages.getPackages());
         Set<Class<?>> allClasses = new HashSet<>();
-        packages.forEach(eachPackage -> {
+        GloamAutoScannerPackages.getPackages().forEach(eachPackage -> {
             try {
                 allClasses.addAll(resourceScanner.scannerForClassesWithAnnotation(eachPackage, this.getClass().getClassLoader(), WebService.class));
             } catch (IOException e) {

@@ -12,6 +12,7 @@ import java.lang.annotation.Target;
 
 /**
  * 启动security chain
+ *
  * @author 晓龙
  */
 @Retention(RetentionPolicy.RUNTIME)

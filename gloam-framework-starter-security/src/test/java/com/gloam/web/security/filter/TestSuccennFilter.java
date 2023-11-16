@@ -21,7 +21,7 @@ public class TestSuccennFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         log.info("成功");
-        filterChain.doFilter(request,response);
+        filterChain.doFilter(request, response);
     }
 
 }

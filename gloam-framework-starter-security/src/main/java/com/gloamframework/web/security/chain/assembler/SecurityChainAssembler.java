@@ -4,6 +4,7 @@ import com.gloamframework.web.security.chain.SecurityChain;
 
 /**
  * security链装配器
+ *
  * @author 晓龙
  */
 @FunctionalInterface

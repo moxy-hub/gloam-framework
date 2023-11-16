@@ -34,10 +34,6 @@ public class GloamEnvironmentPostProcessor implements EnvironmentPostProcessor, 
      * gloam banner
      */
     private static final Banner GLOAM_BANNER = new GloamBanner();
-    /**
-     * gloam扫描基础包
-     */
-    private static final String ASSEMBLE_BASE_PACKAGE = "com.gloamframework";
 
     /**
      * 设置环境设置触发优先级
@@ -50,13 +46,17 @@ public class GloamEnvironmentPostProcessor implements EnvironmentPostProcessor, 
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
         log.info("welcome to use gloam framework");
+        // 初始化packages
+        GloamAutoScannerPackages.doRegister(application.getClassLoader());
+        // 添加项目启动路径
+        GloamAutoScannerPackages.addPackage(application.getMainApplicationClass().getPackage().getName());
         // 设置banner
         application.setBanner(GLOAM_BANNER);
         // 配置转换器
         GloamConverterDiscover gloamConverterDiscover = new GloamConverterDiscover(environment.getConversionService(), application.getClassLoader());
         log.trace("create GloamConverterDiscover with conversionService:" + environment.getConversionService().getClass().getName());
         // 执行注册
-        gloamConverterDiscover.doRegister(ASSEMBLE_BASE_PACKAGE, application.getMainApplicationClass().getPackage().getName());
+        gloamConverterDiscover.doRegister(GloamAutoScannerPackages.getPackageArrays());
         // 创建映射对象转换器
         MappingPropertyDefinitionConversion mappingPropertyDefinitionConversion = new GloamMappingPropertyDefinitionConversion(environment);
         log.trace("create GloamMappingPropertyDefinitionConversion with env:" + environment.getClass().getName());
@@ -64,7 +64,7 @@ public class GloamEnvironmentPostProcessor implements EnvironmentPostProcessor, 
         MappingProperty mappingProperty = new GloamMappingProperty(environment, mappingPropertyDefinitionConversion, application.getClassLoader());
         log.trace("create GloamMappingProperty with env:" + environment.getClass().getName() + " and classLoader:" + application.getClassLoader().getClass().getName());
         // 收集对应的映射定义
-        Set<MappingPropertyDefinition> definitions = mappingProperty.collectMappingPropertyDefinitions(ASSEMBLE_BASE_PACKAGE, application.getMainApplicationClass().getPackage().getName());
+        Set<MappingPropertyDefinition> definitions = mappingProperty.collectMappingPropertyDefinitions(GloamAutoScannerPackages.getPackageArrays());
         // 执行映射
         mappingProperty.doMapping(definitions);
     }
