@@ -1,9 +1,12 @@
 package com.gloamframework.core.http.manager.converter.convert;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.PropertyNamingStrategy;
 import com.alibaba.fastjson.parser.ParserConfig;
 import com.gloamframework.core.http.manager.converter.GloamHttpResponseConverter;
+import com.gloamframework.core.http.manager.converter.type.GloamType;
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.MediaType;
 import okhttp3.ResponseBody;
 
@@ -15,7 +18,8 @@ import java.lang.reflect.Type;
  *
  * @author 晓龙
  */
-public class HttpJsonConverter implements GloamHttpResponseConverter<Object> {
+@Slf4j
+public class HttpResponseJsonConverter implements GloamHttpResponseConverter<Object> {
 
     protected static final ParserConfig CAMEL_CASE_PARSER = new ParserConfig();
 
@@ -34,6 +38,18 @@ public class HttpJsonConverter implements GloamHttpResponseConverter<Object> {
 
     @Override
     public Object convert(ResponseBody responseBody, Type type) throws IOException {
-        return JSON.parseObject(responseBody.string(), type, CAMEL_CASE_PARSER);
+        String originalBody = responseBody.string();
+        log.debug("请求结果--> {}", originalBody);
+        try {
+            return JSON.parseObject(originalBody, type, CAMEL_CASE_PARSER);
+        } catch (JSONException jsonException) {
+            log.warn("响应解析json失败,具体内容为:{},将返回字符串处理，如果处理类不是String类型将返回null", originalBody, jsonException);
+            if (new GloamType(type).is(String.class)) {
+                return originalBody;
+            } else {
+                return null;
+            }
+        }
+
     }
 }

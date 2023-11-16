@@ -2,8 +2,8 @@ package com.gloamframework.core.http.annotation;
 
 import com.gloamframework.core.http.manager.assembler.OkHttpClientAssembler;
 import com.gloamframework.core.http.manager.converter.GloamHttpResponseConverter;
-import com.gloamframework.core.http.manager.converter.convert.HttpJsonConverter;
-import com.gloamframework.core.http.manager.converter.convert.HttpStreamConverter;
+import com.gloamframework.core.http.manager.converter.convert.HttpResponseJsonConverter;
+import com.gloamframework.core.http.manager.converter.convert.HttpResponseStreamConverter;
 import com.gloamframework.core.http.peoperties.HttpProperties;
 import okhttp3.Interceptor;
 import org.springframework.core.annotation.AliasFor;
@@ -71,11 +71,11 @@ public @interface WebService {
      */
 
     /**
-     * 配置转化服务，默认配置有Json转换{@link com.gloamframework.core.http.manager.converter.convert.HttpJsonConverter}和流式转换{@link com.gloamframework.core.http.manager.converter.convert.HttpStreamConverter},
+     * 配置转化服务，默认配置有Json转换{@link HttpResponseJsonConverter}和流式转换{@link HttpResponseStreamConverter},
      * 如果全局配置，可以在spring中注入实现了{@link GloamHttpResponseConverter}接口的bean<br/>
      * 以下配置为局部配置，如果设置了，为了防止冲突，全部的全局设置将会失效，当前webService的转换器由您完全自定义,当然指定的转换器同样需要放在spring容器中
      */
-    Class<? extends GloamHttpResponseConverter>[] converters() default {HttpJsonConverter.class, HttpStreamConverter.class};
+    Class<? extends GloamHttpResponseConverter>[] converters() default {HttpResponseJsonConverter.class, HttpResponseStreamConverter.class};
 
     /**
      * 适用于当前接口的调用适配器工厂，优先级比全局调用适配器工厂更高。转换器实例从Spring容器获取

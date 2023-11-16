@@ -16,7 +16,7 @@ import java.util.Objects;
  *
  * @author 晓龙
  */
-public class HttpStreamConverter implements GloamHttpResponseConverter<ByteArrayInputStream> {
+public class HttpResponseStreamConverter implements GloamHttpResponseConverter<ByteArrayInputStream> {
 
     private static final MediaType[] supportMediaType;
 

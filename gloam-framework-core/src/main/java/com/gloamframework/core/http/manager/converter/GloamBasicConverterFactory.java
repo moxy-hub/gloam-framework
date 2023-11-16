@@ -6,14 +6,15 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Converter;
 import retrofit2.Retrofit;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,7 +27,30 @@ import java.util.Set;
 @Slf4j
 public class GloamBasicConverterFactory extends Converter.Factory {
 
+    private final static MediaType DEFAULT_REQUEST_CONTEXT_TYPE = MediaType.parse("text/plain");
     private final Set<GloamHttpResponseConverter<Object>> gloamHttpResponseConverters;
+
+    @Override
+    public Converter<?, RequestBody> requestBodyConverter(Type type, Annotation[] parameterAnnotations, Annotation[] methodAnnotations, Retrofit retrofit) {
+        // 通过类型判断，创建合适的转换器
+        GloamType gloamType = new GloamType(type);
+        if (gloamType.is(String.class)) {
+            return (Converter<String, RequestBody>) req -> RequestBody.create(DEFAULT_REQUEST_CONTEXT_TYPE, req);
+        } else if (gloamType.is(Integer.class)) {
+            return (Converter<Integer, RequestBody>) req -> RequestBody.create(DEFAULT_REQUEST_CONTEXT_TYPE, String.valueOf(req));
+        } else if (gloamType.is(Long.class)) {
+            return (Converter<Long, RequestBody>) req -> RequestBody.create(DEFAULT_REQUEST_CONTEXT_TYPE, String.valueOf(req));
+        } else if (gloamType.is(Boolean.class)) {
+            return (Converter<Boolean, RequestBody>) req -> RequestBody.create(DEFAULT_REQUEST_CONTEXT_TYPE, String.valueOf(req));
+        } else if (gloamType.is(Float.class)) {
+            return (Converter<Float, RequestBody>) req -> RequestBody.create(DEFAULT_REQUEST_CONTEXT_TYPE, String.valueOf(req));
+        } else if (gloamType.is(Double.class)) {
+            return (Converter<Double, RequestBody>) req -> RequestBody.create(DEFAULT_REQUEST_CONTEXT_TYPE, String.valueOf(req));
+        } else if (gloamType.is(File.class)) {
+            return (Converter<File, RequestBody>) req -> RequestBody.create(MediaType.parse("multipart/form-data"), req);
+        }
+        return (Converter<Object, RequestBody>) req -> RequestBody.create(MediaType.parse("application/json;charset=UTF-8"), JSON.toJSONString(req));
+    }
 
     @Override
     public Converter<ResponseBody, ?> responseBodyConverter(Type type, Annotation[] annotations, Retrofit retrofit) {
@@ -65,9 +89,12 @@ public class GloamBasicConverterFactory extends Converter.Factory {
             // 获取全部的转换器
             if (gloamHttpResponseConverters != null) {
                 for (GloamHttpResponseConverter<T> converter : gloamHttpResponseConverters) {
-                    if (Arrays.asList(converter.contentTypeSupport()).contains(currentMediaType)) {
-                        log.debug("http response converter switch to {}", converter);
-                        return converter.convert(responseBody, type);
+                    for (MediaType mediaType : converter.contentTypeSupport()) {
+                        if (mediaType.type().equalsIgnoreCase(currentMediaType.type())
+                                && mediaType.subtype().equalsIgnoreCase(currentMediaType.subtype())) {
+                            log.debug("http response converter switch to {}", converter);
+                            return converter.convert(responseBody, type);
+                        }
                     }
                 }
             }

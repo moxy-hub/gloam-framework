@@ -76,6 +76,7 @@ public final class GloamCallAdapterFactory extends CallAdapter.Factory {
         public R adapt(Call<R> call) {
             Response<R> response;
             Request request = call.request();
+            log.info("发起请求:{}#{}", request.method(), request.url());
             try {
                 response = call.execute();
             } catch (IOException e) {

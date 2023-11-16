@@ -3,8 +3,8 @@ package com.gloamframework.core.http.manager;
 import com.gloamframework.core.http.manager.adapter.GloamCallAdapterFactory;
 import com.gloamframework.core.http.manager.assembler.OkHttpClientAssembler;
 import com.gloamframework.core.http.manager.assembler.RetrofitAssembler;
-import com.gloamframework.core.http.manager.converter.convert.HttpJsonConverter;
-import com.gloamframework.core.http.manager.converter.convert.HttpStreamConverter;
+import com.gloamframework.core.http.manager.converter.convert.HttpResponseJsonConverter;
+import com.gloamframework.core.http.manager.converter.convert.HttpResponseStreamConverter;
 import com.gloamframework.core.http.peoperties.HttpProperties;
 import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.beans.factory.annotation.Configurable;
@@ -67,12 +67,12 @@ public class ManagerConfigure {
      * json支持的转换器
      */
     @Bean
-    public HttpJsonConverter httpJsonConverter() {
-        return new HttpJsonConverter();
+    public HttpResponseJsonConverter httpJsonConverter() {
+        return new HttpResponseJsonConverter();
     }
 
     @Bean
-    public HttpStreamConverter httpStreamConverter() {
-        return new HttpStreamConverter();
+    public HttpResponseStreamConverter httpStreamConverter() {
+        return new HttpResponseStreamConverter();
     }
 }
