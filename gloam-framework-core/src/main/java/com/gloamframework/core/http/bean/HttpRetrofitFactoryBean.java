@@ -1,11 +1,15 @@
 package com.gloamframework.core.http.bean;
 
+import cn.hutool.core.util.StrUtil;
+import com.gloamframework.common.template.Template;
 import com.gloamframework.core.http.annotation.WebService;
 import com.gloamframework.core.http.exception.HttpInterfaceBeanRegisterException;
 import com.gloamframework.core.http.manager.RetrofitManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.FactoryBean;
+import org.springframework.context.EnvironmentAware;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.core.env.Environment;
 
 /**
  * 使用spring的工厂bean来注册为全部的接口的代理对象
@@ -13,7 +17,9 @@ import org.springframework.core.annotation.AnnotationUtils;
  * @author 晓龙
  */
 @Slf4j
-public class HttpRetrofitFactoryBean<I> implements FactoryBean<I> {
+public class HttpRetrofitFactoryBean<I> implements FactoryBean<I>, EnvironmentAware {
+
+    private static final Template template = new Template("$");
 
     /**
      * 代理retrofit2接口
@@ -21,6 +27,8 @@ public class HttpRetrofitFactoryBean<I> implements FactoryBean<I> {
     private final Class<I> retrofit2Interface;
 
     private final RetrofitManager retrofitManager;
+
+    private Environment environment;
 
     public HttpRetrofitFactoryBean(Class<I> retrofit2Interface, RetrofitManager retrofitManager) {
         if (!retrofit2Interface.isInterface()) {
@@ -35,7 +43,15 @@ public class HttpRetrofitFactoryBean<I> implements FactoryBean<I> {
         log.trace("create http retrofit bean:{}", this.retrofit2Interface);
         // 获取注解
         WebService webService = AnnotationUtils.findAnnotation(this.retrofit2Interface, WebService.class);
-        return retrofitManager.obtainRetrofit(webService).create(this.retrofit2Interface);
+        if (webService == null) {
+            throw new HttpInterfaceBeanRegisterException("获取WebService的@WebService注解失败！", "创建retrofit2代理对象失败");
+        }
+        // 支持spring环境中的配置获取
+        String renderURL = template.render(webService.remoteURL(), valueKey -> environment.getProperty(valueKey));
+        if (!StrUtil.startWithAny(renderURL, "http://", "https://")) {
+            renderURL = "http://" + renderURL;
+        }
+        return retrofitManager.obtainRetrofit(renderURL, webService).create(this.retrofit2Interface);
     }
 
     @Override
@@ -43,4 +59,8 @@ public class HttpRetrofitFactoryBean<I> implements FactoryBean<I> {
         return retrofit2Interface;
     }
 
+    @Override
+    public void setEnvironment(Environment environment) {
+        this.environment = environment;
+    }
 }

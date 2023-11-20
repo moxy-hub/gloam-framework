@@ -40,7 +40,11 @@ public class RetrofitManager {
     /**
      * 通过注解换取Retrofit
      */
-    public Retrofit obtainRetrofit(WebService webService) {
+    public Retrofit obtainRetrofit(String renderURL, WebService webService) {
+        // 先解析地址
+        if (StrUtil.isBlank(renderURL)) {
+            throw new RetrofitException("请在@WebService注解中配置远程连接路径", "Retrofit配置失败");
+        }
         Retrofit.Builder builder = new Retrofit.Builder();
         // 装配器先进行配置
         for (RetrofitAssembler assembler : assemblers) {
@@ -50,15 +54,12 @@ public class RetrofitManager {
             }
         }
         // 进行默认的配置
-        return webServiceBuild(webService, builder).build();
+        return webServiceBuild(renderURL, webService, builder).build();
     }
 
     @SuppressWarnings("all")
-    private Retrofit.Builder webServiceBuild(WebService webService, Retrofit.Builder builder) {
-        // 先解析地址
-        if (StrUtil.isBlank(webService.remoteURL())) {
-            throw new RetrofitException("请在@WebService注解中配置远程连接路径", "Retrofit配置失败");
-        }
+    private Retrofit.Builder webServiceBuild(String renderURL, WebService webService, Retrofit.Builder builder) {
+
         // 配置默认的gloam支持转换器
         GloamBasicConverterFactory.Builder converterBuilder = new GloamBasicConverterFactory.Builder();
         for (Class<? extends GloamHttpResponseConverter> converter : webService.converters()) {
@@ -69,7 +70,7 @@ public class RetrofitManager {
                 builder.addCallAdapterFactory(beanFactory.getBean(callAdapterFactory));
             }
         }
-        return builder.baseUrl(webService.remoteURL())
+        return builder.baseUrl(renderURL)
                 .addConverterFactory(converterBuilder.build())
                 // OKHttpClient
                 .client(httpClientManager.obtainClient(webService));
