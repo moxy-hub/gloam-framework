@@ -1,14 +1,16 @@
 package com.gloam.web.security;
 
-import com.gloamframework.web.security.chain.annotation.EnableSecurityChain;
+
+import com.gloamframework.web.doc.EnableHttpDoc;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
  * @author 晓龙
  */
-@EnableSecurityChain
+
 @SpringBootApplication
+@EnableHttpDoc
 public class SecurityApplication {
 
     public static void main(String[] args) {

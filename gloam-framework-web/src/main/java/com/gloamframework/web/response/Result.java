@@ -12,7 +12,7 @@ import org.springframework.http.HttpStatus;
  * @author 晓龙
  */
 @Getter
-abstract class Result<T> {
+public abstract class Result<T> {
 
     /**
      * 传输数据

@@ -1,6 +1,9 @@
 package com.gloam.web.security.filter;
 
+import com.gloamframework.web.security.filter.GloamOncePerRequestFilter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.Ordered;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -16,12 +19,18 @@ import java.io.IOException;
  * @date 2023年11月09日 22:40
  */
 @Slf4j
-public class TestSuccennFilter extends OncePerRequestFilter {
+@Component
+public class TestSuccennFilter extends GloamOncePerRequestFilter {
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        log.info("成功");
+    protected void doGloamFilter(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        log.info("成功:{}",request.getRequestURL());
         filterChain.doFilter(request, response);
+    }
+
+    @Override
+    public int getOrder() {
+        return Ordered.LOWEST_PRECEDENCE;
     }
 
 }

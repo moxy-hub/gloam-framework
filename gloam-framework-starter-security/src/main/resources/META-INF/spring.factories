@@ -1,1 +1,1 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.gloamframework.web.security.WebSecurityConfigure
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.gloamframework.web.security.GloamWebSecurityConfigure
