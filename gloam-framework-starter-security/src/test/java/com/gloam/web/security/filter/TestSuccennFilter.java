@@ -4,7 +4,6 @@ import com.gloamframework.web.security.filter.GloamOncePerRequestFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
-import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -24,7 +23,7 @@ public class TestSuccennFilter extends GloamOncePerRequestFilter {
 
     @Override
     protected void doGloamFilter(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        log.info("成功:{}",request.getRequestURL());
+        log.info("成功:{}", request.getRequestURL());
         filterChain.doFilter(request, response);
     }
 

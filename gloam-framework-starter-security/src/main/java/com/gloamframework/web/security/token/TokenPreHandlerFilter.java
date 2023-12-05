@@ -1,7 +1,5 @@
 package com.gloamframework.web.security.token;
 
-import cn.hutool.core.date.DateTime;
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
@@ -19,6 +17,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Date;
 
 /**
  * token的请求头前置校验处理</br>
@@ -64,9 +63,14 @@ public class TokenPreHandlerFilter extends GloamOncePerRequestFilter {
             log.error("无效请求:{},获取请求头nonce为空", request.getRequestURI());
             throw new TokenAnalysisException("请求token无效").setResponseStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }
-        // 解密token字符串
-        AESUtil.AES aes = AESUtil.getAES(AESUtil.Algorithm.CBC, tokenProperties.getTokenAesSecret());
-        tokenHeader = aes.decrypt(tokenHeader);
+        // 解密token字符串,接收hex类型加密序列
+        try {
+            AESUtil.AES aes = AESUtil.getAES(AESUtil.Algorithm.CBC, tokenProperties.getTokenAesSecret(), AESUtil.CODE_HEX);
+            tokenHeader = aes.decrypt(tokenHeader);
+        } catch (Exception exception) {
+            log.error("无效请求:{},请求的token 解密失败,", request.getRequestURI(), exception);
+            throw new TokenAnalysisException("请求token无效").setResponseStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        }
         String[] tokens = tokenHeader.split(tokenProperties.getTokenSplit());
         if (tokens.length != 3) {
             log.error("无效请求:{},请求的token长度不正确", request.getRequestURI());
@@ -82,9 +86,9 @@ public class TokenPreHandlerFilter extends GloamOncePerRequestFilter {
             log.error("无效请求:{},请求的timestamp不正确", request.getRequestURI());
             throw new TokenAnalysisException("请求token无效").setResponseStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }
-        DateTime requestTime = DateUtil.parse(tokens[1]);
-        if ((System.currentTimeMillis() - requestTime.millsecond()) > tokenProperties.getTokenValidTime()) {
-            log.error("无效请求:{},请求的timestamp已过期,间隔:{}毫秒", request.getRequestURI(), System.currentTimeMillis() - requestTime.millsecond());
+        Date requestTime = new Date(Long.parseLong(tokens[1]));
+        if ((System.currentTimeMillis() - requestTime.getTime()) > tokenProperties.getTokenValidTime()) {
+            log.error("无效请求:{},请求的timestamp已过期,间隔:{}毫秒", request.getRequestURI(), System.currentTimeMillis() - requestTime.getTime());
             throw new TokenAnalysisException("请求token无效").setResponseStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }
         // 处理token本体

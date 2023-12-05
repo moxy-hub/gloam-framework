@@ -24,7 +24,7 @@ public class TokenProperties {
     /**
      * token在请求头中的aes密钥
      */
-    private String tokenAesSecret = "GLOAM_TOKEN_AES_SECRET";
+    private String tokenAesSecret = "03f6e675478d6df0229955cf2f90c6d8";
 
     /**
      * token加密字符串的分割字符符号

@@ -28,6 +28,7 @@ import java.util.List;
 
 /**
  * web安全配置
+ * todo 1、认证类 2、认证校验类 3、token实现 4、加密实现 5、xss过滤器 6、重复提交过滤器
  *
  * @author 晓龙
  */

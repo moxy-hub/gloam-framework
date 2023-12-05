@@ -1,8 +1,11 @@
 package com.gloamframework.common.crypto;
 
+import cn.hutool.core.util.StrUtil;
+
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 
 /**
  * 随机生成key
@@ -50,8 +53,39 @@ public class GloamKeyGenerator {
      * @param digit     生成位数，要生成多少位，只需要修改这里即可128, 192或256
      */
     public static SecretKey generate(String algorithm, int digit) throws NoSuchAlgorithmException {
+        return generate(algorithm, digit, (SecureRandom) null);
+    }
+
+    /**
+     * 通过存在密钥进行配置
+     *
+     * @param algorithm 加密算法
+     * @param digit     生成位数，要生成多少位，只需要修改这里即可128, 192或256
+     * @param secretKey 存在的密钥
+     */
+    public static SecretKey generate(String algorithm, int digit, String secretKey) throws NoSuchAlgorithmException {
+        SecureRandom secureRandom = null;
+        if (StrUtil.isNotBlank(secretKey)) {
+            secureRandom = SecureRandom.getInstance("SHA1PRNG");
+            secureRandom.setSeed(secretKey.getBytes());
+        }
+        return generate(algorithm, digit, secureRandom);
+    }
+
+    /**
+     * 通过存在密钥进行配置
+     *
+     * @param algorithm    加密算法
+     * @param digit        生成位数，要生成多少位，只需要修改这里即可128, 192或256
+     * @param secureRandom 存在的密钥
+     */
+    public static SecretKey generate(String algorithm, int digit, SecureRandom secureRandom) throws NoSuchAlgorithmException {
         KeyGenerator kg = KeyGenerator.getInstance(algorithm);
-        kg.init(digit);
+        if (secureRandom != null) {
+            kg.init(digit, secureRandom);
+        } else {
+            kg.init(digit);
+        }
         return kg.generateKey();
     }
 
