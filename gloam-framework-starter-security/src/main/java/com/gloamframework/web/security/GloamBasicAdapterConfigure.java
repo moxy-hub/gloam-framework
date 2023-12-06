@@ -6,6 +6,7 @@ import com.gloamframework.web.security.handler.GloamHandlerConfigure;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -35,6 +36,7 @@ public class GloamBasicAdapterConfigure {
      * @author 晓龙
      */
     @Bean
+    @ConditionalOnMissingBean(name = "gloamHttpSecurity")
     public GloamHttpSecurityConfigurerAdapter gloamHttpSecurity() {
 
         return new GloamHttpSecurityConfigurerAdapter() {
@@ -70,6 +72,7 @@ public class GloamBasicAdapterConfigure {
      * @author 晓龙
      */
     @Bean
+    @ConditionalOnMissingBean(name = "gloamWebSecurity")
     public GloamWebSecurityConfigurerAdapter gloamWebSecurity() {
         return new GloamWebSecurityConfigurerAdapter() {
             @Override
@@ -78,7 +81,7 @@ public class GloamBasicAdapterConfigure {
             }
 
             @Override
-            public void configure(WebSecurity web) throws Exception {
+            public void configure(WebSecurity web) {
                 // 彻底放行swagger
                 web.ignoring().antMatchers(
                         "/doc.html",
