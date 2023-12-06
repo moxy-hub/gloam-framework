@@ -14,11 +14,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.boot.autoconfigure.cache.CacheType;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.data.ConditionalOnRepositoryType;
 import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
@@ -44,7 +41,7 @@ public class DynamicCacheConfigure {
 
     @Bean
     @Primary
-    @ConditionalOnProperty(value = "spring.cache.type",havingValue = "REDIS")
+    @ConditionalOnProperty(value = "spring.cache.type", havingValue = "REDIS")
     public RedisCacheManager cacheManager(CacheProperties cacheProperties, ObjectProvider<RedisCacheConfiguration> redisCacheConfiguration, RedisConnectionFactory redisConnectionFactory) {
         List<String> cacheNamesProp = cacheProperties.getCacheNames();
         String[] cacheNames = {};

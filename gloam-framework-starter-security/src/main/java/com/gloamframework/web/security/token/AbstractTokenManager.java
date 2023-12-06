@@ -1,6 +1,5 @@
 package com.gloamframework.web.security.token;
 
-import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.gloamframework.web.context.WebContext;
@@ -21,6 +20,7 @@ import java.util.Date;
 
 /**
  * token 实现的抽象类
+ *
  * @author 晓龙
  */
 @Slf4j
@@ -31,7 +31,7 @@ public abstract class AbstractTokenManager implements TokenManager {
      */
     @Data
     @Accessors(chain = true)
-    private final static class TokenInfo{
+    private final static class TokenInfo {
         /**
          * token主体信息
          */
@@ -66,52 +66,52 @@ public abstract class AbstractTokenManager implements TokenManager {
      * 生成票据，可以作为临时访问token
      */
     @Override
-    public void ticket(String subject,Device device) {
-        if (StrUtil.isBlank(subject)){
+    public void ticket(String subject, Device device) {
+        if (StrUtil.isBlank(subject)) {
             throw new TicketGenerateException("票据生成失败:没有指定token的主题");
         }
         // 生成票据主题
-        String ticketSubject = StrUtil.format(TICKET_SUBJECT, subject,System.currentTimeMillis());
+        String ticketSubject = StrUtil.format(TICKET_SUBJECT, subject, System.currentTimeMillis());
         // 生成有效时间
         long validTime = System.currentTimeMillis() + tokenProperties.getTicket().getValidTime();
         Date expiration = new Date(validTime);
         // 生成票据
         String ticket = this.generateToken(ticketSubject, expiration);
-        log.info("生成临时通行票据:{}",ticket);
+        log.info("生成临时通行票据:{}", ticket);
         Token ticketToken = new Token(ticket, "", expiration);
         // 缓冲存储
         TokenInfo tokenInfo = new TokenInfo().setToken(ticketToken).setDevice(device).setValidCount(tokenProperties.getTicket().getValidCount());
-        cacheManager.getCache().put("ticket:"+ticket,tokenInfo);
+        cacheManager.getCache().put("ticket:" + ticket, tokenInfo);
         // 写入响应头
         HttpServletResponse response = WebContext.obtainResponse();
-        if (response==null){
+        if (response == null) {
             log.error("票据写入时获取当前响应失败");
             throw new TicketGenerateException("票据生成失败");
         }
-        response.setHeader(tokenProperties.getTicket().getHeader(),JSON.toJSONString(ticketToken));
+        response.setHeader(tokenProperties.getTicket().getHeader(), JSON.toJSONString(ticketToken));
     }
 
     @Override
     public void authenticate(String subject, Device device) {
-        if (StrUtil.isBlank(subject)){
+        if (StrUtil.isBlank(subject)) {
             throw new TokenGenerateException("Token生成失败:没有指定token的主题");
         }
         Date currentTime = new Date();
-        Date tokenExpirationTime = DateUtils.addSeconds(currentTime, (int)this.tokenProperties.getAccessTokenExpire());
-        Date refreshTokenExpirationTime = DateUtils.addSeconds(currentTime, (int)this.tokenProperties.getRefreshTokenExpire());
+        Date tokenExpirationTime = DateUtils.addSeconds(currentTime, (int) this.tokenProperties.getAccessTokenExpire());
+        Date refreshTokenExpirationTime = DateUtils.addSeconds(currentTime, (int) this.tokenProperties.getRefreshTokenExpire());
         String accessToken = this.generateToken(subject, tokenExpirationTime);
         String refreshToken = this.generateToken(subject, refreshTokenExpirationTime);
         Token token = new Token(accessToken, refreshToken, tokenExpirationTime);
         // 缓冲存储
         TokenInfo tokenInfo = new TokenInfo().setToken(token).setDevice(device).setValidCount(-1);
-        cacheManager.getCache().put("token:"+accessToken,tokenInfo);
+        cacheManager.getCache().put("token:" + accessToken, tokenInfo);
         // 写入响应头
         HttpServletResponse response = WebContext.obtainResponse();
-        if (response==null){
+        if (response == null) {
             log.error("token写入时获取当前响应失败");
             throw new TokenGenerateException("Token生成失败");
         }
-        response.setHeader(tokenProperties.getTokenHeader(), JSON.toJSONString(token));
+        response.setHeader(tokenProperties.getHeader(), JSON.toJSONString(token));
     }
 
     @Override
@@ -140,7 +140,8 @@ public abstract class AbstractTokenManager implements TokenManager {
 
     /**
      * 生成token
-     * @param subject 主题
+     *
+     * @param subject        主题
      * @param expirationTime 过期时间
      * @return token
      */

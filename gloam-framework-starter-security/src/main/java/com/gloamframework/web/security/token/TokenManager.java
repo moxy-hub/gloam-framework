@@ -18,8 +18,8 @@ public interface TokenManager {
     /**
      * 生成认证票据
      */
-    default void ticket(String subject){
-        ticket(subject,null);
+    default void ticket(String subject) {
+        ticket(subject, null);
     }
 
     /**

@@ -24,7 +24,7 @@ import java.util.Date;
  * token格式：
  * <li>请求头中携带加密token字符串，请求头name和加密密钥可在{@link TokenProperties}中进行配置
  * <li>请求头中需要携带nonce随机字符，同一个请求多次发起，应携带相同的nonce来进行后端的去重请求
- * <li>token的格式为 nonce + {@link TokenProperties#getTokenSplit()} + 请求时间 + token的json格式字符串
+ * <li>token的格式为 nonce + {@link TokenProperties#getSplit()} + 请求时间 + token的json格式字符串
  * <li>请求时间的有效期可在{@link TokenProperties}中进行配置
  *
  * @author 晓龙
@@ -41,7 +41,7 @@ public class TokenPreHandlerFilter extends GloamOncePerRequestFilter {
     @Override
     protected void doGloamFilter(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // 获取请求头中token的存储
-        String tokenHeader = request.getHeader(tokenProperties.getTokenHeader());
+        String tokenHeader = request.getHeader(tokenProperties.getHeader());
         String ticketHeader = request.getHeader(tokenProperties.getTicket().getHeader());
         try {
             Token token;
@@ -73,13 +73,13 @@ public class TokenPreHandlerFilter extends GloamOncePerRequestFilter {
         }
         // 解密token字符串,接收hex类型加密序列
         try {
-            AESUtil.AES aes = AESUtil.getAES(AESUtil.Algorithm.CBC, tokenProperties.getTokenAesSecret(), AESUtil.CODE_HEX);
+            AESUtil.AES aes = AESUtil.getAES(AESUtil.Algorithm.CBC, tokenProperties.getRequestAesSecret(), AESUtil.CODE_HEX);
             tokenHeader = aes.decrypt(tokenHeader);
         } catch (Exception exception) {
             log.error("无效请求:{},请求的token 解密失败,", request.getRequestURI(), exception);
             throw new TokenAnalysisException("请求token无效").setResponseStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }
-        String[] tokens = tokenHeader.split(tokenProperties.getTokenSplit());
+        String[] tokens = tokenHeader.split(tokenProperties.getSplit());
         if (tokens.length != 3) {
             log.error("无效请求:{},请求的token长度不正确", request.getRequestURI());
             throw new TokenAnalysisException("请求token无效").setResponseStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -95,7 +95,7 @@ public class TokenPreHandlerFilter extends GloamOncePerRequestFilter {
             throw new TokenAnalysisException("请求token无效").setResponseStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }
         Date requestTime = new Date(Long.parseLong(tokens[1]));
-        if ((System.currentTimeMillis() - requestTime.getTime()) > tokenProperties.getTokenValidTime()) {
+        if ((System.currentTimeMillis() - requestTime.getTime()) > tokenProperties.getRequestValidTime()) {
             log.error("无效请求:{},请求的timestamp已过期,间隔:{}毫秒", request.getRequestURI(), System.currentTimeMillis() - requestTime.getTime());
             throw new TokenAnalysisException("请求token无效").setResponseStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }
