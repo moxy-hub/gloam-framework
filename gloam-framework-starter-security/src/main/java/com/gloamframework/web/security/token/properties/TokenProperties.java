@@ -1,5 +1,6 @@
 package com.gloamframework.web.security.token.properties;
 
+import com.gloamframework.web.security.token.constant.TokenStrategy;
 import lombok.Data;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
@@ -10,6 +11,11 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
  */
 @Data
 public class TokenProperties {
+
+    /**
+     * token实现的策略，默认为jwt
+     */
+    private TokenStrategy strategy = TokenStrategy.JWT;
 
     /**
      * token存储的header名称
@@ -37,6 +43,21 @@ public class TokenProperties {
     private long tokenValidTime = 60 * 1000;
 
     /**
+     * accessToken的过期时间，默认20分钟
+     */
+    private long accessTokenExpire = 20*60*1000;
+
+    /**
+     * refreshToken的过期时间，默认一个小时
+     */
+    private long refreshTokenExpire = 60*60*1000;
+
+    /**
+     * token密钥
+     */
+    private String tokenSecret = "gloam-token-#@!secret";
+
+    /**
      * 票据类配置
      */
     @NestedConfigurationProperty
@@ -51,6 +72,20 @@ public class TokenProperties {
     @Data
     public static class TicketProperties {
 
+        /**
+         * 临时票据的有效次数,默认一次
+         */
+        private int validCount = 1;
+
+        /**
+         * 临时票据的有效时间,默认5分钟
+         */
+        private long validTime = 5*60*1000;
+
+        /**
+         * 票据存储的header名称
+         */
+        private String header = "Ticket";
     }
 
     @Data

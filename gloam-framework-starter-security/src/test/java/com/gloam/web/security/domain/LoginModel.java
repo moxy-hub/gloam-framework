@@ -1,6 +1,8 @@
 package com.gloam.web.security.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author 晓龙
@@ -9,6 +11,8 @@ import lombok.Data;
  * @date 2023年11月21日 11:51
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class LoginModel {
 
     private String username;

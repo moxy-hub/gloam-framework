@@ -33,17 +33,18 @@
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
+        <!-- gloam cache -->
+        <dependency>
+            <groupId>com.gloamframework</groupId>
+            <artifactId>gloam-framework-starter-cache</artifactId>
+        </dependency>
+
         <!-- guava -->
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>cn.dev33</groupId>
-            <artifactId>sa-token</artifactId>
-            <version>1.6.0</version>
-        </dependency>
         <!-- 不进行传递 -->
         <dependency>
             <groupId>com.gloamframework</groupId>

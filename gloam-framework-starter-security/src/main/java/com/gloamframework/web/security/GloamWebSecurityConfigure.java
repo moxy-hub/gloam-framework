@@ -11,9 +11,10 @@ import com.gloamframework.web.security.token.TokenConfigure;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.Ordered;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -33,7 +34,6 @@ import java.util.List;
  * @author 晓龙
  */
 @Configurable
-@ComponentScan("com.gloamframework")
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, jsr250Enabled = true)
 @EnableConfigurationProperties(SecurityProperties.class)
@@ -82,5 +82,11 @@ public class GloamWebSecurityConfigure extends WebSecurityConfigurerAdapter {
     @Bean
     protected AuthenticationManager authenticationManager() throws Exception {
         return super.authenticationManager();
+    }
+
+    @Bean
+    @ConditionalOnBean(CacheManager.class)
+    public GloamSecurityCacheManager gloamSecurityCacheManager(CacheManager cacheManager) {
+        return new GloamSecurityCacheManager(cacheManager);
     }
 }

@@ -28,6 +28,7 @@
     </developers>
 
     <properties>
+        <gloam.version>1.0-SNAPSHOT</gloam.version>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -141,62 +142,69 @@
             <dependency>
                 <groupId>com.gloamframework</groupId>
                 <artifactId>gloam-framework-common</artifactId>
-                <version>${project.version}</version>
+                <version>${gloam.version}</version>
             </dependency>
 
             <!-- gloam-core -->
             <dependency>
                 <groupId>com.gloamframework</groupId>
                 <artifactId>gloam-framework-core</artifactId>
-                <version>${project.version}</version>
+                <version>${gloam.version}</version>
             </dependency>
 
             <!-- gloam-web -->
             <dependency>
                 <groupId>com.gloamframework</groupId>
                 <artifactId>gloam-framework-web</artifactId>
-                <version>${project.version}</version>
+                <version>${gloam.version}</version>
             </dependency>
 
             <!-- gloam-data -->
             <dependency>
                 <groupId>com.gloamframework</groupId>
                 <artifactId>gloam-framework-data</artifactId>
-                <version>${project.version}</version>
+                <version>${gloam.version}</version>
             </dependency>
 
             <!-- gloam-mybatis-flex -->
             <dependency>
                 <groupId>com.gloamframework</groupId>
                 <artifactId>gloam-framework-starter-mybatis-flex</artifactId>
-                <version>${project.version}</version>
+                <version>${gloam.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.gloamframework</groupId>
                 <artifactId>gloam-framework-starter-mybatis-flex-codegen</artifactId>
-                <version>${project.version}</version>
+                <version>${gloam.version}</version>
+            </dependency>
+
+            <!-- gloam-starter-cache -->
+            <dependency>
+                <groupId>com.gloamframework</groupId>
+                <artifactId>gloam-framework-starter-cache</artifactId>
+                <version>${gloam.version}</version>
             </dependency>
 
             <!-- gloam-starter-security -->
             <dependency>
                 <groupId>com.gloamframework</groupId>
                 <artifactId>gloam-framework-starter-security</artifactId>
-                <version>${project.version}</version>
+                <version>${gloam.version}</version>
             </dependency>
 
             <!-- gloam-starter-tomcat -->
             <dependency>
                 <groupId>com.gloamframework</groupId>
                 <artifactId>gloam-framework-starter-tomcat</artifactId>
-                <version>${project.version}</version>
+                <version>${gloam.version}</version>
             </dependency>
 
             <!-- gloam-starter-tomcat -->
             <dependency>
                 <groupId>com.gloamframework</groupId>
                 <artifactId>gloam-framework-starter-undertow</artifactId>
-                <version>${project.version}</version>
+                <version>${gloam.version}</version>
             </dependency>
 
         </dependencies>

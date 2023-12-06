@@ -42,6 +42,7 @@ public class TokenPreHandlerFilter extends GloamOncePerRequestFilter {
     protected void doGloamFilter(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // 获取请求头中token的存储
         String tokenHeader = request.getHeader(tokenProperties.getTokenHeader());
+        String ticketHeader = request.getHeader(tokenProperties.getTicket().getHeader());
         try {
             Token token;
             if (StrUtil.isBlank(tokenHeader)) {
@@ -49,8 +50,15 @@ public class TokenPreHandlerFilter extends GloamOncePerRequestFilter {
             } else {
                 token = this.analysisToken(tokenHeader, request);
             }
+            Token ticket;
+            if (StrUtil.isBlank(ticketHeader)) {
+                ticket = new UnauthorizedToken();
+            } else {
+                ticket = this.analysisToken(ticketHeader, request);
+            }
             // 将解析的token放入请求属性
             Attribute.setAttributes(request, Attribute.TOKEN, token);
+            Attribute.setAttributes(request, Attribute.TICKET, ticket);
             filterChain.doFilter(request, response);
         } finally {
             Attribute.removeAttributes(request);

@@ -17,6 +17,10 @@ public enum Attribute {
      */
     TOKEN,
     /**
+     * 票据
+     */
+    TICKET,
+    /**
      * 请求设备
      */
     DEVICE;

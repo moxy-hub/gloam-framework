@@ -13,7 +13,14 @@ public interface TokenManager {
     /**
      * 生成认证票据，会在响应头中返回票据的
      */
-    void ticket();
+    void ticket(String subject, Device device);
+
+    /**
+     * 生成认证票据
+     */
+    default void ticket(String subject){
+        ticket(subject,null);
+    }
 
     /**
      * 认证用户，会在响应头中返回认证token
