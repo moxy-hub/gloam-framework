@@ -6,7 +6,6 @@ import com.gloamframework.web.security.annotation.Authentication;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.Ordered;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
@@ -86,6 +85,6 @@ public class AuthenticationMatcher extends AbstractSpringMvcPathMatcher<Authenti
 
     @Override
     public int getOrder() {
-        return Ordered.LOWEST_PRECEDENCE;
+        return -100;
     }
 }

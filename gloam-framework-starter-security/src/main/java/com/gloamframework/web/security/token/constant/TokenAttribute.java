@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
  *
  * @author 晓龙
  */
-public enum Attribute {
+public enum TokenAttribute {
 
     /**
      * token解析属性
@@ -24,6 +24,11 @@ public enum Attribute {
      * 请求设备
      */
     DEVICE,
+
+    /**
+     * token策略
+     */
+    TOKEN_STRATEGY,
 
     /**
      * 是否进行刷新
@@ -40,12 +45,12 @@ public enum Attribute {
      *
      * @param request 请求
      */
-    public static void setAttributes(HttpServletRequest request, Attribute attributeName, Object attribute) {
+    public static void setAttributes(HttpServletRequest request, TokenAttribute attributeName, Object attribute) {
         if (request == null) {
             return;
         }
         // 如果为TOKEN，则必须为规定的类型
-        if (EnumUtil.equals(attributeName, Attribute.TOKEN.name()) && !Token.class.isAssignableFrom(attribute.getClass())) {
+        if (EnumUtil.equals(attributeName, TokenAttribute.TOKEN.name()) && !Token.class.isAssignableFrom(attribute.getClass())) {
             return;
         }
         // 设置
@@ -61,7 +66,7 @@ public enum Attribute {
         if (request == null) {
             return;
         }
-        for (Attribute attribute : Attribute.values()) {
+        for (TokenAttribute attribute : TokenAttribute.values()) {
             request.removeAttribute(attribute.name());
         }
     }
@@ -84,7 +89,7 @@ public enum Attribute {
      * @param request 请求
      */
     public Token obtainToken(HttpServletRequest request) {
-        if (!EnumUtil.equals(Attribute.TOKEN, this.name())) {
+        if (!EnumUtil.equals(TokenAttribute.TOKEN, this.name())) {
             return null;
         }
         return (Token) obtain(request);

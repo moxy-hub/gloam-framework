@@ -6,8 +6,8 @@ import com.alibaba.fastjson.JSON;
 import com.gloamframework.data.redis.RedisUtil;
 import com.gloamframework.web.context.WebContext;
 import com.gloamframework.web.security.GloamSecurityCacheManager;
-import com.gloamframework.web.security.token.constant.Attribute;
 import com.gloamframework.web.security.token.constant.Device;
+import com.gloamframework.web.security.token.constant.TokenAttribute;
 import com.gloamframework.web.security.token.domain.Token;
 import com.gloamframework.web.security.token.exception.TokenAuthenticateException;
 import com.gloamframework.web.security.token.exception.TokenGenerateException;
@@ -127,7 +127,7 @@ public abstract class AbstractCacheTokenManager extends AbstractTokenManager {
             log.error("获取当前请求未空");
             throw new TokenAuthenticateException("Token认证失败");
         }
-        String subject = (String) Attribute.TOKEN_SUBJECT.obtain(request);
+        String subject = (String) TokenAttribute.TOKEN_SUBJECT.obtain(request);
         // 分布式锁定token
         String randomLock = String.valueOf(System.currentTimeMillis() + RandomUtil.randomChar());
         try {
@@ -147,7 +147,7 @@ public abstract class AbstractCacheTokenManager extends AbstractTokenManager {
                 throw new TokenAuthenticateException("您已被踢下线");
             }
             // 是否需要刷新
-            boolean refresh = (boolean) Attribute.TOKEN_REFRESH.obtain(request);
+            boolean refresh = (boolean) TokenAttribute.TOKEN_REFRESH.obtain(request);
             if (refresh) {
                 // 移除当前token
                 this.revoke(subject, device);

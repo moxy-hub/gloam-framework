@@ -2,9 +2,12 @@ package com.gloamframework.web.security.token;
 
 import cn.hutool.http.useragent.UserAgent;
 import com.gloamframework.web.context.WebContext;
+import com.gloamframework.web.security.annotation.Token;
 import com.gloamframework.web.security.filter.GloamOncePerRequestFilter;
-import com.gloamframework.web.security.token.constant.Attribute;
+import com.gloamframework.web.security.match.TokenMatcher;
 import com.gloamframework.web.security.token.constant.Device;
+import com.gloamframework.web.security.token.constant.TokenAttribute;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -17,7 +20,10 @@ import java.io.IOException;
  *
  * @author 晓龙
  */
-public class DeviceMatchFilter extends GloamOncePerRequestFilter {
+public class DeviceAndTokenStrategyMatchFilter extends GloamOncePerRequestFilter {
+
+    @Autowired
+    private TokenMatcher tokenMatcher;
 
     @Override
     protected void doGloamFilter(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -28,8 +34,17 @@ public class DeviceMatchFilter extends GloamOncePerRequestFilter {
         } catch (Exception e) {
             device = Device.UNKNOWN;
         }
-        Attribute.setAttributes(request, Attribute.DEVICE, device);
-        filterChain.doFilter(request, response);
+        TokenAttribute.setAttributes(request, TokenAttribute.DEVICE, device);
+        // 处理token策略
+        Token.Strategy strategy = tokenMatcher.matchStrategy(request);
+        TokenAttribute.setAttributes(request, TokenAttribute.TOKEN_STRATEGY, strategy);
+        try {
+            filterChain.doFilter(request, response);
+        } finally {
+            // 这是过滤器开始的起一个环境，在最后移除全部属性
+            TokenAttribute.removeAttributes(request);
+        }
+
     }
 
     @Override

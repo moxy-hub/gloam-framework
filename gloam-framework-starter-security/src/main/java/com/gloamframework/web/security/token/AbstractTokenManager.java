@@ -3,8 +3,8 @@ package com.gloamframework.web.security.token;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.gloamframework.web.context.WebContext;
-import com.gloamframework.web.security.token.constant.Attribute;
 import com.gloamframework.web.security.token.constant.Device;
+import com.gloamframework.web.security.token.constant.TokenAttribute;
 import com.gloamframework.web.security.token.domain.Token;
 import com.gloamframework.web.security.token.domain.UnauthorizedToken;
 import com.gloamframework.web.security.token.exception.TicketGenerateException;
@@ -86,7 +86,7 @@ public abstract class AbstractTokenManager implements TokenManager {
     public boolean checkAuthentication(Device device) {
         HttpServletRequest request = WebContext.obtainRequest();
         // 请求携带的token
-        Token token = Attribute.TOKEN.obtainToken(request);
+        Token token = TokenAttribute.TOKEN.obtainToken(request);
         if (token == null) {
             log.error("未在请求中检测到token");
             throw new TokenAuthenticateException("无效token");
@@ -105,24 +105,24 @@ public abstract class AbstractTokenManager implements TokenManager {
         String subject;
         try {
             subject = this.verifyToken(token.getAccessToken());
-        } catch (Exception tokenException) {
+        } catch (TokenExpiredException tokenException) {
             log.warn("token不正确或已过期，开始检测refreshToken");
             try {
                 subject = this.verifyToken(token.getRefreshToken());
                 // 解析成功，可以刷新
-                Attribute.setAttributes(request, Attribute.TOKEN_REFRESH, true);
-            } catch (Exception refreshTokenException) {
-                log.warn("refreshToken不正确或已过期");
+                TokenAttribute.setAttributes(request, TokenAttribute.TOKEN_REFRESH, true);
+            } catch (TokenExpiredException refreshTokenException) {
+                log.warn("refreshToken不正确或已过期", refreshTokenException);
                 throw new TokenExpiredException("token已过期");
             }
         }
-        Attribute.setAttributes(request, Attribute.TOKEN_SUBJECT, subject);
+        TokenAttribute.setAttributes(request, TokenAttribute.TOKEN_SUBJECT, subject);
         return false;
     }
 
     @Override
     public Token obtainToken() {
-        return Attribute.TOKEN.obtainToken(WebContext.obtainRequest());
+        return TokenAttribute.TOKEN.obtainToken(WebContext.obtainRequest());
     }
 
     /**

@@ -5,6 +5,9 @@ import com.gloamframework.cache.ExpireValue;
 import com.gloamframework.web.response.WebResult;
 import com.gloamframework.web.security.GloamSecurityCacheManager;
 import com.gloamframework.web.security.annotation.Authentication;
+import com.gloamframework.web.security.annotation.Token;
+import com.gloamframework.web.security.token.TokenManager;
+import com.gloamframework.web.security.token.constant.Device;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,8 +26,12 @@ public class TestApiController {
     @Autowired
     private GloamSecurityCacheManager cacheManager;
 
+    @Autowired
+    private TokenManager tokenManager;
+
     @GetMapping("/auth")
-    @Authentication(hasAuth = "kk:oo")
+    @Authentication
+    @Token(strategy = Token.Strategy.WANT)
     public WebResult<String> auth() {
         return WebResult.success("登录成功");
     }
@@ -36,11 +43,20 @@ public class TestApiController {
     }
 
     @PostMapping("/ae3")
-    @Authentication(hasAuth = "sss:sss")
+    @Authentication(hasAuth = "sss:ss")
+    @Token(strategy = Token.Strategy.NONE)
     public WebResult<String> auth3() {
         cacheManager.getCache().put("ttl-test", new ExpireValue(new LoginModel("user", "admin"), 30000));
         cacheManager.getCache().put("ttl@3333", new LoginModel("user1", "admin1"), 20000);
         LoginModel loginModel = cacheManager.getCache().get("ttl@3333", LoginModel.class);
         return WebResult.success("success");
     }
+
+    @PostMapping("/login")
+    @Token(strategy = Token.Strategy.NONE)
+    public WebResult<String> login() {
+        tokenManager.authenticate("123456", Device.PC);
+        return WebResult.success("登录成功");
+    }
+
 }

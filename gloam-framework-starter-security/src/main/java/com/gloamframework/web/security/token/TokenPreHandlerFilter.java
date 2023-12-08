@@ -5,7 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.gloamframework.common.crypto.AESUtil;
 import com.gloamframework.web.security.filter.GloamOncePerRequestFilter;
-import com.gloamframework.web.security.token.constant.Attribute;
+import com.gloamframework.web.security.token.constant.TokenAttribute;
 import com.gloamframework.web.security.token.domain.Token;
 import com.gloamframework.web.security.token.domain.UnauthorizedToken;
 import com.gloamframework.web.security.token.exception.TokenAnalysisException;
@@ -40,29 +40,50 @@ public class TokenPreHandlerFilter extends GloamOncePerRequestFilter {
 
     @Override
     protected void doGloamFilter(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        com.gloamframework.web.security.annotation.Token.Strategy tokenStrategy = (com.gloamframework.web.security.annotation.Token.Strategy) TokenAttribute.TOKEN_STRATEGY.obtain(request);
+        switch (tokenStrategy) {
+            case NONE: {
+                filterChain.doFilter(request, response);
+                break;
+            }
+            case WANT: {
+                try {
+                    this.tokenPreHandler(request);
+                    break;
+                } catch (Exception ignore) {
+                    // 对不正确的token不进行强制处理
+                    break;
+                } finally {
+                    filterChain.doFilter(request, response);
+                }
+            }
+            default: {
+                this.tokenPreHandler(request);
+                filterChain.doFilter(request, response);
+            }
+        }
+
+    }
+
+    private void tokenPreHandler(HttpServletRequest request) {
         // 获取请求头中token的存储
         String tokenHeader = request.getHeader(tokenProperties.getHeader());
         String ticketHeader = request.getHeader(tokenProperties.getTicket().getHeader());
-        try {
-            Token token;
-            if (StrUtil.isBlank(tokenHeader)) {
-                token = new UnauthorizedToken();
-            } else {
-                token = this.analysisToken(tokenHeader, request);
-            }
-            Token ticket;
-            if (StrUtil.isBlank(ticketHeader)) {
-                ticket = new UnauthorizedToken();
-            } else {
-                ticket = this.analysisToken(ticketHeader, request);
-            }
-            // 将解析的token放入请求属性
-            Attribute.setAttributes(request, Attribute.TOKEN, token);
-            Attribute.setAttributes(request, Attribute.TICKET, ticket);
-            filterChain.doFilter(request, response);
-        } finally {
-            Attribute.removeAttributes(request);
+        Token token;
+        if (StrUtil.isBlank(tokenHeader)) {
+            token = new UnauthorizedToken();
+        } else {
+            token = this.analysisToken(tokenHeader, request);
         }
+        Token ticket;
+        if (StrUtil.isBlank(ticketHeader)) {
+            ticket = new UnauthorizedToken();
+        } else {
+            ticket = this.analysisToken(ticketHeader, request);
+        }
+        // 将解析的token放入请求属性
+        TokenAttribute.setAttributes(request, TokenAttribute.TOKEN, token);
+        TokenAttribute.setAttributes(request, TokenAttribute.TICKET, ticket);
     }
 
     private Token analysisToken(String tokenHeader, HttpServletRequest request) {

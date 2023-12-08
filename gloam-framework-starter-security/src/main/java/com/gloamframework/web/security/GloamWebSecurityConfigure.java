@@ -7,9 +7,7 @@ import com.gloamframework.web.security.exception.GloamWebSecurityAdapterApplyExc
 import com.gloamframework.web.security.filter.GloamFilterConfigure;
 import com.gloamframework.web.security.match.GloamMachterConfigure;
 import com.gloamframework.web.security.properties.SecurityProperties;
-import com.gloamframework.web.security.token.TokenAuthenticationFilter;
 import com.gloamframework.web.security.token.TokenConfigure;
-import com.gloamframework.web.security.token.TokenManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
@@ -23,7 +21,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.web.AuthenticationEntryPoint;
 
 import java.util.Comparator;
 import java.util.List;
@@ -54,20 +51,11 @@ public class GloamWebSecurityConfigure extends WebSecurityConfigurerAdapter {
     @Autowired
     private List<GloamWebSecurityConfigurerAdapter> webSecurityConfigurerAdapters;
 
-    @Autowired
-    private AuthenticationEntryPoint authenticationEntryPoint;
-
-    @Autowired
-    private TokenManager tokenManager;
-
     @Override
     protected void configure(HttpSecurity http) {
         httpSecurityConfigurerAdapters.stream().sorted(Comparator.comparingInt(Ordered::getOrder)).forEachOrdered(adapter -> {
             try {
-                http
-                        // 认证
-                        .addFilter(new TokenAuthenticationFilter(authenticationManager(), authenticationEntryPoint, tokenManager))
-                        .apply(adapter);
+                http.apply(adapter);
                 log.debug("gloam http security apply adapter success on order:{} # {}", adapter.getOrder(), adapter);
             } catch (Exception e) {
                 throw new GloamHttpSecurityAdapterApplyException("gloam http security adapter apply fail", "配置适配器:" + adapter + "失败", e);

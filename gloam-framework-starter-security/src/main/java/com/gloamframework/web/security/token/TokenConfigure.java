@@ -20,19 +20,6 @@ import org.springframework.context.annotation.ComponentScan;
 public class TokenConfigure {
 
     @Bean
-    @ConditionalOnMissingBean(TokenPreHandlerFilter.class)
-    public TokenPreHandlerFilter tokenPreHandlerFilter(SecurityProperties securityProperties) {
-        return new TokenPreHandlerFilter(securityProperties.getToken());
-    }
-
-    @Bean
-    @ConditionalOnMissingBean(DeviceMatchFilter.class)
-    public DeviceMatchFilter deviceMatchFilter() {
-        return new DeviceMatchFilter();
-    }
-
-
-    @Bean
     @SuppressWarnings("all")
     @ConditionalOnMissingBean(TokenManager.class)
     public TokenManager tokenManager(SecurityProperties securityProperties, GloamSecurityCacheManager cacheManager) {
@@ -48,5 +35,22 @@ public class TokenConfigure {
         }
     }
 
+    @Bean
+    @ConditionalOnMissingBean(DeviceAndTokenStrategyMatchFilter.class)
+    public DeviceAndTokenStrategyMatchFilter deviceMatchFilter() {
+        return new DeviceAndTokenStrategyMatchFilter();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(TokenPreHandlerFilter.class)
+    public TokenPreHandlerFilter tokenPreHandlerFilter(SecurityProperties securityProperties) {
+        return new TokenPreHandlerFilter(securityProperties.getToken());
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(TokenAuthenticationFilter.class)
+    public TokenAuthenticationFilter tokenAuthenticationFilter(TokenManager tokenManager) {
+        return new TokenAuthenticationFilter(tokenManager);
+    }
 
 }

@@ -6,6 +6,7 @@ import com.gloamframework.web.security.token.exception.TokenAuthenticateExceptio
 import com.gloamframework.web.security.token.exception.TokenExpiredException;
 import com.gloamframework.web.security.token.properties.TokenProperties;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.apache.commons.lang3.StringUtils;
@@ -45,9 +46,14 @@ public class JwtTokenManager extends AbstractCacheTokenManager {
         if (StringUtils.isBlank(accessToken)) {
             throw new TokenAuthenticateException("JWT:验证token为空");
         } else {
-            Claims claims = Jwts.parser().setSigningKey(this.tokenProperties.getSecret()).parseClaimsJws(accessToken).getBody();
-            this.verifyTokenExpired(claims);
-            return claims.getSubject();
+            try {
+                Claims claims = Jwts.parser().setSigningKey(this.tokenProperties.getSecret()).parseClaimsJws(accessToken).getBody();
+                this.verifyTokenExpired(claims);
+                return claims.getSubject();
+            } catch (ExpiredJwtException jwtException) {
+                throw new TokenExpiredException("token已过期", jwtException);
+            }
+
         }
     }
 

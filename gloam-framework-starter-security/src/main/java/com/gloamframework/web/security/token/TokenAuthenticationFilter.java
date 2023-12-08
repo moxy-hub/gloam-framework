@@ -1,13 +1,12 @@
 package com.gloamframework.web.security.token;
 
-import com.gloamframework.web.security.token.constant.Attribute;
+import com.gloamframework.web.security.annotation.Token;
+import com.gloamframework.web.security.filter.GloamOncePerRequestFilter;
 import com.gloamframework.web.security.token.constant.Device;
+import com.gloamframework.web.security.token.constant.TokenAttribute;
 import com.gloamframework.web.security.token.exception.TokenAuthenticateException;
 import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.web.AuthenticationEntryPoint;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -22,24 +21,50 @@ import java.io.IOException;
  */
 @EqualsAndHashCode(callSuper = true)
 @Slf4j
-public class TokenAuthenticationFilter extends BasicAuthenticationFilter {
+public class TokenAuthenticationFilter extends GloamOncePerRequestFilter {
 
     private final TokenManager tokenManager;
 
-    public TokenAuthenticationFilter(AuthenticationManager authenticationManager, AuthenticationEntryPoint authenticationEntryPoint, TokenManager tokenManager) {
-        super(authenticationManager, authenticationEntryPoint);
+    public TokenAuthenticationFilter(TokenManager tokenManager) {
         this.tokenManager = tokenManager;
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
+    protected void doGloamFilter(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        // 匹配认证策略
+        Token.Strategy strategy = (Token.Strategy) TokenAttribute.TOKEN_STRATEGY.obtain(request);
+        switch (strategy) {
+            case NONE: {
+                break;
+            }
+            case WANT: {
+                try {
+                    this.authentication(request);
+                    break;
+                } catch (Exception ignore) {
+                    // 尝试解析，不考虑成功率
+                    break;
+                }
+            }
+            default: {
+                // 进行认证
+                this.authentication(request);
+            }
+        }
+        filterChain.doFilter(request, response);
+    }
+
+    private void authentication(HttpServletRequest request) {
         // 进行token认证
-        boolean authRes = tokenManager.checkAuthentication((Device) request.getAttribute(Attribute.DEVICE.name()));
+        boolean authRes = tokenManager.checkAuthentication((Device) request.getAttribute(TokenAttribute.DEVICE.name()));
         if (!authRes) {
             throw new TokenAuthenticateException("认证失败");
         }
         // todo 认证通过
-        chain.doFilter(request, response);
     }
 
+    @Override
+    public int getOrder() {
+        return 3;
+    }
 }

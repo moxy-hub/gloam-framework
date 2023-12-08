@@ -19,4 +19,9 @@ public class GloamMachterConfigure {
         return new AuthenticationMatcher();
     }
 
+    @Bean
+    public TokenMatcher tokenMatcher() {
+        return new TokenMatcher();
+    }
+
 }
