@@ -6,6 +6,5 @@ package com.gloamframework.web.security.token.constant;
  * @author 晓龙
  */
 public enum TokenStrategy {
-
     JWT
 }

@@ -38,20 +38,8 @@ public class TokenAuthenticationFilter extends BasicAuthenticationFilter {
         if (!authRes) {
             throw new TokenAuthenticateException("认证失败");
         }
+        // todo 认证通过
         chain.doFilter(request, response);
     }
 
-    //    @Override
-//    protected void doGloamFilter(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException {
-//        // 进行token认证
-//        boolean authRes = tokenManager.checkAuthentication((Device) request.getAttribute(Attribute.DEVICE.name()));
-//        if (!authRes){
-//            throw new TokenAuthenticateException("认证失败");
-//        }
-//    }
-//
-//    @Override
-//    public int getOrder() {
-//        return 3;
-//    }
 }
