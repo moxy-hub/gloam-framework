@@ -3,7 +3,6 @@ package com.gloamframework.web.security.token;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.gloamframework.web.context.WebContext;
-import com.gloamframework.web.security.GloamSecurityCacheManager;
 import com.gloamframework.web.security.token.constant.Attribute;
 import com.gloamframework.web.security.token.constant.Device;
 import com.gloamframework.web.security.token.domain.Token;
@@ -13,8 +12,6 @@ import com.gloamframework.web.security.token.exception.TokenAuthenticateExceptio
 import com.gloamframework.web.security.token.exception.TokenExpiredException;
 import com.gloamframework.web.security.token.exception.TokenGenerateException;
 import com.gloamframework.web.security.token.properties.TokenProperties;
-import lombok.Data;
-import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.time.DateUtils;
 
@@ -94,7 +91,7 @@ public abstract class AbstractTokenManager implements TokenManager {
             log.error("未在请求中检测到token");
             throw new TokenAuthenticateException("无效token");
         }
-        if (UnauthorizedToken.class.isAssignableFrom(token.getClass())){
+        if (UnauthorizedToken.class.isAssignableFrom(token.getClass())) {
             log.error("未认证token");
             throw new TokenAuthenticateException("未认证请求");
         }

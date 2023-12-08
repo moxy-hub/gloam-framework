@@ -99,6 +99,6 @@ public class TokenProperties {
         /**
          * token被踢下线的时长
          */
-        private long kickOffTime = 60*60*1000;
+        private long kickOffTime = 60 * 60 * 1000;
     }
 }
