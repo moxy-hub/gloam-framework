@@ -23,7 +23,17 @@ public enum Attribute {
     /**
      * 请求设备
      */
-    DEVICE;
+    DEVICE,
+
+    /**
+     * 是否进行刷新
+     */
+    TOKEN_REFRESH,
+
+    /**
+     * token主题
+     */
+    TOKEN_SUBJECT;
 
     /**
      * 将请求携带的信息转化为内部使用属性

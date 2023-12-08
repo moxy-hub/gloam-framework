@@ -1,7 +1,7 @@
 package com.gloamframework.web.security;
 
+import com.gloamframework.cache.GloamCache;
 import lombok.Getter;
-import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 
 /**
@@ -12,10 +12,10 @@ public final class GloamSecurityCacheManager {
 
     private static final String DEFAULT_CACHE_NAME = "Security";
 
-    private final Cache cache;
+    private final GloamCache cache;
 
     public GloamSecurityCacheManager(CacheManager cacheManager) {
-        this.cache = cacheManager.getCache(DEFAULT_CACHE_NAME);
+        this.cache = new GloamCache(cacheManager.getCache(DEFAULT_CACHE_NAME));
     }
 
 }

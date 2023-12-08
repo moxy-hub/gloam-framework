@@ -14,9 +14,7 @@
     <description>接入sa-token和spring-security的安全套件</description>
 
     <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <jwt.version>0.9.1</jwt.version>
     </properties>
 
     <dependencies>
@@ -45,6 +43,13 @@
             <artifactId>guava</artifactId>
         </dependency>
 
+        <!-- jwt -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>${jwt.version}</version>
+        </dependency>
+
         <!-- 不进行传递 -->
         <dependency>
             <groupId>com.gloamframework</groupId>
@@ -57,6 +62,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>

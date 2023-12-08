@@ -1,4 +1,4 @@
-package com.gloamframework.cache.dynamic;
+package com.gloamframework.cache.redis;
 
 import org.springframework.data.redis.cache.RedisCache;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;

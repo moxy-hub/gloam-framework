@@ -17,6 +17,7 @@
         <module>../gloam-framework-data</module>
         <module>../gloam-framework-starter-mybatis-flex</module>
         <module>../gloam-framework-starter-mybatis-flex-codegen</module>
+        <module>../gloam-framework-starter-redis</module>
         <module>../gloam-framework-starter-cache</module>
         <module>../gloam-framework-starter-security</module>
         <module>../gloam-framework-starter-tomcat</module>

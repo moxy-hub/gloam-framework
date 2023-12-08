@@ -1,6 +1,7 @@
 package com.gloam.web.security;
 
 import com.gloam.web.security.domain.LoginModel;
+import com.gloamframework.cache.ExpireValue;
 import com.gloamframework.web.response.WebResult;
 import com.gloamframework.web.security.GloamSecurityCacheManager;
 import com.gloamframework.web.security.annotation.Authentication;
@@ -37,9 +38,9 @@ public class TestApiController {
     @PostMapping("/ae3")
     @Authentication(hasAuth = "sss:sss")
     public WebResult<String> auth3() {
-        cacheManager.getCache().put("ddd", new LoginModel("user", "admin"));
-        cacheManager.getCache().put("234", new LoginModel("user1", "admin1"));
-        LoginModel loginModel = cacheManager.getCache().get("234", LoginModel.class);
+        cacheManager.getCache().put("ttl-test", new ExpireValue(new LoginModel("user", "admin"), 30000));
+        cacheManager.getCache().put("ttl@3333", new LoginModel("user1", "admin1"), 20000);
+        LoginModel loginModel = cacheManager.getCache().get("ttl@3333", LoginModel.class);
         return WebResult.success("success");
     }
 }

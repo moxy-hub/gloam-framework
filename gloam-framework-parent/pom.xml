@@ -179,6 +179,12 @@
                 <version>${gloam.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.gloamframework</groupId>
+                <artifactId>gloam-framework-starter-redis</artifactId>
+                <version>${gloam.version}</version>
+            </dependency>
+
             <!-- gloam-starter-cache -->
             <dependency>
                 <groupId>com.gloamframework</groupId>

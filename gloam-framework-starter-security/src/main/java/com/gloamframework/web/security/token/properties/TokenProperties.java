@@ -18,6 +18,11 @@ public class TokenProperties {
     private TokenStrategy strategy = TokenStrategy.JWT;
 
     /**
+     * 是否启动同端排斥，会自动挤下线
+     */
+    private boolean enableDeviceRepel = false;
+
+    /**
      * token存储的header名称
      */
     private String header = "Authorization";
@@ -91,5 +96,9 @@ public class TokenProperties {
     @Data
     public static class AuthenticationProperties {
 
+        /**
+         * token被踢下线的时长
+         */
+        private long kickOffTime = 60*60*1000;
     }
 }

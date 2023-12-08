@@ -1,4 +1,4 @@
-package com.gloamframework.cache.dynamic;
+package com.gloamframework.cache.redis;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -9,6 +9,9 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.gloamframework.cache.properties.CacheProperties;
+import com.gloamframework.cache.redis.properties.RedisCacheProperties;
+import com.gloamframework.core.boot.diagnostics.GloamStartException;
+import com.gloamframework.data.redis.GloamRedisTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
@@ -30,9 +33,9 @@ import java.util.List;
 
 @Configurable
 @AutoConfigureAfter({RedisAutoConfiguration.class})
-public class DynamicCacheConfigure {
+public class RedisCacheConfigure {
 
-    private static final Logger log = LoggerFactory.getLogger(DynamicCacheConfigure.class);
+    private static final Logger log = LoggerFactory.getLogger(RedisCacheConfigure.class);
 
     @PostConstruct
     public void init() {
@@ -42,7 +45,11 @@ public class DynamicCacheConfigure {
     @Bean
     @Primary
     @ConditionalOnProperty(value = "spring.cache.type", havingValue = "REDIS")
-    public RedisCacheManager cacheManager(CacheProperties cacheProperties, ObjectProvider<RedisCacheConfiguration> redisCacheConfiguration, RedisConnectionFactory redisConnectionFactory) {
+    public RedisCacheManager cacheManager(CacheProperties cacheProperties, ObjectProvider<RedisCacheConfiguration> redisCacheConfiguration, GloamRedisTemplate gloamRedisTemplate) {
+        RedisConnectionFactory redisConnectionFactory;
+        if ((redisConnectionFactory = gloamRedisTemplate.getConnectionFactory()) == null) {
+            throw new GloamStartException("缓存加载失败", "未找到GloamRedisTemplate,请检查redis配置");
+        }
         List<String> cacheNamesProp = cacheProperties.getCacheNames();
         String[] cacheNames = {};
         if (CollectionUtil.isNotEmpty(cacheNamesProp)) {
@@ -57,7 +64,7 @@ public class DynamicCacheConfigure {
     }
 
     private RedisCacheConfiguration createConfiguration(CacheProperties cacheProperties) {
-        CacheProperties.Redis redisProperties = cacheProperties.getRedis();
+        RedisCacheProperties redisProperties = cacheProperties.getRedis();
         RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig();
         // json序列化配置
         Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(Object.class);
