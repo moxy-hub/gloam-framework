@@ -37,7 +37,7 @@ import java.util.List;
 @EnableConfigurationProperties(SecurityProperties.class)
 @Import({GloamBasicAdapterConfigure.class, GloamFilterConfigure.class, GloamMachterConfigure.class, TokenConfigure.class, GloamSecurityCacheConfigure.class})
 @Slf4j
-public class GloamWebSecurityConfigure extends WebSecurityConfigurerAdapter {
+public class GloamSecurityConfigure extends WebSecurityConfigurerAdapter {
 
     /**
      * HttpSecurity适配器

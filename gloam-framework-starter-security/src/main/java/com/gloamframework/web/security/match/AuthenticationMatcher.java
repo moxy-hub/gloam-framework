@@ -58,7 +58,6 @@ public class AuthenticationMatcher extends AbstractSpringMvcPathMatcher<Authenti
     protected void registerFilter(String pathUrl, HttpMethod httpMethod, Authentication annotation) {
         // 处理匹配到的路径
         authenticationRequests.add(new AuthenticationRequest(pathUrl, httpMethod, annotation));
-
     }
 
     @Override

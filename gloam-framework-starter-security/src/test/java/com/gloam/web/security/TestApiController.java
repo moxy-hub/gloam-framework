@@ -33,7 +33,8 @@ public class TestApiController {
     @Authentication
     @Token(strategy = Token.Strategy.WANT)
     public WebResult<String> auth() {
-        return WebResult.success("登录成功");
+        throw new NullPointerException("error");
+//        return WebResult.success("登录成功");
     }
 
     @PostMapping("/ae")

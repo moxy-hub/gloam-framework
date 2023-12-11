@@ -52,6 +52,7 @@ public class TokenPreHandlerFilter extends GloamOncePerRequestFilter {
                     break;
                 } catch (Exception ignore) {
                     // 对不正确的token不进行强制处理
+                    log.warn("try to authenticate token but found un correct token,please make sure your system is safe[获取请求token时格式或解析错误,由于该请求使用的WANT策略,所以进行放行,请确保您的系统安全]");
                     break;
                 } finally {
                     filterChain.doFilter(request, response);

@@ -1,5 +1,6 @@
 package com.gloamframework.web.security.match;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.gloamframework.web.security.annotation.Token;
 import lombok.AllArgsConstructor;
@@ -22,6 +23,7 @@ public class TokenMatcher extends AbstractSpringMvcPathMatcher<Token> {
 
     private static final PathMatcher pathMatcher = new AntPathMatcher();
     private static final List<TokenPath> TOKEN_PATHS = new ArrayList<>();
+    private static boolean reversed = false;
 
     @AllArgsConstructor
     private static class TokenPath {
@@ -68,15 +70,19 @@ public class TokenMatcher extends AbstractSpringMvcPathMatcher<Token> {
         }
         String uri = request.getRequestURI();
         String method = request.getMethod();
+        if (!reversed) {
+            CollectionUtil.reverse(TOKEN_PATHS);
+            reversed = true;
+        }
         for (TokenPath tokenPath : TOKEN_PATHS) {
             Token.Strategy strategy = tokenPath.matchStrategy(uri, method);
             if (strategy != null) {
-                log.info("请求:{}#{} 执行token策略:{}", uri, method, strategy);
+                log.info("请求:{}#{} 执行token策略:{}", request.getRequestURL(), method, strategy);
                 return strategy;
             }
         }
         // 没有匹配到，默认need
-        log.info("请求:{}#{} 执行token策略:{}", uri, method, Token.Strategy.NEED);
+        log.info("请求:{}#{} 执行token策略:{}", request.getRequestURL(), method, Token.Strategy.NEED);
         return Token.Strategy.NEED;
     }
 }

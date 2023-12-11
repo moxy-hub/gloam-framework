@@ -1,5 +1,6 @@
 package com.gloamframework.web.security.token;
 
+import com.gloamframework.web.security.GloamSecurityContext;
 import com.gloamframework.web.security.annotation.Token;
 import com.gloamframework.web.security.filter.GloamOncePerRequestFilter;
 import com.gloamframework.web.security.token.constant.Device;
@@ -41,8 +42,9 @@ public class TokenAuthenticationFilter extends GloamOncePerRequestFilter {
                 try {
                     this.authentication(request);
                     break;
-                } catch (Exception ignore) {
+                } catch (Exception exception) {
                     // 尝试解析，不考虑成功率
+                    log.warn("try to authenticate token but found exception,because use [WANT] strategy,so this request pass without authentication,full exception", exception);
                     break;
                 }
             }
@@ -60,7 +62,8 @@ public class TokenAuthenticationFilter extends GloamOncePerRequestFilter {
         if (!authRes) {
             throw new TokenAuthenticateException("认证失败");
         }
-        // todo 认证通过
+        // 认证通过
+        GloamSecurityContext.passAuthentication(TokenAttribute.TOKEN_SUBJECT.obtain(request));
     }
 
     @Override

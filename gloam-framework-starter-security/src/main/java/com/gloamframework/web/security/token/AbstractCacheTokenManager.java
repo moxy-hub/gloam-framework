@@ -136,6 +136,14 @@ public abstract class AbstractCacheTokenManager extends AbstractTokenManager {
                 // 获取锁失败
                 throw new TokenAuthenticateException("同时有多人对该账号进行认证，请稍后再试，如果不是本人操作，请及时检查");
             }
+            // 是否需要刷新
+            boolean refresh = (boolean) TokenAttribute.TOKEN_REFRESH.obtain(request);
+            if (refresh) {
+                // 移除当前token
+                this.revoke(subject, device);
+                // 重新生成token
+                this.authenticate(subject, device);
+            }
             // 获取缓存token
             TokenInfo tokenInfo = cacheManager.getCache().get(this.generateCacheKey(TokenPrefix.TOKEN, subject, device), TokenInfo.class);
             if (tokenInfo == null) {
@@ -145,14 +153,6 @@ public abstract class AbstractCacheTokenManager extends AbstractTokenManager {
             // 是否还在线
             if (tokenInfo.isKickOff()) {
                 throw new TokenAuthenticateException("您已被踢下线");
-            }
-            // 是否需要刷新
-            boolean refresh = (boolean) TokenAttribute.TOKEN_REFRESH.obtain(request);
-            if (refresh) {
-                // 移除当前token
-                this.revoke(subject, device);
-                // 重新生成token
-                this.authenticate(subject, device);
             }
             return true;
         } finally {

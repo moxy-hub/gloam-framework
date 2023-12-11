@@ -1,5 +1,6 @@
 package com.gloamframework.web.exception;
 
+import com.gloamframework.core.exception.GloamRuntimeException;
 import com.gloamframework.web.context.WebContext;
 import com.gloamframework.web.response.WebResult;
 import com.gloamframework.web.view.GloamView;
@@ -29,8 +30,14 @@ public class GlomaHandlerExceptionResolver implements HandlerExceptionResolver, 
     @SuppressWarnings("all")
     public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
         log.error("IP:[{}] 请求资源:[{}:{}] 发生异常,异常类型:{},异常原因:{}", WebContext.obtainIp(request), request.getMethod(), request.getRequestURI(), ex.getClass(), ex.getMessage(), ex);
-        log.warn("如果需要自定义异常返回,请对异常:{} 进行统一处理,默认返回500", ex.getClass());
-        ModelAndView modelAndView = new ModelAndView(new GloamView(WebResult.refuse("服务器无法处理您的请求")));
+        String errorMessage;
+        if (GloamRuntimeException.class.isAssignableFrom(ex.getClass())) {
+            errorMessage = ((GloamRuntimeException) ex).getMessage();
+        } else {
+            log.warn("对于非Gloam框架的异常，统一返回500，如有特殊处理，请自行全局处理");
+            errorMessage = "服务器无法处理您的请求";
+        }
+        ModelAndView modelAndView = new ModelAndView(new GloamView(WebResult.refuse(errorMessage)));
         modelAndView.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
         return modelAndView;
     }

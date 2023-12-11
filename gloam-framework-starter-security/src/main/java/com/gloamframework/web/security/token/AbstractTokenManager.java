@@ -117,7 +117,7 @@ public abstract class AbstractTokenManager implements TokenManager {
             }
         }
         TokenAttribute.setAttributes(request, TokenAttribute.TOKEN_SUBJECT, subject);
-        return false;
+        return true;
     }
 
     @Override

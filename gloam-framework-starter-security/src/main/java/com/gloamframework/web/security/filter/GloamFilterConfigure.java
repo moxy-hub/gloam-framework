@@ -14,6 +14,11 @@ import java.util.List;
 public class GloamFilterConfigure {
 
     @Bean
+    public GloamFilterRegistrationBeanPostProcessor gloamFilterRegistrationBeanPostProcessor() {
+        return new GloamFilterRegistrationBeanPostProcessor();
+    }
+
+    @Bean
     @ConditionalOnMissingBean(GloamFilterConfigurerAdapter.class)
     public GloamHttpSecurityConfigurerAdapter gloamFilterConfigurerAdapter(List<GloamOncePerRequestFilter> gloamOncePerRequestFilters) {
         return new GloamFilterConfigurerAdapter(gloamOncePerRequestFilters);

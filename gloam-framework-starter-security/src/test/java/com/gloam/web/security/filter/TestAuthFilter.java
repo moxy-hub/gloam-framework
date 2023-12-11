@@ -1,7 +1,7 @@
 package com.gloam.web.security.filter;
 
+import com.gloamframework.web.security.GloamAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,7 +27,7 @@ public class TestAuthFilter extends BasicAuthenticationFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList("sss:sss");
-        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("aa", "ss", authorities));
+        SecurityContextHolder.getContext().setAuthentication(new GloamAuthenticationToken("aa", "ss", authorities));
         super.doFilterInternal(request, response, chain);
     }
 
