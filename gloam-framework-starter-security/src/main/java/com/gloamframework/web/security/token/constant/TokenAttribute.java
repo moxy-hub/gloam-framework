@@ -1,6 +1,7 @@
 package com.gloamframework.web.security.token.constant;
 
 import cn.hutool.core.util.EnumUtil;
+import com.gloamframework.web.security.attribute.Attribute;
 import com.gloamframework.web.security.token.domain.Token;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
  *
  * @author 晓龙
  */
-public enum TokenAttribute {
+public enum TokenAttribute implements Attribute {
 
     /**
      * token解析属性
@@ -24,63 +25,26 @@ public enum TokenAttribute {
      * 请求设备
      */
     DEVICE,
-
     /**
      * token策略
      */
     TOKEN_STRATEGY,
-
     /**
      * 是否进行刷新
      */
     TOKEN_REFRESH,
-
     /**
      * token主题
      */
     TOKEN_SUBJECT;
 
-    /**
-     * 将请求携带的信息转化为内部使用属性
-     *
-     * @param request 请求
-     */
-    public static void setAttributes(HttpServletRequest request, TokenAttribute attributeName, Object attribute) {
-        if (request == null) {
-            return;
-        }
-        // 如果为TOKEN，则必须为规定的类型
-        if (EnumUtil.equals(attributeName, TokenAttribute.TOKEN.name()) && !Token.class.isAssignableFrom(attribute.getClass())) {
-            return;
-        }
-        // 设置
-        request.setAttribute(attributeName.name(), attribute);
-    }
-
-    /**
-     * 移除请求的内部处理属性
-     *
-     * @param request 请求
-     */
-    public static void removeAttributes(HttpServletRequest request) {
+    public static void clearAll(HttpServletRequest request) {
         if (request == null) {
             return;
         }
         for (TokenAttribute attribute : TokenAttribute.values()) {
             request.removeAttribute(attribute.name());
         }
-    }
-
-    /**
-     * 获取内部参数
-     *
-     * @param request 请求
-     */
-    public Object obtain(HttpServletRequest request) {
-        if (request == null) {
-            return null;
-        }
-        return request.getAttribute(this.name());
     }
 
     /**

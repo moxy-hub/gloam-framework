@@ -5,6 +5,7 @@ import com.gloamframework.web.security.GloamSecurityContext;
 import com.gloamframework.web.security.annotation.Token;
 import com.gloamframework.web.security.token.constant.Device;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +21,7 @@ public class UserController {
     public WebResult<Void> login(String username, String password) {
         if ("admin".equals(username) && "admin".equals(password)) {
             GloamSecurityContext.passAuthenticationWithResponseHeader(username, password, Device.PC);
+            Authentication authentication = GloamSecurityContext.obtainAuthentication();
             return WebResult.success(null, "登录成功");
         }
         return WebResult.fail("用户名密码错误");

@@ -83,7 +83,7 @@ public abstract class AbstractTokenManager implements TokenManager {
     }
 
     @Override
-    public boolean checkAuthentication(Device device) {
+    public void checkAuthentication(Device device) {
         HttpServletRequest request = WebContext.obtainRequest();
         // 请求携带的token
         Token token = TokenAttribute.TOKEN.obtainToken(request);
@@ -110,14 +110,13 @@ public abstract class AbstractTokenManager implements TokenManager {
             try {
                 subject = this.verifyToken(token.getRefreshToken());
                 // 解析成功，可以刷新
-                TokenAttribute.setAttributes(request, TokenAttribute.TOKEN_REFRESH, true);
+                TokenAttribute.TOKEN_REFRESH.setAttributes(request, true);
             } catch (TokenExpiredException refreshTokenException) {
                 log.warn("refreshToken不正确或已过期", refreshTokenException);
                 throw new TokenExpiredException("token已过期");
             }
         }
-        TokenAttribute.setAttributes(request, TokenAttribute.TOKEN_SUBJECT, subject);
-        return true;
+        TokenAttribute.TOKEN_SUBJECT.setAttributes(request, subject);
     }
 
     @Override

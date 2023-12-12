@@ -83,8 +83,8 @@ public class TokenPreHandlerFilter extends GloamOncePerRequestFilter {
             ticket = this.analysisToken(ticketHeader, request);
         }
         // 将解析的token放入请求属性
-        TokenAttribute.setAttributes(request, TokenAttribute.TOKEN, token);
-        TokenAttribute.setAttributes(request, TokenAttribute.TICKET, ticket);
+        TokenAttribute.TOKEN.setAttributes(request, token);
+        TokenAttribute.TICKET.setAttributes(request, ticket);
     }
 
     private Token analysisToken(String tokenHeader, HttpServletRequest request) {

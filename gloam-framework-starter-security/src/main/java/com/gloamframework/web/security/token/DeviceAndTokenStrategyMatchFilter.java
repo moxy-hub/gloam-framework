@@ -34,15 +34,15 @@ public class DeviceAndTokenStrategyMatchFilter extends GloamOncePerRequestFilter
         } catch (Exception e) {
             device = Device.UNKNOWN;
         }
-        TokenAttribute.setAttributes(request, TokenAttribute.DEVICE, device);
+        TokenAttribute.DEVICE.setAttributes(request, device);
         // 处理token策略
         Token.Strategy strategy = tokenMatcher.matchStrategy(request);
-        TokenAttribute.setAttributes(request, TokenAttribute.TOKEN_STRATEGY, strategy);
+        TokenAttribute.TOKEN_STRATEGY.setAttributes(request, strategy);
         try {
             filterChain.doFilter(request, response);
         } finally {
             // 这是过滤器开始的起一个环境，在最后移除全部属性
-            TokenAttribute.removeAttributes(request);
+            TokenAttribute.clearAll(request);
         }
 
     }

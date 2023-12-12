@@ -5,7 +5,6 @@ import com.gloamframework.web.security.annotation.Token;
 import com.gloamframework.web.security.filter.GloamOncePerRequestFilter;
 import com.gloamframework.web.security.token.constant.Device;
 import com.gloamframework.web.security.token.constant.TokenAttribute;
-import com.gloamframework.web.security.token.exception.TokenAuthenticateException;
 import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
 
@@ -58,10 +57,7 @@ public class TokenAuthenticationFilter extends GloamOncePerRequestFilter {
 
     private void authentication(HttpServletRequest request) {
         // 进行token认证
-        boolean authRes = tokenManager.checkAuthentication((Device) request.getAttribute(TokenAttribute.DEVICE.name()));
-        if (!authRes) {
-            throw new TokenAuthenticateException("认证失败");
-        }
+        tokenManager.checkAuthentication((Device) request.getAttribute(TokenAttribute.DEVICE.name()));
         // 认证通过
         GloamSecurityContext.passAuthentication(TokenAttribute.TOKEN_SUBJECT.obtain(request));
     }

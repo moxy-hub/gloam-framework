@@ -3,6 +3,8 @@ package com.gloamframework.common.crypto;
 
 import com.gloamframework.common.crypto.exception.DecryptException;
 import com.gloamframework.common.crypto.exception.EncryptException;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -16,8 +18,6 @@ import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -31,6 +31,30 @@ import java.util.regex.Pattern;
  * </p>
  */
 public class RSAUtil extends Base64Util {
+
+    @Data
+    @NoArgsConstructor
+    public static class RsaKeypair {
+        private String pubKey;
+        private String priKey;
+        private String pemPubKey;
+        private String pemPriKey;
+
+        private RsaKeypair(String pubKey, String priKey) {
+            this.pubKey = pubKey;
+            this.priKey = priKey;
+            this.pemPubKey = "-----BEGIN PUBLIC KEY-----" +
+                    "\n" +
+                    this.pubKey +
+                    "\n" +
+                    "-----END PUBLIC KEY-----";
+            this.pemPriKey = "-----BEGIN PRIVATE KEY-----" +
+                    "\n" +
+                    this.priKey +
+                    "\n" +
+                    "-----END PRIVATE KEY-----";
+        }
+    }
 
     public static final String KEY_ALGORITHM = "RSA";
     public static final String SIGNATURE_ALGORITHM = "MD5withRSA";
@@ -224,39 +248,23 @@ public class RSAUtil extends Base64Util {
         }
     }
 
-    /**
-     * 取得私钥
-     */
-    public static String getPrivateKey(Map<String, Object> keyMap) throws Exception {
-        Key key = (Key) keyMap.get(PRIVATE_KEY);
-
-        return encryptBASE64(key.getEncoded());
-    }
-
-    /**
-     * 取得公钥
-     */
-    public static String getPublicKey(Map<String, Object> keyMap) throws Exception {
-        Key key = (Key) keyMap.get(PUBLIC_KEY);
-
-        return encryptBASE64(key.getEncoded());
+    public static RsaKeypair initKey() throws NoSuchAlgorithmException {
+        return initKey(1024);
     }
 
     /**
      * 初始化密钥
      */
-    public static Map<String, Object> initKey() throws Exception {
+    public static RsaKeypair initKey(int keySize) throws NoSuchAlgorithmException {
         KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance(KEY_ALGORITHM);
-        keyPairGen.initialize(1024);
+        keyPairGen.initialize(keySize);
         KeyPair keyPair = keyPairGen.generateKeyPair();
         // 公钥
         RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
         // 私钥
         RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
-        Map<String, Object> keyMap = new HashMap<String, Object>(2);
-        keyMap.put(PUBLIC_KEY, publicKey);
-        keyMap.put(PRIVATE_KEY, privateKey);
-        return keyMap;
+        return new RsaKeypair(encryptBASE64(publicKey.getEncoded()),
+                encryptBASE64(privateKey.getEncoded()));
     }
 
     /**

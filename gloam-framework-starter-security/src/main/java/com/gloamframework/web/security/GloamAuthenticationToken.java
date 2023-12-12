@@ -1,5 +1,6 @@
 package com.gloamframework.web.security;
 
+import cn.hutool.core.collection.CollectionUtil;
 import lombok.Getter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,7 +20,6 @@ public class GloamAuthenticationToken extends AbstractAuthenticationToken {
      * 认证的信息存储
      */
     private final Object principal;
-
     /**
      * 认证凭证
      */
@@ -29,7 +29,9 @@ public class GloamAuthenticationToken extends AbstractAuthenticationToken {
         super(authorities);
         this.principal = principal;
         this.credentials = credentials;
-        super.setAuthenticated(true);
+        if (CollectionUtil.isNotEmpty(authorities)) {
+            super.setAuthenticated(true);
+        }
     }
 
     public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {

@@ -1,5 +1,6 @@
 package com.gloamframework.web.security.properties;
 
+import com.gloamframework.web.security.rsa.RsaProperties;
 import com.gloamframework.web.security.token.properties.TokenProperties;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -15,8 +16,16 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 public class SecurityProperties {
 
     /**
+     * 权限标识请求头，用于识别是否存在多权限配置
+     */
+    private String authoritySymbolHeader = "Authority";
+
+    /**
      * token相关的配置
      */
     @NestedConfigurationProperty
     private final TokenProperties token = new TokenProperties();
+
+    @NestedConfigurationProperty
+    private final RsaProperties rsa = new RsaProperties();
 }

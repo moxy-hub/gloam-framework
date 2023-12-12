@@ -5,7 +5,6 @@ import cn.hutool.core.util.StrUtil;
 import com.github.xiaoymin.swaggerbootstrapui.annotations.EnableSwaggerBootstrapUI;
 import com.gloamframework.core.boot.scanner.ResourceScanner;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.beans.factory.config.ConstructorArgumentValues;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
@@ -18,9 +17,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @EnableSwagger2
 @EnableSwaggerBootstrapUI
@@ -49,8 +47,7 @@ public class HttpDocConfigure {
         beanFactory.registerBeanDefinition(StrUtil.format(HTTP_DOCKET_BEAN_NAME, UUID.randomUUID()), beanDf);
     }
 
-    @Autowired
-    private void startupHttpDoc(ApplicationContext applicationContext) {
+    public HttpDocConfigure(ApplicationContext applicationContext, List<HttpDocRegister> httpDocRegisters) {
         // 进行扫描，获取启动注解
         Map<String, Object> enableAnnotationBean = applicationContext.getBeansWithAnnotation(EnableHttpDoc.class);
         if (CollectionUtil.isEmpty(enableAnnotationBean)) {
@@ -60,35 +57,48 @@ public class HttpDocConfigure {
         String basePackage = enableAnnotationBean.values().stream()
                 .findFirst().orElseThrow(() -> new HttpDocInitializeException("初始化在线文档失败，获取基础扫描路径失败"))
                 .getClass().getPackage().getName();
+        boolean containBasePackage = false;
         // 进行扫描
-        List<Class<?>> packageInfoList = null;
+        Set<Class<?>> packageInfoList;
         try {
-            packageInfoList = resourceScanner.scannerForClasses(basePackage, this.getClass().getClassLoader(), "package-info");
+            packageInfoList = new HashSet<>(resourceScanner.scannerForClasses(basePackage, this.getClass().getClassLoader(), "package-info"));
         } catch (IOException e) {
             throw new HttpDocInitializeException("获取swagger包信息资源失败", "swagger配置错误", e);
         }
-        if (CollectionUtil.isEmpty(packageInfoList)) {
-            // 没有package-info，直接创建docket
-            this.registerHttpDocBean(applicationContext, this.assembleDefaultConstructorArgValue(basePackage));
-            return;
+        // 加载package
+        Set<Package> packageSet = packageInfoList.stream().map(Class::getPackage).collect(Collectors.toSet());
+        // 主动注册package
+        if (CollectionUtil.isNotEmpty(httpDocRegisters)) {
+            for (HttpDocRegister httpDocRegister : httpDocRegisters) {
+                Package registerPackage = httpDocRegister.packageInfo();
+                if (registerPackage == null) {
+                    continue;
+                }
+                packageSet.add(registerPackage);
+            }
         }
         // 根据扫描进行创建分组文档
-        for (Class<?> aClass : packageInfoList) {
-            DocGroup annoInfo = aClass.getPackage().getAnnotation(DocGroup.class);
+        for (Package docPackage : packageSet) {
+            DocGroup annoInfo = docPackage.getAnnotation(DocGroup.class);
             if (annoInfo == null) {
                 // 没有注解，默认不进行创建该包下的文档
+                log.warn("包:{}下没有找到@DocGroup注解，不进行HttpDoc注册", docPackage);
                 continue;
             }
             this.registerHttpDocBean(applicationContext,
                     this.assembleConstructorArgValue(
                             annoInfo.title(),
                             annoInfo.tags(),
-                            StringUtils.isEmpty(annoInfo.basePackage()) ? aClass.getPackage().getName() : annoInfo.basePackage(),
+                            StringUtils.isEmpty(annoInfo.basePackage()) ? docPackage.getName() : annoInfo.basePackage(),
                             annoInfo.version(),
                             annoInfo.leader(),
                             annoInfo.description(),
                             annoInfo.serviceUrl()
                     ));
+        }
+        if (CollectionUtil.isEmpty(packageInfoList)) {
+            // 没有package-info，直接创建docket
+            this.registerHttpDocBean(applicationContext, this.assembleDefaultConstructorArgValue(basePackage));
         }
     }
 

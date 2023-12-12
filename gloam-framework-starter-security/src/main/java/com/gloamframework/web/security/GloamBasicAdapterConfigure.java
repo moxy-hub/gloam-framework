@@ -95,5 +95,9 @@ public class GloamBasicAdapterConfigure {
         };
     }
 
+    @Bean
+    public GloamRequestAuthorityFilter gloamRequestAuthorityFilter() {
+        return new GloamRequestAuthorityFilter();
+    }
 
 }

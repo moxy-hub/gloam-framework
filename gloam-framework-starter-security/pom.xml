@@ -19,10 +19,10 @@
 
     <dependencies>
 
-        <!-- gloam core -->
+        <!-- gloam web -->
         <dependency>
             <groupId>com.gloamframework</groupId>
-            <artifactId>gloam-framework-core</artifactId>
+            <artifactId>gloam-framework-web</artifactId>
         </dependency>
 
         <!-- spring-security -->

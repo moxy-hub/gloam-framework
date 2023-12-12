@@ -6,9 +6,11 @@ import com.alibaba.fastjson.JSON;
 import com.gloamframework.data.redis.RedisUtil;
 import com.gloamframework.web.context.WebContext;
 import com.gloamframework.web.security.GloamSecurityCacheManager;
+import com.gloamframework.web.security.attribute.AuthorityAttribute;
 import com.gloamframework.web.security.token.constant.Device;
 import com.gloamframework.web.security.token.constant.TokenAttribute;
 import com.gloamframework.web.security.token.domain.Token;
+import com.gloamframework.web.security.token.exception.TokenAnalysisException;
 import com.gloamframework.web.security.token.exception.TokenAuthenticateException;
 import com.gloamframework.web.security.token.exception.TokenGenerateException;
 import com.gloamframework.web.security.token.exception.TokenKickOffException;
@@ -56,6 +58,11 @@ public abstract class AbstractCacheTokenManager extends AbstractTokenManager {
         private Device device;
 
         /**
+         * 绑定的权限标识
+         */
+        private String switchAuth;
+
+        /**
          * token是否被踢出
          */
         private boolean kickOff = false;
@@ -91,20 +98,26 @@ public abstract class AbstractCacheTokenManager extends AbstractTokenManager {
         HttpServletResponse response = WebContext.obtainResponse();
         if (response == null) {
             log.error("token写入时获取当前响应失败");
-            throw new TokenGenerateException("票据生成失败");
+            throw new TokenGenerateException("token生成失败");
+        }
+        // 获取权限标识
+        String authSymbol = (String) AuthorityAttribute.AUTHORITY_SYMBOL.obtain(WebContext.obtainRequest());
+        if (StrUtil.isBlank(authSymbol)) {
+            log.error("token写入时获取权限标识失败");
+            throw new TokenGenerateException("token生成失败");
         }
         switch (tokenPrefix) {
             case TOKEN: {
                 String tokenJSON = response.getHeader(tokenProperties.getHeader());
                 Token token = JSON.parseObject(tokenJSON, Token.class);
-                TokenInfo tokenInfo = new TokenInfo().setToken(token).setDevice(device).setValidCount(-1);
+                TokenInfo tokenInfo = new TokenInfo().setToken(token).setDevice(device).setValidCount(-1).setSwitchAuth(authSymbol);
                 cacheManager.getCache().put(this.generateCacheKey(tokenPrefix, subject, device), tokenInfo, tokenProperties.getRefreshTokenExpire());
                 break;
             }
             case TICKET: {
                 String ticketJSON = response.getHeader(tokenProperties.getTicket().getHeader());
                 Token ticket = JSON.parseObject(ticketJSON, Token.class);
-                TokenInfo ticketInfo = new TokenInfo().setToken(ticket).setDevice(device).setValidCount(tokenProperties.getTicket().getValidCount());
+                TokenInfo ticketInfo = new TokenInfo().setToken(ticket).setDevice(device).setValidCount(tokenProperties.getTicket().getValidCount()).setSwitchAuth(authSymbol);
                 cacheManager.getCache().put(this.generateCacheKey(tokenPrefix, subject, device), ticketInfo, tokenProperties.getTicket().getValidTime());
                 break;
             }
@@ -116,11 +129,9 @@ public abstract class AbstractCacheTokenManager extends AbstractTokenManager {
     }
 
     @Override
-    public boolean checkAuthentication(Device device) {
+    public void checkAuthentication(Device device) {
         // 先检查token
-        if (!super.checkAuthentication(device)) {
-            return false;
-        }
+        super.checkAuthentication(device);
         // 获取到解析的token主题
         HttpServletRequest request = WebContext.obtainRequest();
         if (request == null) {
@@ -128,6 +139,7 @@ public abstract class AbstractCacheTokenManager extends AbstractTokenManager {
             throw new TokenAuthenticateException("Token认证失败");
         }
         String subject = (String) TokenAttribute.TOKEN_SUBJECT.obtain(request);
+        String authSymbol = (String) AuthorityAttribute.AUTHORITY_SYMBOL.obtain(request);
         // 分布式锁定token
         String randomLock = String.valueOf(System.currentTimeMillis() + RandomUtil.randomChar());
         try {
@@ -150,17 +162,32 @@ public abstract class AbstractCacheTokenManager extends AbstractTokenManager {
                 log.error("token认证: 在缓存中没有查询到相应的token，是否已过期");
                 throw new TokenAuthenticateException("无效token");
             }
+            // 判断权限码
+            if (!StrUtil.equals(tokenInfo.switchAuth, authSymbol)) {
+                throw new TokenAuthenticateException("登录用户不一致，请重新登录");
+            }
             // 是否还在线
             if (tokenInfo.isKickOff()) {
                 throw new TokenAuthenticateException("您已被踢下线");
             }
-            return true;
         } finally {
             // 释放锁
             if (!RedisUtil.LockOps.releaseLock(subject, randomLock)) {
                 log.error("释放分布式锁失败，key:{},value:{}", subject, randomLock);
             }
         }
+    }
+
+    @Override
+    public void switchAuth(String subject, Device device, String authSymbol) {
+        String cacheKey = this.generateCacheKey(TokenPrefix.TOKEN, subject, device);
+        // 在缓存中修改token信息
+        TokenInfo tokenInfo = cacheManager.getCache().get(cacheKey, TokenInfo.class);
+        if (tokenInfo == null) {
+            throw new TokenKickOffException("当前用户不在线");
+        }
+        tokenInfo.setSwitchAuth(authSymbol);
+        cacheManager.getCache().put(cacheKey, JSON.toJSONString(tokenInfo), tokenProperties.getRefreshTokenExpire());
     }
 
     @Override
@@ -171,13 +198,14 @@ public abstract class AbstractCacheTokenManager extends AbstractTokenManager {
 
     @Override
     public void kickOff(String subject, Device device) {
+        String cacheKey = this.generateCacheKey(TokenPrefix.TOKEN, subject, device);
         // 在缓存中修改token信息
-        TokenInfo tokenInfo = cacheManager.getCache().get(this.generateCacheKey(TokenPrefix.TOKEN, subject, device), TokenInfo.class);
+        TokenInfo tokenInfo = cacheManager.getCache().get(cacheKey, TokenInfo.class);
         if (tokenInfo == null) {
             throw new TokenKickOffException("当前用户不在线");
         }
         tokenInfo.setKickOff(true);
-        cacheManager.getCache().put(this.generateCacheKey(TokenPrefix.TOKEN, subject, device), JSON.toJSONString(tokenInfo), tokenProperties.getAuthentication().getKickOffTime());
+        cacheManager.getCache().put(cacheKey, JSON.toJSONString(tokenInfo), tokenProperties.getAuthentication().getKickOffTime());
     }
 
     /**
@@ -193,7 +221,7 @@ public abstract class AbstractCacheTokenManager extends AbstractTokenManager {
         if (device != null) {
             deviceValue = device.name();
         } else {
-            deviceValue = "all";
+            deviceValue = "*";
         }
         // 处理前缀
         if (prefix == null) {
@@ -207,9 +235,15 @@ public abstract class AbstractCacheTokenManager extends AbstractTokenManager {
         // 使用存在同端排斥
         String repel = "allow";
         if (!tokenProperties.isEnableDeviceRepel()) {
-            repel = System.currentTimeMillis() + RandomUtil.randomString(5);
+            // 获取当前token
+            Token token = TokenAttribute.TOKEN.obtainToken(WebContext.obtainRequest());
+            if (token == null) {
+                log.error("生成缓存Key时获取token失败");
+                throw new TokenAnalysisException("获取token失败");
+            }
+            repel = token.getAccessToken().substring(0, 6);
         }
-        return prefix + ":" + subject + ":" + deviceValue + ":" + repel;
+        return prefix + ":" + subject + ":" + repel + ":" + deviceValue;
     }
 
 }

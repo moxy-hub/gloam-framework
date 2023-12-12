@@ -4,9 +4,7 @@ import com.gloamframework.web.security.adapter.GloamHttpSecurityConfigurerAdapte
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.stereotype.Component;
 
-@Component
 public class HttpAdapterTest extends GloamHttpSecurityConfigurerAdapter {
 
     @Autowired

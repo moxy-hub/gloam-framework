@@ -44,13 +44,25 @@ public interface TokenManager {
      *
      * @param device 认证设备,用于查看是否在对应的设备上认证
      */
-    boolean checkAuthentication(Device device);
+    void checkAuthentication(Device device);
 
     /**
      * 检查当前请求的认证信息，会自动获取请求的设备，进行自动匹配
      */
-    default boolean checkAuthentication() {
-        return checkAuthentication(null);
+    default void checkAuthentication() {
+        checkAuthentication(null);
+    }
+
+    /**
+     * 切换token绑定的权限标识
+     */
+    void switchAuth(String subject, Device device, String authSymbol);
+
+    /**
+     * 切换token绑定的权限标识
+     */
+    default void switchAuth(String subject, String authSymbol) {
+        switchAuth(subject, null, authSymbol);
     }
 
     /**

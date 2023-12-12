@@ -7,6 +7,7 @@ import com.gloamframework.web.security.exception.GloamWebSecurityAdapterApplyExc
 import com.gloamframework.web.security.filter.GloamFilterConfigure;
 import com.gloamframework.web.security.match.GloamMachterConfigure;
 import com.gloamframework.web.security.properties.SecurityProperties;
+import com.gloamframework.web.security.rsa.RsaSecurityConfigure;
 import com.gloamframework.web.security.token.TokenConfigure;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ import java.util.List;
 
 /**
  * web安全配置
- * todo 1、认证类 2、认证校验类 3、token实现 4、加密实现 5、xss过滤器 6、重复提交过滤器
+ * todo 4、加密实现 5、xss过滤器 6、重复提交过滤器
  *
  * @author 晓龙
  */
@@ -35,7 +36,14 @@ import java.util.List;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, jsr250Enabled = true)
 @EnableConfigurationProperties(SecurityProperties.class)
-@Import({GloamBasicAdapterConfigure.class, GloamFilterConfigure.class, GloamMachterConfigure.class, TokenConfigure.class, GloamSecurityCacheConfigure.class})
+@Import({
+        GloamBasicAdapterConfigure.class,
+        GloamFilterConfigure.class,
+        GloamMachterConfigure.class,
+        TokenConfigure.class,
+        GloamSecurityCacheConfigure.class,
+        RsaSecurityConfigure.class
+})
 @Slf4j
 public class GloamSecurityConfigure extends WebSecurityConfigurerAdapter {
 

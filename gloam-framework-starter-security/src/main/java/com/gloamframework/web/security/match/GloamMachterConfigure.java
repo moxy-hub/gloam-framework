@@ -24,4 +24,8 @@ public class GloamMachterConfigure {
         return new TokenMatcher();
     }
 
+    @Bean
+    public WebEnvelopeMatcher webEnvelopeMatcher() {
+        return new WebEnvelopeMatcher();
+    }
 }
