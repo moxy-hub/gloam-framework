@@ -213,6 +213,13 @@
                 <version>${gloam.version}</version>
             </dependency>
 
+            <!-- gloam cloud -->
+            <dependency>
+                <groupId>com.gloamframework</groupId>
+                <artifactId>gloam-framework-starter-cloud-sentinel</artifactId>
+                <version>${gloam.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 

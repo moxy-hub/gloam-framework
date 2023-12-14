@@ -6,7 +6,6 @@ import com.gloamframework.web.security.exception.GloamHttpSecurityAdapterApplyEx
 import com.gloamframework.web.security.exception.GloamWebSecurityAdapterApplyException;
 import com.gloamframework.web.security.filter.GloamFilterConfigure;
 import com.gloamframework.web.security.match.GloamMachterConfigure;
-import com.gloamframework.web.security.plugin.GloamSecurityPluginConfigure;
 import com.gloamframework.web.security.properties.SecurityProperties;
 import com.gloamframework.web.security.rsa.RsaSecurityConfigure;
 import com.gloamframework.web.security.token.TokenConfigure;
@@ -43,8 +42,7 @@ import java.util.List;
         GloamMachterConfigure.class,
         TokenConfigure.class,
         GloamSecurityCacheConfigure.class,
-        RsaSecurityConfigure.class,
-        GloamSecurityPluginConfigure.class
+        RsaSecurityConfigure.class
 })
 @Slf4j
 public class GloamSecurityConfigure extends WebSecurityConfigurerAdapter {

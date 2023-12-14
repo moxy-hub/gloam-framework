@@ -3,6 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>com.gloamframework</groupId>
         <artifactId>gloam-framework-parent</artifactId>
@@ -10,40 +11,24 @@
         <relativePath/>
     </parent>
 
-    <artifactId>gloam-framework-starter-security</artifactId>
-    <description>接入sa-token和spring-security的安全套件</description>
-
-    <properties>
-        <jwt.version>0.9.1</jwt.version>
-    </properties>
+    <artifactId>gloam-framework-starter-cloud-sentinel</artifactId>
+    <description>gloam分布式开放-接入alibaba的sentinel限流降级组件</description>
 
     <dependencies>
 
-        <!-- gloam web -->
+        <!-- gloam core -->
         <dependency>
             <groupId>com.gloamframework</groupId>
             <artifactId>gloam-framework-web</artifactId>
         </dependency>
 
-        <!-- spring-security -->
+        <!-- sentinel -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
         </dependency>
 
-        <!-- gloam cache -->
-        <dependency>
-            <groupId>com.gloamframework</groupId>
-            <artifactId>gloam-framework-starter-cache</artifactId>
-        </dependency>
-
-        <!-- jwt -->
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt</artifactId>
-            <version>${jwt.version}</version>
-        </dependency>
-
+        <!-- test -->
         <!-- 不进行传递 -->
         <dependency>
             <groupId>com.gloamframework</groupId>
@@ -52,7 +37,7 @@
             <optional>true</optional>
         </dependency>
 
-        <!-- test -->
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -60,4 +45,5 @@
         </dependency>
 
     </dependencies>
+
 </project>

@@ -22,6 +22,8 @@
         <module>../gloam-framework-starter-security</module>
         <module>../gloam-framework-starter-tomcat</module>
         <module>../gloam-framework-starter-undertow</module>
+        <!-- gloam cloud -->
+        <module>../gloam-framework-starter-cloud-sentinel</module>
     </modules>
 
 </project>

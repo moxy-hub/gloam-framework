@@ -2,6 +2,7 @@ package com.gloam.web.security;
 
 
 import com.gloamframework.web.doc.EnableHttpDoc;
+import com.gloamframework.web.security.plugin.envelope.EnableWebEnvelopeProtect;
 import com.gloamframework.web.security.plugin.xss.EnableXssProtect;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,6 +14,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 @EnableHttpDoc
 @EnableXssProtect
+@EnableWebEnvelopeProtect
 public class SecurityApplication {
 
     public static void main(String[] args) {
