@@ -1,4 +1,4 @@
-package com.gloamframework.web.security.envelope.exception;
+package com.gloamframework.web.security.plugin.envelope.exception;
 
 import com.gloamframework.web.security.exception.GloamSecurityException;
 

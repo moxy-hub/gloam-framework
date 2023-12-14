@@ -1,4 +1,4 @@
-package com.gloamframework.web.security.envelope.wrapper;
+package com.gloamframework.web.security.plugin.envelope.wrapper;
 
 import javax.servlet.ReadListener;
 import javax.servlet.ServletInputStream;

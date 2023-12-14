@@ -1,4 +1,4 @@
-package com.gloamframework.web.security.envelope;
+package com.gloamframework.web.security.plugin.xss;
 
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Bean;
@@ -7,11 +7,11 @@ import org.springframework.context.annotation.Bean;
  * @author 晓龙
  */
 @Configurable
-public class WebEnvelopeConfigure {
+public class XssSecurityConfigure {
 
     @Bean
-    public WebEnvelopeFilter webEnvelopeFilter() {
-        return new WebEnvelopeFilter();
+    public XssSecurityFilter xssSecurityFilter() {
+        return new XssSecurityFilter();
     }
 
 }

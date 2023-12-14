@@ -1,9 +1,8 @@
-package com.gloam.web.security.filter;
+package com.gloamframework.web.security.plugin.xss;
 
 import com.gloamframework.web.security.filter.GloamOncePerRequestFilter;
+import com.gloamframework.web.security.plugin.xss.wrapper.XssRequestWrapper;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.Ordered;
-import org.springframework.stereotype.Component;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -12,23 +11,26 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * @author 晓龙
- * @version 1.8.271
- * @protectName gloam-framework
- * @date 2023年11月09日 22:40
+ * Xss攻击过滤器
  */
 @Slf4j
-@Component
-public class TestSuccennFilter extends GloamOncePerRequestFilter {
+public class XssSecurityFilter extends GloamOncePerRequestFilter {
+
+    public XssSecurityFilter() {
+        log.info("启动XSS攻击过滤器");
+    }
 
     @Override
     protected void doGloamFilter(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        filterChain.doFilter(request, response);
+        //注入xss过滤器实例
+        XssRequestWrapper requestWrapper = new XssRequestWrapper(request);
+        //过滤
+        filterChain.doFilter(requestWrapper, response);
     }
 
     @Override
     public int getOrder() {
-        return Ordered.LOWEST_PRECEDENCE;
+        return 5;
     }
 
 }

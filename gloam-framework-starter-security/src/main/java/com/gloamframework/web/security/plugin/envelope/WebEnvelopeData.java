@@ -1,4 +1,4 @@
-package com.gloamframework.web.security.envelope;
+package com.gloamframework.web.security.plugin.envelope;
 
 import lombok.Data;
 

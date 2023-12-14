@@ -8,7 +8,7 @@ import com.gloamframework.common.crypto.RSAUtil;
 import com.gloamframework.web.response.WebResult;
 import com.gloamframework.web.security.GloamSecurityContext;
 import com.gloamframework.web.security.annotation.Token;
-import com.gloamframework.web.security.annotation.WebEnvelope;
+import com.gloamframework.web.security.plugin.envelope.WebEnvelope;
 import com.gloamframework.web.security.rsa.RsaService;
 import com.gloamframework.web.security.token.constant.Device;
 import lombok.Data;

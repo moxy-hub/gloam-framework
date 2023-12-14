@@ -1,4 +1,4 @@
-package com.gloamframework.web.security.annotation;
+package com.gloamframework.web.security.plugin.envelope;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;

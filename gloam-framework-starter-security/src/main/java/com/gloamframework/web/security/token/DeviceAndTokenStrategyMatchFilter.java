@@ -7,6 +7,7 @@ import com.gloamframework.web.security.filter.GloamOncePerRequestFilter;
 import com.gloamframework.web.security.match.TokenMatcher;
 import com.gloamframework.web.security.token.constant.Device;
 import com.gloamframework.web.security.token.constant.TokenAttribute;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.FilterChain;
@@ -20,6 +21,7 @@ import java.io.IOException;
  *
  * @author 晓龙
  */
+@Slf4j
 public class DeviceAndTokenStrategyMatchFilter extends GloamOncePerRequestFilter {
 
     @Autowired
@@ -27,6 +29,7 @@ public class DeviceAndTokenStrategyMatchFilter extends GloamOncePerRequestFilter
 
     @Override
     protected void doGloamFilter(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        log.info("请求:{} # {} : 开始进行处理", request.getMethod(), request.getRequestURL());
         Device device;
         try {
             UserAgent userAgent = WebContext.obtainUserAgent(request);
@@ -44,11 +47,11 @@ public class DeviceAndTokenStrategyMatchFilter extends GloamOncePerRequestFilter
             // 这是过滤器开始的起一个环境，在最后移除全部属性
             TokenAttribute.clearAll(request);
         }
-
+        log.info("请求:{} # {} : 处理结束", request.getMethod(), request.getRequestURL());
     }
 
     @Override
     public int getOrder() {
-        return 1;
+        return HIGHEST_PRECEDENCE;
     }
 }

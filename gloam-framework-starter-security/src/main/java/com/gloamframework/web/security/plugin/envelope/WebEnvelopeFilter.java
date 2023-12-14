@@ -1,4 +1,4 @@
-package com.gloamframework.web.security.envelope;
+package com.gloamframework.web.security.plugin.envelope;
 
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
@@ -9,12 +9,10 @@ import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.gloamframework.common.crypto.RSAUtil;
 import com.gloamframework.common.crypto.exception.DecryptException;
-import com.gloamframework.web.security.annotation.WebEnvelope;
-import com.gloamframework.web.security.envelope.exception.EnvelopeAnalysisException;
-import com.gloamframework.web.security.envelope.wrapper.WebEnvelopeRequestWrapper;
-import com.gloamframework.web.security.envelope.wrapper.WebEnvelopeResponseWrapper;
 import com.gloamframework.web.security.filter.GloamOncePerRequestFilter;
-import com.gloamframework.web.security.match.WebEnvelopeMatcher;
+import com.gloamframework.web.security.plugin.envelope.exception.EnvelopeAnalysisException;
+import com.gloamframework.web.security.plugin.envelope.wrapper.WebEnvelopeRequestWrapper;
+import com.gloamframework.web.security.plugin.envelope.wrapper.WebEnvelopeResponseWrapper;
 import com.gloamframework.web.security.properties.SecurityProperties;
 import com.gloamframework.web.security.rsa.RsaService;
 import lombok.extern.slf4j.Slf4j;
@@ -79,17 +77,17 @@ public class WebEnvelopeFilter extends GloamOncePerRequestFilter {
         // 拉取请求体
         String requestBody = ServletUtil.getBody(request);
         if (StrUtil.isBlank(requestBody)) {
-            log.warn("接口:{}#{} 的请求体为空，不进行信封保护，请检查接口", request.getRequestURL(), request.getMethod());
+            log.warn("请求:{} # {} 的请求体为空，不进行信封保护，请检查接口", request.getMethod(), request.getRequestURL());
             filterChain.doFilter(request, response);
             return;
         }
         // 由信封保护
-        log.info("接口:{}#{} 由信封加密保护，开始解密", request.getRequestURL(), request.getMethod());
+        log.debug("请求:{} # {} 由信封加密保护，开始解密", request.getMethod(), request.getRequestURL());
         // 解密
         this.analysis(serviceCode, requestBody, ((data, aes) -> {
             // 解密数据
             data = aes.decryptStr(data);
-            log.debug("解密请求信封 -> 请求:{}#{} 解密后参数:{}", request.getRequestURI(), request.getMethod(), data);
+            log.debug("解密请求信封 -> 请求:{} # {} 解密后参数:{}", request.getMethod(), request.getRequestURL(), data);
             WebEnvelopeRequestWrapper requestWrapper = new WebEnvelopeRequestWrapper(request, data);
             WebEnvelopeResponseWrapper responseWrapper = new WebEnvelopeResponseWrapper(response);
             filterChain.doFilter(requestWrapper, responseWrapper);
@@ -139,12 +137,12 @@ public class WebEnvelopeFilter extends GloamOncePerRequestFilter {
         // 加载返回
         byte[] body = response.getResponseData();
         if (ArrayUtil.isEmpty(body)) {
-            log.warn("响应为空，不进行响应加密");
+            log.warn("响应:加密失败 -> 响应为空，不进行响应加密");
             return;
         }
         if (aes == null) {
             // aes为null，不进行响应加密
-            log.warn("响应AES为空，不进行响应加密");
+            log.warn("响应:加密失败 -> 响应AES为空，不进行响应加密");
             outResponse.getOutputStream().write(body);
             return;
         }
@@ -160,13 +158,13 @@ public class WebEnvelopeFilter extends GloamOncePerRequestFilter {
             return;
         }
         if (!bodyResult.containsKey("data")) {
-            log.warn("响应data字段不存在，不进行响应加密");
+            log.warn("响应:加密失败 -> 响应data字段不存在，不进行响应加密");
             outResponse.getOutputStream().write(body);
             return;
         }
         String data = bodyResult.getString("data");
         if (StrUtil.isBlank(data)) {
-            log.warn("响应data为空，不进行响应加密");
+            log.warn("响应:加密失败 -> 响应data为空，不进行响应加密");
             outResponse.getOutputStream().write(body);
             return;
         }
@@ -175,6 +173,7 @@ public class WebEnvelopeFilter extends GloamOncePerRequestFilter {
         bodyResult.put("data", data);
         // 设置加密响应
         outResponse.setHeader(responseTypeHeader, ENCRYPT);
+        log.debug("响应:加密成功 -> 加密字段: data");
         outResponse.getOutputStream().write(bodyResult.toJSONString().getBytes(UTF_8));
     }
 }

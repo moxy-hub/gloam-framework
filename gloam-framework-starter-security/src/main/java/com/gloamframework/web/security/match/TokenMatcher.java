@@ -77,12 +77,12 @@ public class TokenMatcher extends AbstractSpringMvcPathMatcher<Token> {
         for (TokenPath tokenPath : TOKEN_PATHS) {
             Token.Strategy strategy = tokenPath.matchStrategy(uri, method);
             if (strategy != null) {
-                log.info("请求:{}#{} 执行token策略:{}", request.getRequestURL(), method, strategy);
+                log.debug("请求:{} # {} 执行token策略:{}", method, request.getRequestURL(), strategy);
                 return strategy;
             }
         }
         // 没有匹配到，默认need
-        log.info("请求:{}#{} 执行token策略:{}", request.getRequestURL(), method, Token.Strategy.NEED);
+        log.debug("请求:{} # {} 执行token策略:{}", method, request.getRequestURL(), Token.Strategy.NEED);
         return Token.Strategy.NEED;
     }
 }
