@@ -65,7 +65,7 @@ public class WebEnvelopeMatcher extends AbstractSpringMvcPathMatcher<WebEnvelope
      */
     public WebEnvelope match(HttpServletRequest request) {
         if (request == null) {
-            throw new SecurityException("匹配WebEnvlope策略，请求为获取失败");
+            throw new SecurityException("匹配WebEnvelope策略，请求为获取失败");
         }
         String uri = request.getRequestURI();
         String method = request.getMethod();

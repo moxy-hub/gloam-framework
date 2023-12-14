@@ -9,7 +9,7 @@ import java.util.Set;
 /**
  *
  */
-//@Component
+@Component
 public class TestAuth implements GloamSecurityAuthority {
     @Override
     public Set<String> authorities(String switchUser) {

@@ -1,17 +1,14 @@
 package com.gloamframework.web.security.envelope;
 
-import cn.hutool.core.io.IoUtil;
-import cn.hutool.core.map.MapUtil;
+import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.symmetric.AES;
 import cn.hutool.extra.servlet.ServletUtil;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.util.IOUtils;
-import com.gloamframework.common.crypto.AESUtil;
 import com.gloamframework.common.crypto.RSAUtil;
 import com.gloamframework.common.crypto.exception.DecryptException;
-import com.gloamframework.web.response.Result;
 import com.gloamframework.web.security.annotation.WebEnvelope;
 import com.gloamframework.web.security.envelope.exception.EnvelopeAnalysisException;
 import com.gloamframework.web.security.envelope.wrapper.WebEnvelopeRequestWrapper;
@@ -21,19 +18,15 @@ import com.gloamframework.web.security.match.WebEnvelopeMatcher;
 import com.gloamframework.web.security.properties.SecurityProperties;
 import com.gloamframework.web.security.rsa.RsaService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StreamUtils;
 
 import javax.crypto.NoSuchPaddingException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
-import java.nio.charset.Charset;
+import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -71,13 +64,11 @@ public class WebEnvelopeFilter extends GloamOncePerRequestFilter {
 
     @Override
     protected void doGloamFilter(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        response.setHeader(responseTypeHeader,UN_ENCRYPT);
+        response.addHeader(responseTypeHeader, UN_ENCRYPT);
         // 匹配是否为信封保护的接口
         WebEnvelope webEnvelope = webEnvelopeMatcher.match(request);
         if (webEnvelope == null) {
-//            WebEnvelopeResponseWrapper responseWrapper = new WebEnvelopeResponseWrapper(response);
             filterChain.doFilter(request, response);
-//            this.encryptResult(responseWrapper,response,null);
             return;
         }
         // 获取服务code
@@ -85,8 +76,6 @@ public class WebEnvelopeFilter extends GloamOncePerRequestFilter {
         if (StringUtils.isBlank(serviceCode)) {
             throw new EnvelopeAnalysisException("获取serviceCode失败");
         }
-        // 由信封保护
-        log.info("接口:{}#{} 由信封加密保护，开始解密", request.getRequestURL(), request.getMethod());
         // 拉取请求体
         String requestBody = ServletUtil.getBody(request);
         if (StrUtil.isBlank(requestBody)) {
@@ -94,6 +83,8 @@ public class WebEnvelopeFilter extends GloamOncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
+        // 由信封保护
+        log.info("接口:{}#{} 由信封加密保护，开始解密", request.getRequestURL(), request.getMethod());
         // 解密
         this.analysis(serviceCode, requestBody, ((data, aes) -> {
             // 解密数据
@@ -101,20 +92,25 @@ public class WebEnvelopeFilter extends GloamOncePerRequestFilter {
             log.debug("解密请求信封 -> 请求:{}#{} 解密后参数:{}", request.getRequestURI(), request.getMethod(), data);
             WebEnvelopeRequestWrapper requestWrapper = new WebEnvelopeRequestWrapper(request, data);
             WebEnvelopeResponseWrapper responseWrapper = new WebEnvelopeResponseWrapper(response);
-            filterChain.doFilter(requestWrapper, response);
-            this.encryptResult(responseWrapper,responseWrapper,aes);
+            filterChain.doFilter(requestWrapper, responseWrapper);
+            this.encryptResult(responseWrapper, response, aes);
         }));
     }
 
 
     private void analysis(String serviceCode, String requestBody, AnalysisEnvelope analysisEnvelope) throws ServletException, IOException {
         // 解析为信封
-        WebEnvelopeData envelopeData = JSON.parseObject(requestBody, WebEnvelopeData.class);
+        WebEnvelopeData envelopeData;
+        try {
+            envelopeData = JSON.parseObject(requestBody, WebEnvelopeData.class);
+        } catch (JSONException jsonException) {
+            throw new EnvelopeAnalysisException("请求信封格式不正确", jsonException);
+        }
         String encryptAesKey, data;
         if (envelopeData == null || StringUtils.isAnyBlank(encryptAesKey = envelopeData.getKey(), data = envelopeData.getData())) {
             throw new EnvelopeAnalysisException("解析信封失败,请检查信封是否为空或其结果不正确或为null");
         }
-        analysisEnvelope.analysis(data, getValidAes(encryptAesKey, serviceCode));
+        analysisEnvelope.analysis(data, getValidAes(serviceCode, encryptAesKey));
     }
 
     /**
@@ -139,18 +135,46 @@ public class WebEnvelopeFilter extends GloamOncePerRequestFilter {
         return new AES(aesKey.getBytes(UTF_8));
     }
 
-    private void encryptResult(WebEnvelopeResponseWrapper response,HttpServletResponse outResponse, AES aes) throws IOException {
-//        // 加载返回
-//        byte[] body = response.getResponseData();
-//        String bodyString = new String(body);
-//        JSONObject jsonResult = JSON.parseObject(bodyString);
-//        if (jsonResult!=null&&jsonResult.containsKey("success")&&!jsonResult.getBooleanValue("success")) {
-//            log.warn("响应未加密:请求处理返回结果为不成功");
-//        }else if (aes !=null){
-//            body = aes.encrypt(bodyString,UTF_8);
-//            // 设置加密响应
-//            outResponse.setHeader(responseTypeHeader,ENCRYPT);
-//        }
-//        outResponse.getOutputStream().write(body);
+    private void encryptResult(WebEnvelopeResponseWrapper response, HttpServletResponse outResponse, AES aes) throws IOException {
+        // 加载返回
+        byte[] body = response.getResponseData();
+        if (ArrayUtil.isEmpty(body)) {
+            log.warn("响应为空，不进行响应加密");
+            return;
+        }
+        if (aes == null) {
+            // aes为null，不进行响应加密
+            log.warn("响应AES为空，不进行响应加密");
+            outResponse.getOutputStream().write(body);
+            return;
+        }
+        JSONObject bodyResult;
+        try {
+            bodyResult = JSON.parseObject(new String(body));
+            if (bodyResult == null) {
+                log.warn("响应解析json失败，不进行响应");
+                return;
+            }
+        } catch (JSONException exception) {
+            log.warn("响应解析json失败，不进行响应");
+            return;
+        }
+        if (!bodyResult.containsKey("data")) {
+            log.warn("响应data字段不存在，不进行响应加密");
+            outResponse.getOutputStream().write(body);
+            return;
+        }
+        String data = bodyResult.getString("data");
+        if (StrUtil.isBlank(data)) {
+            log.warn("响应data为空，不进行响应加密");
+            outResponse.getOutputStream().write(body);
+            return;
+        }
+        // 加密
+        data = aes.encryptHex(data);
+        bodyResult.put("data", data);
+        // 设置加密响应
+        outResponse.setHeader(responseTypeHeader, ENCRYPT);
+        outResponse.getOutputStream().write(bodyResult.toJSONString().getBytes(UTF_8));
     }
 }

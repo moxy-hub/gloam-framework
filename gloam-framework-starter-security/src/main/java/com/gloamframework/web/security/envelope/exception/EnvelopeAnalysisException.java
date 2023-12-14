@@ -4,6 +4,7 @@ import com.gloamframework.web.security.exception.GloamSecurityException;
 
 /**
  * 信封分析错误
+ *
  * @author 晓龙
  */
 public class EnvelopeAnalysisException extends GloamSecurityException {

@@ -2,8 +2,8 @@ package com.gloamframework.web.security.token;
 
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.crypto.symmetric.AES;
 import com.alibaba.fastjson.JSON;
-import com.gloamframework.common.crypto.AESUtil;
 import com.gloamframework.web.security.filter.GloamOncePerRequestFilter;
 import com.gloamframework.web.security.token.constant.TokenAttribute;
 import com.gloamframework.web.security.token.domain.Token;
@@ -18,6 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
  * token的请求头前置校验处理</br>
@@ -95,8 +97,8 @@ public class TokenPreHandlerFilter extends GloamOncePerRequestFilter {
         }
         // 解密token字符串,接收hex类型加密序列
         try {
-            AESUtil.AES aes = AESUtil.getAES(AESUtil.Algorithm.CBC, tokenProperties.getRequestAesSecret(), AESUtil.CODE_HEX);
-            tokenHeader = aes.decrypt(tokenHeader);
+            AES aes = new AES(tokenProperties.getRequestAesSecret().getBytes(UTF_8));
+            tokenHeader = aes.decryptStr(tokenHeader);
         } catch (Exception exception) {
             log.error("无效请求:{},请求的token 解密失败,", request.getRequestURI(), exception);
             throw new TokenAnalysisException("请求token无效").setResponseStatus(HttpServletResponse.SC_UNAUTHORIZED);

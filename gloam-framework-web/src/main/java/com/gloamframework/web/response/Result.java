@@ -26,25 +26,25 @@ public class Result<T> implements Serializable {
      * 传输数据
      */
     @ApiModelProperty(value = "服务器结果数据")
-    private  T data;
+    private T data;
 
     /**
      * 请求状态
      */
     @ApiModelProperty(value = "服务器请求状态")
-    private  int status;
+    private int status;
 
     /**
      * 执行
      */
     @ApiModelProperty(value = "服务器处理状态")
-    private  boolean success;
+    private boolean success;
 
     /**
      * 执行消息
      */
     @ApiModelProperty(value = "服务器信息")
-    private  String message;
+    private String message;
 
     protected Result(T data, HttpStatus status, boolean success, String message, Object... params) {
         this.data = data;

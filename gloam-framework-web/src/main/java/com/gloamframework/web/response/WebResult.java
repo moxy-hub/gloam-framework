@@ -33,6 +33,10 @@ public class WebResult<T> extends Result<T> {
         return success(null);
     }
 
+    public static WebResult<Void> successWithMessage(String message, Object... params) {
+        return success(null, message, params);
+    }
+
     /**
      * 请求失败，返回的状态是200，表示请求后端成功处理，但是业务不支持
      *

@@ -1,7 +1,5 @@
 package com.gloamframework.web.security.envelope.wrapper;
 
-import org.springframework.http.HttpHeaders;
-
 import javax.servlet.ServletOutputStream;
 import javax.servlet.WriteListener;
 import javax.servlet.http.HttpServletResponse;
@@ -23,8 +21,6 @@ public class WebEnvelopeResponseWrapper extends HttpServletResponseWrapper {
         buffer = new ByteArrayOutputStream();
         outputStream = new WrapperOutputStream(buffer);
         writer = new PrintWriter(new OutputStreamWriter(buffer, this.getCharacterEncoding()));
-        super.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
-        super.setHeader(HttpHeaders.TRANSFER_ENCODING, "chunked");
     }
 
     @Override
@@ -74,13 +70,8 @@ public class WebEnvelopeResponseWrapper extends HttpServletResponseWrapper {
         }
 
         @Override
-        public void write(int b) {
+        public void write(int b) throws IOException {
             bos.write(b);
-        }
-
-        @Override
-        public void write(byte[] b) {
-            bos.write(b, 0, b.length);
         }
 
         @Override

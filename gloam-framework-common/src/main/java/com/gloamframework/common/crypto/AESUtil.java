@@ -94,6 +94,10 @@ public class AESUtil {
         return getAES(algorithm, secretKey, iv.getBytes(), CODE_BASE64);
     }
 
+    public static AES getAES(Algorithm algorithm, String secretKey, String iv) {
+        return getAES(algorithm, secretKey, iv.getBytes(), CODE_BASE64);
+    }
+
     public static AES getAES(Algorithm algorithm, String secretKey, int decryptCode) {
         return getAES(algorithm, secretKey, iv.getBytes(), decryptCode);
     }

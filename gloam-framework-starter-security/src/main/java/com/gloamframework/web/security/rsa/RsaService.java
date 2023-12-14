@@ -16,7 +16,6 @@ import java.security.NoSuchAlgorithmException;
 public class RsaService {
 
     private static final String RSA_KEY = "RSA_KEY:%s";
-    private static final int EXPIRE_TIME = 24 * 60 * 60 * 1000;
 
     @Autowired
     private GloamSecurityCacheManager cacheManager;
@@ -67,7 +66,7 @@ public class RsaService {
             log.debug("init rsa keypair : {}", rsaKeypair);
             // 序列化密钥对
             String rsaKey = getServiceRSAKey(serviceCode);
-            cacheManager.getCache().put(rsaKey, rsaKeypair, EXPIRE_TIME);
+            cacheManager.getCache().put(rsaKey, rsaKeypair);
             log.debug("cache rsa : {}", rsaKey);
             return rsaKeypair;
         } catch (NoSuchAlgorithmException e) {
