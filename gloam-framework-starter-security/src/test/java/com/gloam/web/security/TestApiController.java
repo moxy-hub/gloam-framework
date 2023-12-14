@@ -30,7 +30,7 @@ public class TestApiController {
     private TokenManager tokenManager;
 
     @GetMapping("/auth")
-    @Authentication
+//    @Authentication
     @Token(strategy = Token.Strategy.WANT)
     public WebResult<String> auth() {
         throw new NullPointerException("error");

@@ -29,7 +29,7 @@ public class Base64Util {
     /**
      * BASE64解密
      */
-    public static byte[] decryptBASE64(String key) throws Exception {
+    public static byte[] decryptBASE64(String key) throws IOException {
         return (new BASE64Decoder()).decodeBuffer(key);
     }
 

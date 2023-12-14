@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -16,6 +17,7 @@ import java.io.InputStream;
 import java.security.*;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
+import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Objects;
@@ -138,7 +140,7 @@ public class RSAUtil extends Base64Util {
      * 解密<br>
      * 用私钥解密
      */
-    public static String decryptByPrivateKey(String data, String key) throws Exception {
+    public static String decryptByPrivateKey(String data, String key) throws IOException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeySpecException, InvalidKeyException, DecryptException {
         return new String(Objects.requireNonNull(decryptByPrivateKey(decryptBASE64(data), key)));
     }
 
@@ -146,7 +148,7 @@ public class RSAUtil extends Base64Util {
      * 解密<br>
      * 用私钥解密
      */
-    public static byte[] decryptByPrivateKey(byte[] data, String key) throws Exception {
+    public static byte[] decryptByPrivateKey(byte[] data, String key) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException, InvalidKeyException, DecryptException {
         // 对密钥解密
         byte[] keyBytes = decryptBASE64(key);
         // 取得私钥

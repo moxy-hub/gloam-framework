@@ -1,6 +1,7 @@
 package com.gloamframework.web.security.rsa;
 
 import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.StrUtil;
 import com.gloamframework.web.response.WebResult;
 import com.gloamframework.web.security.annotation.Token;
 import com.gloamframework.web.security.properties.SecurityProperties;
@@ -27,12 +28,12 @@ public class RsaController {
     @Autowired
     private SecurityProperties securityProperties;
 
-    @ApiOperation(value = "获取服务器公钥", notes = "需要客服端code,code加密请使用DES256加密方式")
+    @ApiOperation(value = "获取服务器公钥")
     @GetMapping("/publicKey")
     @Token(strategy = Token.Strategy.NONE)
     public WebResult<String> getRsaPublicKey(@ApiIgnore HttpServletRequest request) {
         String serviceCode = request.getHeader(securityProperties.getRsa().getServiceHeader());
-        if (!ArrayUtil.contains(securityProperties.getRsa().getSupportService(), serviceCode)) {
+        if (StrUtil.isBlank(serviceCode) || !ArrayUtil.contains(securityProperties.getRsa().getSupportService(), serviceCode)) {
             return WebResult.fail("不支持的服务");
         }
         // 获取公钥

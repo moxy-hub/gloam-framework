@@ -2,6 +2,7 @@ package com.gloamframework.web.security;
 
 import com.gloamframework.web.security.adapter.GloamHttpSecurityConfigurerAdapter;
 import com.gloamframework.web.security.adapter.GloamWebSecurityConfigurerAdapter;
+import com.gloamframework.web.security.envelope.WebEnvelopeConfigure;
 import com.gloamframework.web.security.exception.GloamHttpSecurityAdapterApplyException;
 import com.gloamframework.web.security.exception.GloamWebSecurityAdapterApplyException;
 import com.gloamframework.web.security.filter.GloamFilterConfigure;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.Ordered;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -42,7 +44,8 @@ import java.util.List;
         GloamMachterConfigure.class,
         TokenConfigure.class,
         GloamSecurityCacheConfigure.class,
-        RsaSecurityConfigure.class
+        RsaSecurityConfigure.class,
+        WebEnvelopeConfigure.class
 })
 @Slf4j
 public class GloamSecurityConfigure extends WebSecurityConfigurerAdapter {

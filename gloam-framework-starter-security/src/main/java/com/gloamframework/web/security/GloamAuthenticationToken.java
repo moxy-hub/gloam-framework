@@ -46,4 +46,12 @@ public class GloamAuthenticationToken extends AbstractAuthenticationToken {
         super.eraseCredentials();
         this.credentials = null;
     }
+
+    @Override
+    public String toString() {
+        return "GloamAuthenticationToken{" +
+                "principal=" + principal +
+                ", credentials=" + credentials +
+                '}';
+    }
 }

@@ -72,7 +72,7 @@ public class RsaService {
             return rsaKeypair;
         } catch (NoSuchAlgorithmException e) {
             log.error("初始化rsa keypair 失败", e);
-            throw new GloamRuntimeException("初始化rsa keypair 失败:%s", e.getMessage());
+            throw new GloamRuntimeException("初始化rsa keypair 失败:{}", e.getMessage());
         }
     }
 

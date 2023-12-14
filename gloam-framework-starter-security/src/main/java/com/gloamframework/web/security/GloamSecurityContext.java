@@ -33,21 +33,23 @@ public class GloamSecurityContext {
     /**
      * 通过认证，该方法只会通过spring security的认证，不会有响应头的携带，使用场景：验证token
      */
-    public static boolean passAuthentication(Object principal) {
-        return passAuthentication(principal, null);
+    public static void passAuthentication(Object principal) {
+        passAuthentication(principal, null);
     }
 
     /**
      * 通过认证
      */
-    public static boolean passAuthentication(Object principal, Object credentials) {
+    public static void passAuthentication(Object principal, Object credentials) {
         // 拉取权限
         List<GrantedAuthority> authorities = pullAuthorities();
         // 生成spring security认证token
         GloamAuthenticationToken gloamAuthenticationToken = new GloamAuthenticationToken(principal, credentials, authorities);
+        if (!gloamAuthenticationToken.isAuthenticated()) {
+            throw new GloamRuntimeException("用户认证未通过");
+        }
         // 通过认证
         SecurityContextHolder.getContext().setAuthentication(gloamAuthenticationToken);
-        return gloamAuthenticationToken.isAuthenticated();
     }
 
     /**
@@ -59,9 +61,7 @@ public class GloamSecurityContext {
      */
     public static void passAuthenticationWithResponseHeader(String principal, Object credentials, Device device) {
         // 认证通过
-        if (!passAuthentication(principal, credentials)) {
-            throw new GloamRuntimeException("用户认证未通过");
-        }
+        passAuthentication(principal, credentials);
         // 生成token
         tokenManager().authenticate(principal, device);
     }

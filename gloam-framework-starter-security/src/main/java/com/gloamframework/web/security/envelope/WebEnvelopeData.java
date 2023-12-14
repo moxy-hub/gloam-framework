@@ -8,7 +8,7 @@ import lombok.Data;
  * @author 晓龙
  */
 @Data
-public class Envelope {
+public class WebEnvelopeData {
 
     /**
      * 加密信息

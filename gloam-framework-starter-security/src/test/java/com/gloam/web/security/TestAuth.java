@@ -1,6 +1,7 @@
 package com.gloam.web.security;
 
 import com.gloamframework.web.security.GloamSecurityAuthority;
+import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
 import java.util.Set;
