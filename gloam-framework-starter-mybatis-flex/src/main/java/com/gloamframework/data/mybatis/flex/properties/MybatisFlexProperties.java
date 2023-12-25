@@ -57,7 +57,7 @@ public class MybatisFlexProperties {
      * 默认的逻辑删除字段,默认为del
      */
     @MappingConfigurationProperty("mybatis-flex.global-config.logic-delete-column")
-    private String logicDeleteColumn = "del";
+    private String logicDeleteColumn = "deleted";
 
     /**
      * 默认的多租户字段,默认为tenant_id

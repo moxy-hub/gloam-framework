@@ -1,6 +1,5 @@
 package com.gloamframework.web.security.match;
 
-import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ArrayUtil;
 import com.gloamframework.web.security.annotation.Authentication;
 import lombok.AllArgsConstructor;
@@ -75,11 +74,7 @@ public class AuthenticationMatcher extends AbstractSpringMvcPathMatcher<Authenti
             }
             log.debug("match path:{} method:{} for authentication with authorities:{} and roles:{}", req.pathUrl, req.httpMethod, req.authentication.hasAuth(), req.authentication.hasRole());
         });
-        if (CollectionUtil.isEmpty(authenticationRequests)) {
-            expressionInterceptUrlRegistry.anyRequest().authenticated();
-        } else {
-            expressionInterceptUrlRegistry.anyRequest().permitAll();
-        }
+        expressionInterceptUrlRegistry.anyRequest().permitAll();
     }
 
     @Override

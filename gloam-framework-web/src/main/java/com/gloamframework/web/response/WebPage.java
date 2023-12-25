@@ -22,15 +22,15 @@ public class WebPage<T> extends Result<Collection<T>> {
     private static final int DEFAULT_TOTAL = 0;
 
     @ApiModelProperty(value = "分页页数")
-    private final int pageNum;
+    private final long pageNum;
 
     @ApiModelProperty(value = "分页大小")
-    private final int pageSize;
+    private final long pageSize;
 
     @ApiModelProperty(value = "分页总数")
-    private final int total;
+    private final long total;
 
-    private WebPage(Collection<T> data, HttpStatus status, boolean success, String message, int pageNum, int pageSize, int total, Object... params) {
+    private WebPage(Collection<T> data, HttpStatus status, boolean success, String message, long pageNum, long pageSize, long total, Object... params) {
         super(data, status, success, message, params);
         this.pageNum = pageNum;
         this.pageSize = pageSize;
@@ -43,11 +43,11 @@ public class WebPage<T> extends Result<Collection<T>> {
      * @param data    传输数据
      * @param message 传输消息
      */
-    public static <T> WebPage<T> success(Collection<T> data, int pageNum, int pageSize, int total, String message, Object... params) {
+    public static <T> WebPage<T> success(Collection<T> data, long pageNum, long pageSize, long total, String message, Object... params) {
         return new WebPage<>(data, HttpStatus.OK, true, message, pageNum, pageSize, total, params);
     }
 
-    public static <T> WebPage<T> success(Collection<T> data, int pageNum, int pageSize, int total) {
+    public static <T> WebPage<T> success(Collection<T> data, long pageNum, long pageSize, long total) {
         return success(data, pageNum, pageSize, total, null);
     }
 

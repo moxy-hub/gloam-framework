@@ -67,10 +67,10 @@ public class LimitRuleProperties {
          * Warm Up（CONTROL_BEHAVIOR_WARM_UP）
          * 匀速排队（CONTROL_BEHAVIOR_RATE_LIMITER，漏桶算法 ）
          * 冷启动+匀速器（CONTROL_BEHAVIOR_WARM_UP_RATE_LIMITER），除了让流量缓慢增加，还控制的了请求的间隔时间，让请求已均匀速度通过。这种策略是1.4.0版本新增的。
-         * 这四个行为，是通过FlowRule中的controlBehavior属性来控制，默认是直接拒绝
+         * 这四个行为，是通过FlowRule中的controlBehavior属性来控制，默认是冷启动+匀速器
          * </p>
          */
-        private int grade = RuleConstant.FLOW_GRADE_QPS;
+        private int grade = RuleConstant.CONTROL_BEHAVIOR_WARM_UP_RATE_LIMITER;
 
         /**
          * 限流阈值，在QPS下表示，每秒可以请求多少次

@@ -29,7 +29,7 @@ public class LoggingProperties {
      * 日志级别
      */
     @MappingConfigurationProperty("logging.level")
-    private Map<String, LogLevel> level;
+    private Map<String, LogLevel> level = new HashMap<>();
 
     /**
      * 本地日志配置
@@ -63,10 +63,4 @@ public class LoggingProperties {
     @NestedConfigurationProperty
     private LoggingPatternProperties pattern;
 
-    public LoggingProperties() {
-        level = new HashMap<>();
-        // 默认级别
-        level.put("com.*", LogLevel.DEBUG);
-        level.put("org.*", LogLevel.INFO);
-    }
 }

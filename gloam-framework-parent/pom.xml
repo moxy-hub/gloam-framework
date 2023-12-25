@@ -36,8 +36,12 @@
         <swaager.models.version>1.5.21</swaager.models.version>
         <swaager.2.version>2.9.2</swaager.2.version>
         <swaager.bootstrap.ui.version>1.9.6</swaager.bootstrap.ui.version>
+        <validator.version>6.0.8.Final</validator.version>
         <retrofit2.version>2.9.0</retrofit2.version>
         <mybatis-flex.version>1.7.3</mybatis-flex.version>
+        <jsqlparser>4.6</jsqlparser>
+        <mybatis-plus.version>3.5.3.2</mybatis-plus.version>
+        <mybatis-plus-join-boot-starter.version>1.4.6</mybatis-plus-join-boot-starter.version>
         <druid.version>1.2.4</druid.version>
         <dynamic.version>3.3.1</dynamic.version>
         <servlet.version>2.5</servlet.version>
@@ -54,7 +58,7 @@
     <dependencyManagement>
         <dependencies>
 
-            <!-- spring cloud alibaba-sentinel -->
+            <!-- spring cloud alibaba -->
             <dependency>
                 <groupId>com.alibaba.cloud</groupId>
                 <artifactId>spring-cloud-alibaba-dependencies</artifactId>
@@ -91,9 +95,28 @@
             </dependency>
 
             <dependency>
+                <groupId>com.github.jsqlparser</groupId>
+                <artifactId>jsqlparser</artifactId>
+                <version>${jsqlparser}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>com.mybatis-flex</groupId>
                 <artifactId>mybatis-flex-codegen</artifactId>
                 <version>${mybatis-flex.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${mybatis-plus.version}</version>
+            </dependency>
+
+            <!-- MyBatis 联表查询 -->
+            <dependency>
+                <groupId>com.github.yulichang</groupId>
+                <artifactId>mybatis-plus-join-boot-starter</artifactId>
+                <version>${mybatis-plus-join-boot-starter.version}</version>
             </dependency>
 
             <!--阿里数据库连接池 -->
@@ -122,6 +145,13 @@
                 <groupId>com.github.xiaoymin</groupId>
                 <artifactId>swagger-bootstrap-ui</artifactId>
                 <version>${swaager.bootstrap.ui.version}</version>
+            </dependency>
+
+            <!-- valid -->
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-validator</artifactId>
+                <version>${validator.version}</version>
             </dependency>
 
             <!-- 内置retrofit2http框架-->
@@ -179,9 +209,23 @@
                 <version>${gloam.version}</version>
             </dependency>
 
+            <!-- gloam-mybatis-plus -->
+            <dependency>
+                <groupId>com.gloamframework</groupId>
+                <artifactId>gloam-framework-starter-mybatis-plus</artifactId>
+                <version>${gloam.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>com.gloamframework</groupId>
                 <artifactId>gloam-framework-starter-redis</artifactId>
+                <version>${gloam.version}</version>
+            </dependency>
+
+            <!-- 数据权限 -->
+            <dependency>
+                <groupId>com.gloamframework</groupId>
+                <artifactId>gloam-framework-starter-data-permission</artifactId>
                 <version>${gloam.version}</version>
             </dependency>
 
@@ -213,6 +257,13 @@
                 <version>${gloam.version}</version>
             </dependency>
 
+            <!-- gloam-starter-camunda -->
+            <dependency>
+                <groupId>com.gloamframework</groupId>
+                <artifactId>gloam-framework-starter-camunda</artifactId>
+                <version>${gloam.version}</version>
+            </dependency>
+
             <!-- gloam cloud -->
             <dependency>
                 <groupId>com.gloamframework</groupId>
@@ -220,7 +271,21 @@
                 <version>${gloam.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.gloamframework</groupId>
+                <artifactId>gloam-framework-starter-cloud-nacos</artifactId>
+                <version>${gloam.version}</version>
+            </dependency>
+
+            <!-- gloam 服务类 -->
+            <!-- gloam 多租户 -->
+            <dependency>
+                <groupId>com.gloamframework</groupId>
+                <artifactId>gloam-framework-starter-service-tenant</artifactId>
+                <version>${gloam.version}</version>
+            </dependency>
         </dependencies>
+
     </dependencyManagement>
 
     <build>

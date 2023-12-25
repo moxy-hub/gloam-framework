@@ -50,6 +50,7 @@ public class GloamSecurityContext {
         }
         // 通过认证
         SecurityContextHolder.getContext().setAuthentication(gloamAuthenticationToken);
+        WebContext.setAuthenticatedUser(principal);
     }
 
     /**

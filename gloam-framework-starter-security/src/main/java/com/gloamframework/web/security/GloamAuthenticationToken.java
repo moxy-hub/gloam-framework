@@ -1,11 +1,15 @@
 package com.gloamframework.web.security;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.map.MapUtil;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * gloam认证token
@@ -25,13 +29,33 @@ public class GloamAuthenticationToken extends AbstractAuthenticationToken {
      */
     private Object credentials;
 
+    // ========== 上下文 ==========
+    /**
+     * 上下文字段，不进行持久化
+     * 1. 用于基于 GloamAuthenticationToken 维度的临时缓存
+     */
+    @JsonIgnore
+    private Map<String, Object> context;
+
     public GloamAuthenticationToken(Object principal, Object credentials, Collection<? extends GrantedAuthority> authorities) {
         super(authorities);
         this.principal = principal;
         this.credentials = credentials;
         if (CollectionUtil.isNotEmpty(authorities)) {
             super.setAuthenticated(true);
+            context = new HashMap<>();
         }
+    }
+
+    public void setContext(String key, Object value) {
+        if (context == null) {
+            context = new HashMap<>();
+        }
+        context.put(key, value);
+    }
+
+    public <T> T getContext(String key, Class<T> type) {
+        return MapUtil.get(context, key, type);
     }
 
     public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {

@@ -28,6 +28,26 @@
             <artifactId>mybatis-flex-spring-boot-starter</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.github.jsqlparser</groupId>
+            <artifactId>jsqlparser</artifactId>
+        </dependency>
+
+        <!-- 获取请求中的属性-->
+        <dependency>
+            <groupId>com.gloamframework</groupId>
+            <artifactId>gloam-framework-web</artifactId>
+            <scope>provided</scope>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>com.gloamframework</groupId>
+            <artifactId>gloam-framework-starter-undertow</artifactId>
+            <scope>provided</scope>
+            <optional>true</optional>
+        </dependency>
+
         <!-- test -->
         <dependency>
             <groupId>mysql</groupId>

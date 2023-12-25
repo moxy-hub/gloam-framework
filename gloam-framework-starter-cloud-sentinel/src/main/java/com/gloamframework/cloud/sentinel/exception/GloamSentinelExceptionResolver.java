@@ -1,5 +1,6 @@
 package com.gloamframework.cloud.sentinel.exception;
 
+import com.alibaba.csp.sentinel.slots.block.BlockException;
 import com.alibaba.csp.sentinel.slots.block.flow.FlowException;
 import com.gloamframework.cloud.sentinel.properties.limit.LimitRuleProperties;
 import com.gloamframework.web.context.WebContext;
@@ -37,7 +38,7 @@ public class GloamSentinelExceptionResolver implements HandlerExceptionResolver,
     public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
         Throwable cause = ex.getCause();
         // 处理限流异常
-        if (FlowException.class.isAssignableFrom(cause.getClass())) {
+        if (FlowException.class.isAssignableFrom(cause.getClass()) || BlockException.class.isAssignableFrom(cause.getClass())) {
             log.error("IP:[{}] 请求资源:[{}:{}] 进行限流,返回信息:{}", WebContext.obtainIp(request), request.getMethod(), request.getRequestURI(), limitRuleProperties.getException());
             ModelAndView modelAndView = new ModelAndView(new GloamView(WebResult.refuse(limitRuleProperties.getException())));
             modelAndView.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);

@@ -1,5 +1,6 @@
 package com.gloamframework.web;
 
+import com.gloamframework.web.exception.GloamValidationExceptionResolver;
 import com.gloamframework.web.exception.GlomaHandlerExceptionResolver;
 import com.gloamframework.web.properties.WebServerProperties;
 import lombok.extern.slf4j.Slf4j;
@@ -21,4 +22,9 @@ public class GloamWebConfigure {
         return new GlomaHandlerExceptionResolver();
     }
 
+    @Bean
+    @ConditionalOnMissingBean(GloamValidationExceptionResolver.class)
+    public GloamValidationExceptionResolver gloamValidationExceptionResolver() {
+        return new GloamValidationExceptionResolver();
+    }
 }

@@ -22,6 +22,7 @@ import java.net.UnknownHostException;
 @SuppressWarnings("unused")
 public class WebContext {
 
+    private static final String REQUEST_ATTRIBUTE_LOGIN_USER_ID = "login_user";
     /**
      * 请求头中的userAgent字段
      */
@@ -143,4 +144,31 @@ public class WebContext {
         return obtainIp(obtainRequest());
     }
 
+    /**
+     * 在请求中获取登录用户
+     */
+    public static Object getAuthenticatedUser(HttpServletRequest request) {
+        if (request == null) {
+            return null;
+        }
+        return request.getAttribute(REQUEST_ATTRIBUTE_LOGIN_USER_ID);
+    }
+
+    public static Object getAuthenticatedUser() {
+        return getAuthenticatedUser(obtainRequest());
+    }
+
+    /**
+     * 设置认证用户，默认在security中进行了设置
+     */
+    public static void setAuthenticatedUser(HttpServletRequest request, Object authenticatedUser) {
+        if (request == null) {
+            return;
+        }
+        request.setAttribute(REQUEST_ATTRIBUTE_LOGIN_USER_ID, authenticatedUser);
+    }
+
+    public static void setAuthenticatedUser(Object authenticatedUser) {
+        setAuthenticatedUser(obtainRequest(), authenticatedUser);
+    }
 }

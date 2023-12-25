@@ -17,13 +17,19 @@
         <module>../gloam-framework-data</module>
         <module>../gloam-framework-starter-mybatis-flex</module>
         <module>../gloam-framework-starter-mybatis-flex-codegen</module>
+        <module>../gloam-framework-starter-mybatis-plus</module>
+        <module>../gloam-framework-starter-data-permission</module>
         <module>../gloam-framework-starter-redis</module>
         <module>../gloam-framework-starter-cache</module>
         <module>../gloam-framework-starter-security</module>
         <module>../gloam-framework-starter-tomcat</module>
         <module>../gloam-framework-starter-undertow</module>
+        <module>../gloam-framework-starter-camunda</module>
         <!-- gloam cloud -->
         <module>../gloam-framework-starter-cloud-sentinel</module>
+        <module>../gloam-framework-starter-cloud-nacos</module>
+        <!-- gloam service -->
+        <module>../gloam-framework-starter-service-tenant</module>
     </modules>
 
 </project>

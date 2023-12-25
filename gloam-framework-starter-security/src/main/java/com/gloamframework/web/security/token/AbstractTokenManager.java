@@ -75,10 +75,12 @@ public abstract class AbstractTokenManager implements TokenManager {
         Token token = new Token(accessToken, refreshToken, tokenExpirationTime);
         // 写入响应头
         HttpServletResponse response = WebContext.obtainResponse();
-        if (response == null) {
-            log.error("token写入时获取当前响应失败");
+        HttpServletRequest request = WebContext.obtainRequest();
+        if (response == null || request == null) {
+            log.error("token写入时获取当前响应和请求失败");
             throw new TokenGenerateException("Token生成失败");
         }
+        TokenAttribute.TOKEN.setAttributes(request, token);
         response.setHeader(tokenProperties.getHeader(), JSON.toJSONString(token));
     }
 
