@@ -277,6 +277,12 @@
                 <version>${gloam.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.gloamframework</groupId>
+                <artifactId>gloam-framework-starter-cloud-remote</artifactId>
+                <version>${gloam.version}</version>
+            </dependency>
+
             <!-- gloam 服务类 -->
             <!-- gloam 多租户 -->
             <dependency>

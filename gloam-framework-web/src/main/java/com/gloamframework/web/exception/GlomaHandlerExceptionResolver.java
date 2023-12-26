@@ -26,19 +26,29 @@ public class GlomaHandlerExceptionResolver implements HandlerExceptionResolver, 
         return Ordered.LOWEST_PRECEDENCE;
     }
 
+    /**
+     * 对于异常后端全部返回的为200，但是在内部的状态码为500，如果前端接收到500的请求，说明后端没有处理异常
+     *
+     * @param request  current HTTP request
+     * @param response current HTTP response
+     * @param handler  the executed handler, or {@code null} if none chosen at the
+     *                 time of the exception (for example, if multipart resolution failed)
+     * @param ex       the exception that got thrown during handler execution
+     */
     @Override
     @SuppressWarnings("all")
     public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
         log.error("IP:[{}] 请求资源:[{}:{}] 发生异常,异常类型:{},异常原因:{}", WebContext.obtainIp(request), request.getMethod(), request.getRequestURI(), ex.getClass(), ex.getMessage(), ex);
-        String errorMessage;
+        ModelAndView modelAndView;
         if (GloamRuntimeException.class.isAssignableFrom(ex.getClass())) {
-            errorMessage = ((GloamRuntimeException) ex).getMessage();
+            // 对于内部错误，直接转换输出
+            modelAndView = new ModelAndView(new GloamView(WebResult.refuse(((GloamRuntimeException) ex).getMessage())));
         } else {
             log.warn("对于非Gloam框架的异常，统一返回500，如有特殊处理，请自行全局处理");
-            errorMessage = "服务器无法处理您的请求";
+            modelAndView = new ModelAndView(new GloamView(WebResult.refuse("服务器无法处理您的请求")));
+            // 对于没有处理的异常，服务器返回500
+            modelAndView.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        ModelAndView modelAndView = new ModelAndView(new GloamView(WebResult.refuse(errorMessage)));
-        modelAndView.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
         return modelAndView;
     }
 

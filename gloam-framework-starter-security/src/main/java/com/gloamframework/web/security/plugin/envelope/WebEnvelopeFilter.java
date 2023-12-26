@@ -9,6 +9,7 @@ import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.gloamframework.common.crypto.RSAUtil;
 import com.gloamframework.common.crypto.exception.DecryptException;
+import com.gloamframework.web.security.feign.FeignAttribute;
 import com.gloamframework.web.security.filter.GloamOncePerRequestFilter;
 import com.gloamframework.web.security.plugin.envelope.exception.EnvelopeAnalysisException;
 import com.gloamframework.web.security.plugin.envelope.wrapper.WebEnvelopeRequestWrapper;
@@ -63,6 +64,12 @@ public class WebEnvelopeFilter extends GloamOncePerRequestFilter {
     @Override
     protected void doGloamFilter(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         response.addHeader(responseTypeHeader, UN_ENCRYPT);
+        // 检查是否需要加解密
+        Object isNoEncrypt = FeignAttribute.NO_ENCRYPT.obtain(request);
+        if (isNoEncrypt != null && (Boolean) isNoEncrypt) {
+            filterChain.doFilter(request, response);
+            return;
+        }
         // 匹配是否为信封保护的接口
         WebEnvelope webEnvelope = webEnvelopeMatcher.match(request);
         if (webEnvelope == null) {

@@ -17,6 +17,6 @@ public interface GloamSecurityAuthority {
      * @param switchUser 切换的用户，该参数用于实现同一用户不同角色下权限，当前值可能为null，请注意处理，该值的来源为请求头{@}
      * @return
      */
-    Set<String> authorities(String switchUser);
+    Set<String> authorities(Object switchUser);
 
 }

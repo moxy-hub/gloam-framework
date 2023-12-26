@@ -1,7 +1,8 @@
 package com.gloamframework.web.security.token.domain;
 
 import cn.hutool.core.date.DateUtil;
-import lombok.Getter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
@@ -10,23 +11,24 @@ import java.util.Date;
  *
  * @author 晓龙
  */
-@Getter
+@Data
+@NoArgsConstructor
 public class Token {
 
     /**
      * 访问令牌
      */
-    private final String accessToken;
+    private String accessToken;
 
     /**
      * 刷新令牌
      */
-    private final String refreshToken;
+    private String refreshToken;
 
     /**
      * 到期时间
      */
-    private final Date expiration;
+    private Date expiration;
 
     public Token(String accessToken, String refreshToken, Date expiration) {
         this.accessToken = accessToken;

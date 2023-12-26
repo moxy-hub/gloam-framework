@@ -104,6 +104,7 @@ public abstract class AbstractTokenManager implements TokenManager {
             throw new TokenExpiredException("token已过期");
         }
         // 开始检查accessToken
+        TokenAttribute.TOKEN_REFRESH.setAttributes(request, false);
         String subject;
         try {
             subject = this.verifyToken(token.getAccessToken());

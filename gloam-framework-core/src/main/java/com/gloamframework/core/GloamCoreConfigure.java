@@ -8,7 +8,6 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import com.gloamframework.core.boot.BootConfigure;
-import com.gloamframework.core.http.GloamHttpConfigure;
 import com.gloamframework.core.json.JsonUtils;
 import com.gloamframework.core.json.databind.LocalDateTimeDeserializer;
 import com.gloamframework.core.json.databind.LocalDateTimeSerializer;
@@ -25,7 +24,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 @Configurable
-@Import({BootConfigure.class, GloamHttpConfigure.class, LoggingConfigure.class})
+@Import({BootConfigure.class, LoggingConfigure.class})
 @Slf4j
 public class GloamCoreConfigure {
 

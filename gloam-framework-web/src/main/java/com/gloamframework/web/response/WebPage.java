@@ -30,7 +30,7 @@ public class WebPage<T> extends Result<Collection<T>> {
     @ApiModelProperty(value = "分页总数")
     private final long total;
 
-    private WebPage(Collection<T> data, HttpStatus status, boolean success, String message, long pageNum, long pageSize, long total, Object... params) {
+    private WebPage(Collection<T> data, Integer status, boolean success, String message, long pageNum, long pageSize, long total, Object... params) {
         super(data, status, success, message, params);
         this.pageNum = pageNum;
         this.pageSize = pageSize;
@@ -44,7 +44,7 @@ public class WebPage<T> extends Result<Collection<T>> {
      * @param message 传输消息
      */
     public static <T> WebPage<T> success(Collection<T> data, long pageNum, long pageSize, long total, String message, Object... params) {
-        return new WebPage<>(data, HttpStatus.OK, true, message, pageNum, pageSize, total, params);
+        return new WebPage<>(data, HttpStatus.OK.value(), true, message, pageNum, pageSize, total, params);
     }
 
     public static <T> WebPage<T> success(Collection<T> data, long pageNum, long pageSize, long total) {
@@ -61,7 +61,7 @@ public class WebPage<T> extends Result<Collection<T>> {
      * @param message 传输消息
      */
     public static <T> WebPage<T> fail(String message, Object... params) {
-        return new WebPage<>(new ArrayList<>(), HttpStatus.OK, false, message, DEFAULT_PAGE_NUM, DEFAULT_PAGE_SIZE, DEFAULT_TOTAL, params);
+        return new WebPage<>(new ArrayList<>(), HttpStatus.OK.value(), false, message, DEFAULT_PAGE_NUM, DEFAULT_PAGE_SIZE, DEFAULT_TOTAL, params);
     }
 
     public static <T> WebPage<T> fail() {

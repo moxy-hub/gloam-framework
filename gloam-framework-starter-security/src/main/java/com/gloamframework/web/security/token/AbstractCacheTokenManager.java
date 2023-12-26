@@ -21,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -41,7 +42,10 @@ public abstract class AbstractCacheTokenManager extends AbstractTokenManager {
      */
     @Data
     @Accessors(chain = true)
-    private final static class TokenInfo {
+    public static class TokenInfo implements Serializable {
+
+        private static final long serialVersionUID = 7476025474416793857L;
+
         /**
          * token主体信息
          */

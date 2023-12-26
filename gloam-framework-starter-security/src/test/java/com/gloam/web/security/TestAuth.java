@@ -12,7 +12,7 @@ import java.util.Set;
 @Component
 public class TestAuth implements GloamSecurityAuthority {
     @Override
-    public Set<String> authorities(String switchUser) {
+    public Set<String> authorities(Object switchUser) {
         HashSet<String> auths = new HashSet<>();
         auths.add("sss:ss");
         return auths;

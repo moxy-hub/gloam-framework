@@ -11,7 +11,7 @@ import org.springframework.http.HttpStatus;
 @ApiModel(description = "单对象类型响应对象")
 public class WebResult<T> extends Result<T> {
 
-    private WebResult(T data, HttpStatus status, boolean success, String message, Object... params) {
+    private WebResult(T data, Integer status, boolean success, String message, Object... params) {
         super(data, status, success, message, params);
     }
 
@@ -22,7 +22,7 @@ public class WebResult<T> extends Result<T> {
      * @param message 传输消息
      */
     public static <T> WebResult<T> success(T data, String message, Object... params) {
-        return new WebResult<>(data, HttpStatus.OK, true, message, params);
+        return new WebResult<>(data, HttpStatus.OK.value(), true, message, params);
     }
 
     public static <T> WebResult<T> success(T data) {
@@ -43,7 +43,7 @@ public class WebResult<T> extends Result<T> {
      * @param message 传输消息
      */
     public static <T> WebResult<T> fail(String message, Object... params) {
-        return new WebResult<>(null, HttpStatus.OK, false, message, params);
+        return new WebResult<>(null, HttpStatus.OK.value(), false, message, params);
     }
 
     public static <T> WebResult<T> fail() {
@@ -54,13 +54,13 @@ public class WebResult<T> extends Result<T> {
      * 拒绝请求，状态为500
      */
     public static <T> WebResult<T> refuse(String message, Object... params) {
-        return new WebResult<>(null, HttpStatus.INTERNAL_SERVER_ERROR, false, message, params);
+        return new WebResult<>(null, HttpStatus.INTERNAL_SERVER_ERROR.value(), false, message, params);
     }
 
     /**
      * 未授权请求，状态为401
      */
     public static <T> WebResult<T> unAuthorization(String message, Object... params) {
-        return new WebResult<>(null, HttpStatus.UNAUTHORIZED, false, message, params);
+        return new WebResult<>(null, HttpStatus.UNAUTHORIZED.value(), false, message, params);
     }
 }

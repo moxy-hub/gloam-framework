@@ -17,7 +17,7 @@ import springfox.documentation.annotations.ApiIgnore;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping("/rsa")
+@RequestMapping("/auth/rsa")
 @Api(tags = "RSA密钥对")
 @Slf4j
 public class RsaController {

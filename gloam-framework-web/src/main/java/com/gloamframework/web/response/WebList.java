@@ -12,7 +12,7 @@ import java.util.Collection;
 @ApiModel(description = "LIST类型响应对象")
 public class WebList<T> extends Result<Collection<T>> {
 
-    private WebList(Collection<T> data, HttpStatus status, boolean success, String message, Object... params) {
+    private WebList(Collection<T> data, Integer status, boolean success, String message, Object... params) {
         super(data, status, success, message, params);
     }
 
@@ -23,7 +23,7 @@ public class WebList<T> extends Result<Collection<T>> {
      * @param message 传输消息
      */
     public static <T> WebList<T> success(Collection<T> data, String message, Object... params) {
-        return new WebList<>(data, HttpStatus.OK, true, message, params);
+        return new WebList<>(data, HttpStatus.OK.value(), true, message, params);
     }
 
     public static <T> WebList<T> success(Collection<T> data) {
@@ -40,7 +40,7 @@ public class WebList<T> extends Result<Collection<T>> {
      * @param message 传输消息
      */
     public static <T> WebList<T> fail(String message, Object... params) {
-        return new WebList<>(new ArrayList<>(), HttpStatus.OK, false, message, params);
+        return new WebList<>(new ArrayList<>(), HttpStatus.OK.value(), false, message, params);
     }
 
     public static <T> WebList<T> fail() {

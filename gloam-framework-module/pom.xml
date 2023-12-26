@@ -28,6 +28,7 @@
         <!-- gloam cloud -->
         <module>../gloam-framework-starter-cloud-sentinel</module>
         <module>../gloam-framework-starter-cloud-nacos</module>
+        <module>../gloam-framework-starter-cloud-remote</module>
         <!-- gloam service -->
         <module>../gloam-framework-starter-service-tenant</module>
     </modules>

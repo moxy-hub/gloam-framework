@@ -46,12 +46,12 @@ public class Result<T> implements Serializable {
     @ApiModelProperty(value = "服务器信息")
     private String message;
 
-    protected Result(T data, HttpStatus status, boolean success, String message, Object... params) {
+    protected Result(T data, Integer status, boolean success, String message, Object... params) {
         this.data = data;
         if (status == null) {
-            status = HttpStatus.OK;
+            status = HttpStatus.OK.value();
         }
-        this.status = status.value();
+        this.status = status;
         this.success = success;
         if (StrUtil.isNotBlank(message)) {
             this.message = MessageFormatter.arrayFormat(message, params).getMessage();

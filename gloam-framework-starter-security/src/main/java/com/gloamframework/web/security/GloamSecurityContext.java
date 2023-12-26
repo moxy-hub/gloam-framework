@@ -3,10 +3,10 @@ package com.gloamframework.web.security;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.extra.spring.SpringUtil;
 import com.gloamframework.core.boot.context.SpringContext;
 import com.gloamframework.core.exception.GloamRuntimeException;
 import com.gloamframework.web.context.WebContext;
-import com.gloamframework.web.security.attribute.AuthorityAttribute;
 import com.gloamframework.web.security.token.TokenManager;
 import com.gloamframework.web.security.token.constant.Device;
 import lombok.extern.slf4j.Slf4j;
@@ -42,7 +42,7 @@ public class GloamSecurityContext {
      */
     public static void passAuthentication(Object principal, Object credentials) {
         // 拉取权限
-        List<GrantedAuthority> authorities = pullAuthorities();
+        List<GrantedAuthority> authorities = pullAuthorities(principal);
         // 生成spring security认证token
         GloamAuthenticationToken gloamAuthenticationToken = new GloamAuthenticationToken(principal, credentials, authorities);
         if (!gloamAuthenticationToken.isAuthenticated()) {
@@ -175,7 +175,7 @@ public class GloamSecurityContext {
         if (CollectionUtil.isNotEmpty(gloamSecurityAuthorities)) {
             return gloamSecurityAuthorities;
         }
-        Map<String, GloamSecurityAuthority> beanMaps = SpringContext.getContext().getBeansOfType(GloamSecurityAuthority.class);
+        Map<String, GloamSecurityAuthority> beanMaps = SpringUtil.getBeansOfType(GloamSecurityAuthority.class);
         if (MapUtil.isEmpty(beanMaps)) {
             log.error("没有找到配置的权限注入实现类，请实现GloamSecurityAuthority接口，并注入spring中");
             gloamSecurityAuthorities = new ArrayList<>();
@@ -188,11 +188,12 @@ public class GloamSecurityContext {
     /**
      * 拉取全部权限
      */
-    private static List<GrantedAuthority> pullAuthorities() {
+    private static List<GrantedAuthority> pullAuthorities(Object principal) {
         List<GloamSecurityAuthority> authorities = gloamSecurityAuthorities();
-        String switchUser = (String) AuthorityAttribute.AUTHORITY_SYMBOL.obtain(WebContext.obtainRequest());
+        // todo 目前不支持用户切换的功能
+        // String switchUser = (String) AuthorityAttribute.AUTHORITY_SYMBOL.obtain(WebContext.obtainRequest());
         Set<String> allAuths = new HashSet<>();
-        authorities.forEach(a -> allAuths.addAll(a.authorities(switchUser)));
+        authorities.forEach(a -> allAuths.addAll(a.authorities(principal)));
         return AuthorityUtils.createAuthorityList(allAuths.toArray(new String[]{}));
     }
 
