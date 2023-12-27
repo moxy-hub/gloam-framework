@@ -31,7 +31,7 @@ public class GloamCoreConfigure {
     @Bean
     @SuppressWarnings("InstantiationOfUtilityClass")
     public JsonUtils jsonUtils(List<ObjectMapper> objectMappers) {
-        // 1.1 创建 SimpleModule 对象
+        // 创建 SimpleModule 对象
         SimpleModule simpleModule = new SimpleModule();
         simpleModule
                 // 新增 Long 类型序列化规则，数值超过 2^53-1，在 JS 会出现精度丢失问题，因此 Long 自动序列化为字符串类型
@@ -44,12 +44,11 @@ public class GloamCoreConfigure {
                 // 新增 LocalDateTime 序列化、反序列化规则
                 .addSerializer(LocalDateTime.class, LocalDateTimeSerializer.INSTANCE)
                 .addDeserializer(LocalDateTime.class, LocalDateTimeDeserializer.INSTANCE);
-        // 1.2 注册到 objectMapper
+        // 注册到 objectMapper
         objectMappers.forEach(objectMapper -> objectMapper.registerModule(simpleModule));
-
-        // 2. 设置 objectMapper 到 JsonUtils {
+        // 设置 objectMapper 到 JsonUtils {
         JsonUtils.init(CollUtil.getFirst(objectMappers));
-        log.info("[init][初始化 JsonUtils 成功]");
+        log.info("[init][JsonUtils init success]");
         return new JsonUtils();
     }
 }

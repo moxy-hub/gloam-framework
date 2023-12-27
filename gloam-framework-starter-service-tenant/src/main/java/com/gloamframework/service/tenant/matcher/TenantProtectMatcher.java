@@ -58,7 +58,7 @@ public class TenantProtectMatcher extends AbstractSpringMvcPathMatcher<TenantPro
     @Override
     protected void registerFilter(String pathUrl, HttpMethod httpMethod, TenantProtect annotation) {
         tenantProtectPaths.add(new TenantProtectPath(pathUrl, httpMethod, annotation));
-        log.info("租户接口保护 -> 接口:{} 请求方法:{}", pathUrl, httpMethod);
+        log.debug("租户接口保护 -> 接口:{} 请求方法:{}", pathUrl, httpMethod);
     }
 
     /**
