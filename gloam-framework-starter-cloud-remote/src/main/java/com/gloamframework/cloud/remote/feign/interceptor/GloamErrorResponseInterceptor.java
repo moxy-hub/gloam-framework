@@ -1,5 +1,6 @@
 package com.gloamframework.cloud.remote.feign.interceptor;
 
+import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.gloamframework.cloud.remote.feign.exception.FeignException;
@@ -8,7 +9,12 @@ import com.gloamframework.core.exception.GloamRuntimeException;
 import com.gloamframework.web.response.Result;
 import feign.Response;
 import feign.codec.ErrorDecoder;
+import feign.httpclient.ApacheHttpClient;
 import lombok.extern.slf4j.Slf4j;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 /**
  * gloam的feign错误处理
@@ -21,7 +27,12 @@ public class GloamErrorResponseInterceptor implements ErrorDecoder {
     @Override
     public Exception decode(String methodKey, Response response) {
         response = GzipUtil.decode(response);
-        String body = response.body().toString();
+        String body;
+        try {
+            body = new String(IoUtil.readBytes(response.body().asInputStream()));
+        } catch (IOException e) {
+            throw new GloamRuntimeException("feign调用错误:读取响应body失败",e);
+        }
         log.error("feign服务调用失败,原因:{}", body);
         String message;
         try {
