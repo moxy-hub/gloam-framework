@@ -25,6 +25,7 @@
         <module>../gloam-framework-starter-tomcat</module>
         <module>../gloam-framework-starter-undertow</module>
         <module>../gloam-framework-starter-camunda</module>
+        <module>../gloam-framework-file</module>
         <!-- gloam cloud -->
         <module>../gloam-framework-starter-cloud-sentinel</module>
         <module>../gloam-framework-starter-cloud-nacos</module>

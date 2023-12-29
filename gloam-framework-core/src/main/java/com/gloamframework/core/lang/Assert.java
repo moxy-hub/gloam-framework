@@ -1,5 +1,7 @@
 package com.gloamframework.core.lang;
 
+import cn.hutool.core.util.StrUtil;
+import com.gloamframework.common.lang.StringUtil;
 import com.gloamframework.core.lang.exception.GloamIllegalArgumentException;
 import com.gloamframework.core.lang.exception.GloamIllegalStateException;
 import org.springframework.lang.Nullable;
@@ -451,6 +453,19 @@ public class Assert {
     }
 
     /**
+     * 判断字符串不可为空
+     */
+    public static void notBlank(String str, Supplier<String> messageSupplier) {
+        if (StringUtil.isBlank(str)){
+            throw new GloamIllegalArgumentException(nullSafeGet(messageSupplier));
+        }
+    }
+
+    public static void notBlank(String str,String message){
+        notBlank(str, () -> message);
+    }
+
+    /**
      * Assert that the provided object is an instance of the provided class.
      * <pre class="code">Assert.instanceOf(Foo.class, foo, "Foo expected");</pre>
      *
@@ -600,5 +615,6 @@ public class Assert {
     private static String nullSafeGet(@Nullable Supplier<String> messageSupplier) {
         return (messageSupplier != null ? messageSupplier.get() : null);
     }
+
 
 }

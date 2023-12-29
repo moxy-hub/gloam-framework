@@ -265,6 +265,13 @@
                 <version>${gloam.version}</version>
             </dependency>
 
+            <!-- gloam-文件系统 -->
+            <dependency>
+                <groupId>com.gloamframework</groupId>
+                <artifactId>gloam-framework-file</artifactId>
+                <version>${gloam.version}</version>
+            </dependency>
+
             <!-- gloam cloud -->
             <dependency>
                 <groupId>com.gloamframework</groupId>
