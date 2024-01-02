@@ -15,6 +15,9 @@ public interface LevelFileClientFactory extends FileClientFactory {
      */
     FileClient<? extends FileClientProperties> getMasterFileClient();
 
+    /**
+     * 设置对应的客户端为主客户端，该方法优先于在properties中进行设置
+     */
     boolean setMaster(String symbol);
 
 }
