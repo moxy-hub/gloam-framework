@@ -51,4 +51,5 @@ public class GloamCoreConfigure {
         log.info("[init][JsonUtils init success]");
         return new JsonUtils();
     }
+
 }

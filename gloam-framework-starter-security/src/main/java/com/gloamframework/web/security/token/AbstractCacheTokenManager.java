@@ -1,9 +1,7 @@
 package com.gloamframework.web.security.token;
 
-import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
-import com.gloamframework.data.redis.RedisUtil;
 import com.gloamframework.web.context.WebContext;
 import com.gloamframework.web.security.GloamSecurityCacheManager;
 import com.gloamframework.web.security.attribute.AuthorityAttribute;
@@ -22,7 +20,6 @@ import lombok.extern.slf4j.Slf4j;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.Serializable;
-import java.util.concurrent.TimeUnit;
 
 /**
  * token缓存层
@@ -144,42 +141,44 @@ public abstract class AbstractCacheTokenManager extends AbstractTokenManager {
         }
         String subject = (String) TokenAttribute.TOKEN_SUBJECT.obtain(request);
         String authSymbol = (String) AuthorityAttribute.AUTHORITY_SYMBOL.obtain(request);
-        // 分布式锁定token
-        String randomLock = String.valueOf(System.currentTimeMillis() + RandomUtil.randomChar());
-        try {
-            if (!RedisUtil.LockOps.getLock(subject, randomLock, 5, TimeUnit.SECONDS)) {
-                log.error("获取分布式锁失败，key:{},value:{}", subject, randomLock);
-                // 获取锁失败
-                throw new TokenAuthenticateException("同时有多人对该账号进行认证，请稍后再试，如果不是本人操作，请及时检查");
-            }
-            // 是否需要刷新
-            boolean refresh = (boolean) TokenAttribute.TOKEN_REFRESH.obtain(request);
-            if (refresh) {
-                // 移除当前token
-                this.revoke(subject, device);
-                // 重新生成token
-                this.authenticate(subject, device);
-            }
-            // 获取缓存token
-            TokenInfo tokenInfo = cacheManager.getCache().get(this.generateCacheKey(TokenPrefix.TOKEN, subject, device), TokenInfo.class);
-            if (tokenInfo == null) {
-                log.error("token认证: 在缓存中没有查询到相应的token，是否已过期");
-                throw new TokenAuthenticateException("无效token");
-            }
-            // 判断权限码
-            if (!StrUtil.equals(tokenInfo.switchAuth, authSymbol)) {
-                throw new TokenAuthenticateException("登录用户不一致，请重新登录");
-            }
-            // 是否还在线
-            if (tokenInfo.isKickOff()) {
-                throw new TokenAuthenticateException("您已被踢下线");
-            }
-        } finally {
-            // 释放锁
-            if (!RedisUtil.LockOps.releaseLock(subject, randomLock)) {
-                log.error("释放分布式锁失败，key:{},value:{}", subject, randomLock);
-            }
+
+        // 是否需要刷新
+        boolean refresh = (boolean) TokenAttribute.TOKEN_REFRESH.obtain(request);
+        if (refresh) {
+            // 移除当前token
+            this.revoke(subject, device);
+            // 重新生成token
+            this.authenticate(subject, device);
         }
+        // 获取缓存token
+        TokenInfo tokenInfo = cacheManager.getCache().get(this.generateCacheKey(TokenPrefix.TOKEN, subject, device), TokenInfo.class);
+        if (tokenInfo == null) {
+            log.error("token认证: 在缓存中没有查询到相应的token，是否已过期");
+            throw new TokenAuthenticateException("无效token");
+        }
+        // 判断权限码
+        if (!StrUtil.equals(tokenInfo.switchAuth, authSymbol)) {
+            throw new TokenAuthenticateException("登录用户不一致，请重新登录");
+        }
+        // 是否还在线
+        if (tokenInfo.isKickOff()) {
+            throw new TokenAuthenticateException("您已被踢下线");
+        }
+        // todo 【马晓龙】分布式锁定token，目前没有用锁，因为出现两个请求同时进来导致只有一个成功，后期检查如必须加锁，再进行考虑
+        // String randomLock = String.valueOf(System.currentTimeMillis() + RandomUtil.randomChar());
+        // try {
+        //     if (!RedisUtil.LockOps.getLock(subject, randomLock, 5, TimeUnit.SECONDS)) {
+        //         log.error("获取分布式锁失败，key:{},value:{}", subject, randomLock);
+        //         // 获取锁失败
+        //         throw new TokenAuthenticateException("同时有多人对该账号进行认证，请稍后再试，如果不是本人操作，请及时检查");
+        //     }
+        //    // todo 锁住操作
+        // } finally {
+        //     // 释放锁
+        //     if (!RedisUtil.LockOps.releaseLock(subject, randomLock)) {
+        //         log.error("释放分布式锁失败，key:{},value:{}", subject, randomLock);
+        //     }
+        // }
     }
 
     @Override

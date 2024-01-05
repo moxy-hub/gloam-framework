@@ -13,6 +13,6 @@ public interface TenantGetter {
      * @param authUser 认证用户
      * @return 租户ID
      */
-    Long obtainTenantId(Object authUser);
+    Number obtainTenantId(Object authUser);
 
 }

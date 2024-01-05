@@ -97,7 +97,7 @@ public class GloamQueryColumn extends QueryColumn {
     }
 
 
-    public QueryCondition inIfPresent(Object... value) {
+    public QueryCondition inIfPresent(Collection<?> value) {
         if (this.ifPresentValue(value)) {
             return super.in(value);
         }
@@ -105,7 +105,7 @@ public class GloamQueryColumn extends QueryColumn {
     }
 
 
-    public QueryCondition notInIfPresent(Object... value) {
+    public QueryCondition notInIfPresent(Collection<?> value) {
         if (this.ifPresentValue(value)) {
             return super.notIn(value);
         }

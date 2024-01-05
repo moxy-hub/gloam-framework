@@ -490,9 +490,11 @@ public class DataPermissionDatabaseInterceptor extends FlexJsqlParserSupport imp
     private Expression buildDataPermissionExpression(Table table) {
         // 生成条件
         Expression allExpression = null;
+        // 处理表名称
+        String tableName = getTableName(table);
         for (DataPermissionRule rule : ContextHolder.getRules()) {
             // 判断表名是否匹配
-            if (!rule.getTableNames().contains(table.getName())) {
+            if (!rule.getTableNames().contains(tableName)) {
                 continue;
             }
             // 如果有匹配的规则，说明可重写。
@@ -501,7 +503,6 @@ public class DataPermissionDatabaseInterceptor extends FlexJsqlParserSupport imp
             ContextHolder.setRewrite(true);
 
             // 单条规则的条件
-            String tableName = getTableName(table);
             Expression oneExpress = rule.getExpression(tableName, table.getAlias());
             if (oneExpress == null) {
                 continue;
@@ -594,7 +595,6 @@ public class DataPermissionDatabaseInterceptor extends FlexJsqlParserSupport imp
 
         /**
          * 判断是否无需重写
-         * ps：虽然有点中文式英语，但是容易读懂即可
          *
          * @param ms    MappedStatement
          * @param rules 数据权限规则数组

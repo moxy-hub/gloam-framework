@@ -38,17 +38,6 @@
             <artifactId>spring-boot-configuration-processor</artifactId>
         </dependency>
 
-        <!-- 内置retrofit2http框架-->
-        <dependency>
-            <groupId>com.squareup.retrofit2</groupId>
-            <artifactId>retrofit</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.squareup.retrofit2</groupId>
-            <artifactId>converter-jackson</artifactId>
-        </dependency>
-
         <!-- common -->
         <dependency>
             <groupId>com.gloamframework</groupId>

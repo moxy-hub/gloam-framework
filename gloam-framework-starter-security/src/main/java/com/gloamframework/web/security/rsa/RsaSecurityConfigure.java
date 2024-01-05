@@ -1,6 +1,5 @@
 package com.gloamframework.web.security.rsa;
 
-import com.gloamframework.web.doc.HttpDocRegister;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -17,8 +16,11 @@ public class RsaSecurityConfigure {
         return new RsaService();
     }
 
-    @Bean
-    public HttpDocRegister rsaDoc() {
-        return () -> this.getClass().getPackage();
-    }
+    /**
+     * todo 目前使用外部自备rest，不进行内部提供
+     */
+    // @Bean
+    // public HttpDocRegister rsaDoc() {
+    //     return () -> this.getClass().getPackage();
+    // }
 }

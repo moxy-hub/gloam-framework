@@ -1,7 +1,6 @@
 package com.gloam.web.undertow.controller;
 
 import cn.hutool.core.codec.Base64;
-import com.gloamframework.core.http.annotation.WebServiceInject;
 import com.gloamframework.web.response.WebResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +18,7 @@ import java.io.IOException;
 @Slf4j
 public class TestApiController {
 
-    @WebServiceInject
+    //    @WebServiceInject
     private AuthWebService authWebService;
 
     @GetMapping("/auth")

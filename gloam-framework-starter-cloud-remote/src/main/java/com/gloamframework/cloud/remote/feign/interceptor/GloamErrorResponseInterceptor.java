@@ -9,11 +9,8 @@ import com.gloamframework.core.exception.GloamRuntimeException;
 import com.gloamframework.web.response.Result;
 import feign.Response;
 import feign.codec.ErrorDecoder;
-import feign.httpclient.ApacheHttpClient;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 /**
@@ -31,7 +28,7 @@ public class GloamErrorResponseInterceptor implements ErrorDecoder {
         try {
             body = new String(IoUtil.readBytes(response.body().asInputStream()));
         } catch (IOException e) {
-            throw new GloamRuntimeException("feign调用错误:读取响应body失败",e);
+            throw new GloamRuntimeException("feign调用错误:读取响应body失败", e);
         }
         log.error("feign服务调用失败,原因:{}", body);
         String message;

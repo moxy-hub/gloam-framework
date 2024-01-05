@@ -36,12 +36,13 @@ public class TenantFilter extends GloamOncePerRequestFilter {
             throw new TenantException("没有找到配置的租户获取器");
         }
         // 获取认证用户
-        Long tenantId = tenantGetter.obtainTenantId(GloamSecurityContext.obtainAuthenticationPrincipal());
+        // 这里考虑到用户的租户安 id不会变换，做缓冲进行处理，但是redis的缓冲中long取出来后会自动转为int，所以多做一步转换
+        Number tenantId = tenantGetter.obtainTenantId(GloamSecurityContext.obtainAuthenticationPrincipal());
         if (tenantId == null) {
             throw new TenantException("获取租户失败");
         }
         // 把租户id放入请求中
-        TenantAttribute.TENANT_ID.setAttributes(request, tenantId);
+        TenantAttribute.TENANT_ID.setAttributes(request, tenantId.longValue());
         try {
             filterChain.doFilter(request, response);
         } finally {

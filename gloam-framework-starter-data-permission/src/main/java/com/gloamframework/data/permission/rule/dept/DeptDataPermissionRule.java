@@ -24,6 +24,7 @@ import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
 import net.sf.jsqlparser.expression.operators.relational.InExpression;
 import net.sf.jsqlparser.schema.Column;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -90,10 +91,12 @@ public class DeptDataPermissionRule implements DataPermissionRule {
     @Override
     public Expression getExpression(String tableName, Alias tableAlias) {
         // 只有有登陆用户的情况下，才进行数据权限的处理
-        GloamAuthenticationToken authentication = (GloamAuthenticationToken) GloamSecurityContext.obtainAuthentication();
-        if (authentication == null) {
+        Authentication springAuthentication = GloamSecurityContext.obtainAuthentication();
+        // 只针对内部的token
+        if (springAuthentication == null || !GloamAuthenticationToken.class.isAssignableFrom(springAuthentication.getClass())) {
             return null;
         }
+        GloamAuthenticationToken authentication = (GloamAuthenticationToken) springAuthentication;
         // 获得数据权限
         DeptDataPermissionDomain deptDataPermission = authentication.getContext(CONTEXT_KEY, DeptDataPermissionDomain.class);
         // 从上下文中拿不到，则调用逻辑进行获取
@@ -120,7 +123,7 @@ public class DeptDataPermissionRule implements DataPermissionRule {
         // 情况二，即不能查看部门，又不能查看自己，则说明 100% 无权限
         if (CollectionUtil.isEmpty(deptDataPermission.getDeptIds())
                 && Boolean.FALSE.equals(deptDataPermission.getSelf())) {
-            return new EqualsTo(null, null); // WHERE null = null，可以保证返回的数据为空
+            return EXPRESSION_NULL; // 保证返回的数据为空
         }
 
         // 情况三，拼接 Dept 和 User 的条件，最后组合

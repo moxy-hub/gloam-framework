@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 @Accessors(chain = true)
 public abstract class GloamSecurityException extends AuthenticationException {
 
-    private int responseStatus = HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
+    private int responseStatus = HttpServletResponse.SC_OK;
 
     public GloamSecurityException(String message, Object... params) {
         super(MessageFormatter.arrayFormat(message, params).getMessage());

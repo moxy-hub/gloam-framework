@@ -50,6 +50,14 @@ public class WebResult<T> extends Result<T> {
         return WebResult.fail(null);
     }
 
+    public static <T> WebResult<T> fail(int status, String message, Object... params) {
+        return new WebResult<>(null, status, false, message, params);
+    }
+
+    public static <T> WebResult<T> fail(T data, int status, String message, Object... params) {
+        return new WebResult<>(data, status, false, message, params);
+    }
+
     /**
      * 拒绝请求，状态为500
      */

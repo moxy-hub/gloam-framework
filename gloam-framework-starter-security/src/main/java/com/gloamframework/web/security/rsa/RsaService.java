@@ -63,7 +63,7 @@ public class RsaService {
         }
         try {
             RSAUtil.RsaKeypair rsaKeypair = RSAUtil.initKey();
-            log.debug("init rsa keypair : {}", rsaKeypair);
+            log.debug("init rsa keypair success");
             // 序列化密钥对
             String rsaKey = getServiceRSAKey(serviceCode);
             cacheManager.getCache().put(rsaKey, rsaKeypair);
