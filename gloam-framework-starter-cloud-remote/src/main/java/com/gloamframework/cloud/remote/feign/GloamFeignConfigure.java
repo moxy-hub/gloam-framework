@@ -9,6 +9,7 @@ import feign.codec.Decoder;
 import feign.codec.ErrorDecoder;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
@@ -19,6 +20,7 @@ import org.springframework.web.client.RestTemplate;
  * @author 晓龙
  */
 @Configurable
+@ConditionalOnClass(name = "feign.Feign")
 @EnableConfigurationProperties(GloamFeignProperties.class)
 public class GloamFeignConfigure {
 

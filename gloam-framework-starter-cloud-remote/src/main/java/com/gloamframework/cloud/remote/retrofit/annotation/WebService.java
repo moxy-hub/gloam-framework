@@ -56,7 +56,7 @@ public @interface WebService {
      * <p>
      * 为自定义的client配置拦截器，如果为全局统一client中，本条配置时不会生效的
      */
-    Class<Interceptor>[] clientInterceptors() default {};
+    Class<? extends Interceptor>[] clientInterceptors() default {};
 
     /**
      * 高级特性，client builder的装配器（仅在 singletonClient=false 时生效）
@@ -64,7 +64,7 @@ public @interface WebService {
      *
      * @see OkHttpClientAssembler
      */
-    Class<OkHttpClientAssembler>[] clientAssembler() default {};
+    Class<? extends OkHttpClientAssembler>[] clientAssembler() default {};
 
     /*
      * ===================== Retrofit配置 ================================

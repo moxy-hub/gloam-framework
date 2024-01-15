@@ -11,10 +11,11 @@ import com.gloamframework.file.sharding.domain.Chunk;
 public interface FileManager {
 
     /**
-     * 上传文件，上传的为文件块，如果不进行分片上传，那么当前块即为文件全部的内容
+     * todo 分片上传文件，上传的为文件块，如果不进行分片上传，那么当前块即为文件全部的内容
      *
      * @param chunk 文件块
      */
     void upload(Chunk chunk);
 
+    String upload();
 }

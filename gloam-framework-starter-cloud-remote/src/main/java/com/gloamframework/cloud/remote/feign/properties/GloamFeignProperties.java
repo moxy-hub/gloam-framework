@@ -1,9 +1,8 @@
 package com.gloamframework.cloud.remote.feign.properties;
 
 import com.gloamframework.core.boot.properties.annotation.MappingConfigurationProperty;
-import feign.ExceptionPropagationPolicy;
-import feign.Logger;
 import lombok.Data;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
@@ -17,6 +16,7 @@ import java.util.Map;
  */
 @ConfigurationProperties("gloam.cloud.feign")
 @Data
+@ConditionalOnClass(name = "feign.Feign")
 public class GloamFeignProperties {
 
     /**
@@ -61,11 +61,37 @@ public class GloamFeignProperties {
     @Data
     public static class FeignClientConfiguration {
 
+        public enum ExceptionPropagationPolicy {
+            NONE, UNWRAP
+        }
+
+        /**
+         * Controls the level of logging.
+         */
+        public enum Level {
+            /**
+             * No logging.
+             */
+            NONE,
+            /**
+             * Log only the request method and URL and the response status code and execution time.
+             */
+            BASIC,
+            /**
+             * Log the basic information along with request and response headers.
+             */
+            HEADERS,
+            /**
+             * Log the headers, body, and metadata for both requests and responses.
+             */
+            FULL
+        }
+
         /**
          * 默认开启feign的日志
          */
         @MappingConfigurationProperty("logger-level")
-        private Logger.Level loggerLevel = Logger.Level.BASIC;
+        private Level loggerLevel = Level.BASIC;
 
         /**
          * 请求超时时间，默认10秒

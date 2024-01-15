@@ -65,11 +65,11 @@ public class OkHttpClientManager {
         // 创建新的client builder
         OkHttpClient.Builder clientBuilder = httpClient.newBuilder();
         // 添加拦截器
-        for (Class<Interceptor> interceptor : webService.clientInterceptors()) {
+        for (Class<? extends Interceptor> interceptor : webService.clientInterceptors()) {
             clientBuilder.addInterceptor(beanFactory.getBean(interceptor));
         }
         // builder
-        for (Class<OkHttpClientAssembler> clientAssemblerClass : webService.clientAssembler()) {
+        for (Class<? extends OkHttpClientAssembler> clientAssemblerClass : webService.clientAssembler()) {
             OkHttpClientAssembler clientAssembler = beanFactory.getBean(clientAssemblerClass);
             clientBuilder = clientAssembler.assemble(clientBuilder);
             if (clientBuilder == null) {
