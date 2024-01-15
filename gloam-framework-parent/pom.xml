@@ -302,9 +302,39 @@
 
     </dependencyManagement>
 
+    <!-- 发布管理-->
+    <distributionManagement>
+        <repository>
+            <id>maven-nexus</id>
+            <name>Gloam Release Repository</name>
+            <url>http://192.168.1.136:8081/repository/wdzh-mix/</url>
+        </repository>
+        <snapshotRepository>
+            <id>maven-nexus</id>
+            <name>Gloam Snapshot Repository</name>
+            <url>http://192.168.1.136:8081/repository/wdzh-mix/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <!--该配置是为了防止pom中的jar包从私服下载之后，但是执行mvn中从插件还是从中央仓库中下载-->
+    <pluginRepositories>
+        <pluginRepository>
+            <id>maven-nexus</id>
+            <url>http://192.168.1.136:8081/repository/wdzh-mix/</url>
+        </pluginRepository>
+    </pluginRepositories>
+
     <build>
         <pluginManagement>
             <plugins>
+
+                <!-- 使用2.8以上的maven发布插件，使用xml仓库信息-->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>2.8.2</version>
+                </plugin>
+
                 <!-- 上传源码 -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
