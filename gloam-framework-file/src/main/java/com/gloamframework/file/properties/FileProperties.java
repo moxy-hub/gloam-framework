@@ -1,8 +1,11 @@
 package com.gloamframework.file.properties;
 
+import com.gloamframework.core.boot.properties.annotation.MappingConfigurationProperty;
 import com.gloamframework.file.FileClientSupport;
 import lombok.Data;
+import org.springframework.boot.autoconfigure.web.servlet.MultipartProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.util.unit.DataSize;
 
 /**
  * gloam文件系统的配置
@@ -19,4 +22,21 @@ public class FileProperties {
      */
     private FileClientSupport master = FileClientSupport.LOCAL;
 
+    /**
+     * 最大的容量为50MB，再大了应该使用分片上传功能
+     */
+    @MappingConfigurationProperty("spring.servlet.multipart.max-file-size")
+    private DataSize maxFileSize = DataSize.ofMegabytes(50);
+
+    /**
+     * 请求最大的容量
+     */
+    @MappingConfigurationProperty("spring.servlet.multipart.max-request-size")
+    private DataSize maxRequestSize = DataSize.ofMegabytes(100);
+
+    /**
+     * 懒加载
+     */
+    @MappingConfigurationProperty("spring.servlet.multipart.resolve-lazily")
+    private boolean resolveLazily = true;
 }

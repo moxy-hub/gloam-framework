@@ -56,3 +56,4 @@ logs/
 **/.iml
 **/*.iml
 */*.iml
+*/file
