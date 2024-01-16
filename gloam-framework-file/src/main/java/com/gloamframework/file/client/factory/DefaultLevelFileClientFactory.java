@@ -3,7 +3,7 @@ package com.gloamframework.file.client.factory;
 import cn.hutool.core.util.ObjectUtil;
 import com.gloamframework.core.lang.Assert;
 import com.gloamframework.file.client.FileClient;
-import com.gloamframework.file.client.properties.FileClientProperties;
+import com.gloamframework.file.client.FileClientProperties;
 import com.gloamframework.file.properties.FileProperties;
 
 /**

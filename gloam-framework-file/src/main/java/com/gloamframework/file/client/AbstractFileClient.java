@@ -1,7 +1,6 @@
 package com.gloamframework.file.client;
 
 import com.gloamframework.core.lang.Assert;
-import com.gloamframework.file.client.properties.FileClientProperties;
 import com.gloamframework.file.exception.FileDownloadException;
 import lombok.extern.slf4j.Slf4j;
 

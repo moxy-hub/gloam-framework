@@ -1,4 +1,4 @@
-package com.gloamframework.file.local;
+package com.gloamframework.file.client.local;
 
 import cn.hutool.core.io.IoUtil;
 import com.gloamframework.core.lang.Assert;
@@ -43,21 +43,22 @@ public class LocalFileClient extends AbstractFileClient<LocalFileClientPropertie
     }
 
     @Override
-    public String upload(InputStream fileStream, String relativePath, String fileName) throws FileUploadException {
+    public void upload(String fileName, String relativePath, InputStream fileStream) throws FileUploadException {
         Assert.notBlank(relativePath, "文件上传请传入相对路径");
         Assert.notBlank(fileName, "文件上传请传入文件名字");
         // 文件通道
         if (fileStream instanceof FileInputStream &&
                 FileInputStream.class.equals(fileStream.getClass())) {
-            return this.upload(getPath(relativePath, fileName), ((FileInputStream) fileStream).getChannel());
+            this.upload(getPath(relativePath, fileName), ((FileInputStream) fileStream).getChannel());
+            return;
         }
-        return this.upload(getPath(relativePath, fileName), Channels.newChannel(fileStream));
+        this.upload(getPath(relativePath, fileName), Channels.newChannel(fileStream));
     }
 
     /**
      * 基于Nio上传
      */
-    private String upload(Path path, ReadableByteChannel readableByteChannel) {
+    private void upload(Path path, ReadableByteChannel readableByteChannel) {
         if (!readableByteChannel.isOpen()) {
             throw new FileUploadException("文件上传通道已关闭");
         }
@@ -71,7 +72,6 @@ public class LocalFileClient extends AbstractFileClient<LocalFileClientPropertie
                 buffer.clear();
             }
             log.debug("[local]:文件上传成功:{}", path.toUri());
-            return StringUtils.replace(path.toString(), "\\", "/");
         } catch (IOException e) {
             throw new FileUploadException("文件上传失败", e);
         } finally {
@@ -82,7 +82,7 @@ public class LocalFileClient extends AbstractFileClient<LocalFileClientPropertie
     /**
      * 基于Nio的fileChannel0拷贝上传
      */
-    private String upload(Path path, FileChannel channel) {
+    private void upload(Path path, FileChannel channel) {
         if (!channel.isOpen()) {
             throw new FileUploadException("文件上传通道已关闭");
         }
@@ -91,7 +91,6 @@ public class LocalFileClient extends AbstractFileClient<LocalFileClientPropertie
         ) {
             channel.transferTo(0, channel.size(), fileOutChannel);
             log.debug("[local]:文件上传成功:{}", path.toUri());
-            return StringUtils.replace(path.toString(), "\\", "/");
         } catch (IOException e) {
             throw new FileUploadException("文件上传失败", e);
         } finally {
@@ -104,7 +103,12 @@ public class LocalFileClient extends AbstractFileClient<LocalFileClientPropertie
         if (StringUtils.isBlank(path)) {
             throw new FileDeleteException("文件不存在");
         }
-        Path downloadPath = Paths.get(path);
+        // 获取路径
+        String uploadDir = fileClientProperties.getUploadDir();
+        if (StringUtils.isBlank(uploadDir)) {
+            throw new FileUploadException("请配置文件上传路径");
+        }
+        Path downloadPath = Paths.get(uploadDir, path);
         if (!Files.exists(downloadPath)) {
             throw new FileDeleteException("文件不存在");
         }
@@ -121,7 +125,12 @@ public class LocalFileClient extends AbstractFileClient<LocalFileClientPropertie
         if (StringUtils.isBlank(path) || outputStream == null) {
             throw new FileDownloadException("文件下载失败");
         }
-        Path downloadPath = Paths.get(path);
+        // 获取路径
+        String uploadDir = fileClientProperties.getUploadDir();
+        if (StringUtils.isBlank(uploadDir)) {
+            throw new FileUploadException("请配置文件上传路径");
+        }
+        Path downloadPath = Paths.get(uploadDir, path);
         if (!Files.exists(downloadPath)) {
             throw new FileDownloadException("下载文件不存在");
         }

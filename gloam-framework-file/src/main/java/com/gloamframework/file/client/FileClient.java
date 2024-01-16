@@ -1,6 +1,5 @@
 package com.gloamframework.file.client;
 
-import com.gloamframework.file.client.properties.FileClientProperties;
 import com.gloamframework.file.exception.FileDeleteException;
 import com.gloamframework.file.exception.FileDownloadException;
 import com.gloamframework.file.exception.FileUploadException;
@@ -30,10 +29,9 @@ public interface FileClient<Properties extends FileClientProperties> {
      *
      * @param fileStream   文件流
      * @param relativePath 相对路径
-     * @return 完整路径，即 HTTP 访问地址
      * @throws FileUploadException 上传文件时，抛出 Exception 异常
      */
-    String upload(InputStream fileStream, String relativePath, String fileName) throws FileUploadException;
+    void upload(String fileName, String relativePath, InputStream fileStream) throws FileUploadException;
 
     /**
      * 删除文件

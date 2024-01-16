@@ -3,7 +3,7 @@ package com.gloamframework.file.client.factory;
 import cn.hutool.core.util.ReflectUtil;
 import com.gloamframework.core.lang.Assert;
 import com.gloamframework.file.client.FileClient;
-import com.gloamframework.file.client.properties.FileClientProperties;
+import com.gloamframework.file.client.FileClientProperties;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.ConcurrentHashMap;

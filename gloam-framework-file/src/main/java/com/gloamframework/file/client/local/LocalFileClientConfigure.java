@@ -1,4 +1,4 @@
-package com.gloamframework.file.local;
+package com.gloamframework.file.client.local;
 
 import com.gloamframework.file.FileClientSupport;
 import com.gloamframework.file.client.factory.FileClientFactory;

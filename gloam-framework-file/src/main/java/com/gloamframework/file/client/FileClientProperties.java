@@ -1,4 +1,4 @@
-package com.gloamframework.file.client.properties;
+package com.gloamframework.file.client;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 

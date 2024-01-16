@@ -1,7 +1,7 @@
 package com.gloamframework.file.client.factory;
 
 import com.gloamframework.file.client.FileClient;
-import com.gloamframework.file.client.properties.FileClientProperties;
+import com.gloamframework.file.client.FileClientProperties;
 
 /**
  * 工厂中对客户端的优先级进行配置
