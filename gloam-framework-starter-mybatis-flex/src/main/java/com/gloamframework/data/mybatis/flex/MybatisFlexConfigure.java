@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Configurable
 @EnableConfigurationProperties(MybatisFlexProperties.class)
-@MapperScan("${gloam.data.mybatis.flex.mapper-scan-package:com.gloam.**.mapper}")
+@MapperScan({"${gloam.data.mybatis.flex.mapper-scan-package:com.wdzh.**.mapper}","com.gloam.**.mapper"})
 public class MybatisFlexConfigure implements MyBatisFlexCustomizer {
 
     @Override

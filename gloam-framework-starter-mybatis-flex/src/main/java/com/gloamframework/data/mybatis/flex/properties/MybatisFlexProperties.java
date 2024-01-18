@@ -21,10 +21,10 @@ public class MybatisFlexProperties {
     private final String XML_SUPPORT = "classpath*:/mapper/**/*.xml,classpath*:/com/**/mapper/xml/*.xml";
 
     /**
-     * mapper接口扫描的基础包路径,默认com.gloam.**.mapper
+     * mapper接口扫描的基础包路径,默认com.wdzh.**.mapper
      * 建议mapper结尾，因为系统中内置http也是接口方式，不指定mapper会导致mybatis将http的接口类进行代理
      */
-    private String mapperScanPackage = "com.gloam.**.mapper";
+    private String mapperScanPackage = "com.wdzh.**.mapper";
 
     /**
      * 主键配置方式
