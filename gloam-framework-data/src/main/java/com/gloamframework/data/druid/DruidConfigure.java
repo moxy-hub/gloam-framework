@@ -22,6 +22,7 @@ import javax.servlet.Servlet;
 @ConditionalOnWebApplication
 public class DruidConfigure {
 
+    static boolean enableAuthentication;
     static String username;
     static String password;
     static String[] deny;
@@ -35,9 +36,11 @@ public class DruidConfigure {
         servletRegistrationBean.addInitParameter("allow", StrUtil.join(",", allow));
         //设置ip黑名单，优先级高于白名单
         servletRegistrationBean.addInitParameter("deny", StrUtil.join(",", deny));
-        //设置控制台管理用户
-        servletRegistrationBean.addInitParameter("loginUsername", username);
-        servletRegistrationBean.addInitParameter("loginPassword", password);
+        if (enableAuthentication) {
+            //设置控制台管理用户
+            servletRegistrationBean.addInitParameter("loginUsername", username);
+            servletRegistrationBean.addInitParameter("loginPassword", password);
+        }
         //是否可以重置数据
         servletRegistrationBean.addInitParameter("resetEnable", String.valueOf(resetEnable));
         log.info("Druid monitor started at url /druid");

@@ -16,12 +16,17 @@ import java.lang.annotation.*;
 public @interface EnableDruidMonitor {
 
     /**
-     * 监控用户名
+     * 是否开启认证，默认开启
+     */
+    boolean enableAuthentication() default true;
+
+    /**
+     * 监控用户名，在认证开启下有效
      */
     String username() default "admin";
 
     /**
-     * 监控密码
+     * 监控密码，在认证开启下有效
      */
     String password() default "admin";
 

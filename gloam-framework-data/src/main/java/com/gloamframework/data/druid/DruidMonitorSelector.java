@@ -18,6 +18,7 @@ public class DruidMonitorSelector implements ImportSelector {
         DruidConfigure.deny = annotation.getStringArray("deny");
         DruidConfigure.allow = annotation.getStringArray("allow");
         DruidConfigure.resetEnable = annotation.getBoolean("resetEnable");
+        DruidConfigure.enableAuthentication = annotation.getBoolean("enableAuthentication");
         return new String[]{DruidConfigure.class.getName()};
 
     }
