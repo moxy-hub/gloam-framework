@@ -237,6 +237,13 @@
                 <version>${gloam.version}</version>
             </dependency>
 
+            <!-- gloam-starter-async -->
+            <dependency>
+                <groupId>com.gloamframework</groupId>
+                <artifactId>gloam-framework-starter-async</artifactId>
+                <version>${gloam.version}</version>
+            </dependency>
+
             <!-- gloam-starter-security -->
             <dependency>
                 <groupId>com.gloamframework</groupId>

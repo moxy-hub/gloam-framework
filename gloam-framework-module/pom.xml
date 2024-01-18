@@ -4,9 +4,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.gloamframework</groupId>
+    <parent>
+        <groupId>com.gloamframework</groupId>
+        <artifactId>gloam-framework-parent</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath/>
+    </parent>
+
     <artifactId>gloam-framework-module</artifactId>
-    <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -21,6 +26,7 @@
         <module>../gloam-framework-starter-data-permission</module>
         <module>../gloam-framework-starter-redis</module>
         <module>../gloam-framework-starter-cache</module>
+        <module>../gloam-framework-starter-async</module>
         <module>../gloam-framework-starter-security</module>
         <module>../gloam-framework-starter-tomcat</module>
         <module>../gloam-framework-starter-undertow</module>
