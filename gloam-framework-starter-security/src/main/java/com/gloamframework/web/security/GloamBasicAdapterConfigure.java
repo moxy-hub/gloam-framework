@@ -88,7 +88,8 @@ public class GloamBasicAdapterConfigure {
                         "/swagger-resources/**",
                         "/webjars/**",
                         "/v2/**",
-                        "/favicon.ico");
+                        "/favicon.ico",
+                        "/actuator/**");
                 log.debug("gloam configure basic web security:{}", web);
             }
 

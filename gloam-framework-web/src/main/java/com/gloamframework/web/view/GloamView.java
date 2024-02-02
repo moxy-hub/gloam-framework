@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.support.spring.FastJsonJsonView;
 import com.gloamframework.common.lang.BeanUtil;
+import org.springframework.lang.NonNull;
 
 import java.util.Map;
 
@@ -26,6 +27,7 @@ public class GloamView extends FastJsonJsonView {
     }
 
     @Override
+    @NonNull
     public String toString() {
         return JSON.toJSONString(modelMap);
     }

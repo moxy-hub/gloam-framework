@@ -10,6 +10,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.ListableBeanFactory;
+import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.Objects;
 
 /**
  * 扫描所有放行的注解:@PermitAll
@@ -38,12 +40,15 @@ public abstract class AbstractSpringMvcPathMatcher<A extends Annotation> extends
     private static final String ALL_PATH_MATCH_SEPARATOR_SPRING = "/**";
     private static final String ALL_PATH_MATCH_SEPARATOR_SERVLET = "/*";
 
+    private ServerProperties serverProperties;
+
 
     @Override
     public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
         if (!ListableBeanFactory.class.isAssignableFrom(beanFactory.getClass())) {
             return;
         }
+        serverProperties = beanFactory.getBean(ServerProperties.class);
         String[] allControllerBeanNames = ((ListableBeanFactory) beanFactory).getBeanNamesForAnnotation(Controller.class);
         for (String restBeanName : allControllerBeanNames) {
             // 检查权限注解
@@ -60,6 +65,18 @@ public abstract class AbstractSpringMvcPathMatcher<A extends Annotation> extends
      * 返回匹配到的注解
      */
     protected abstract void registerFilter(String pathUrl, HttpMethod httpMethod, A annotation);
+
+    /**
+     * 处理spring 上下文存在的问题
+     */
+    private void registerFilterWithContext(String pathUrl, HttpMethod httpMethod, A annotation) {
+        String webContext = this.obtainSpringWebContext();
+        if (StringUtil.isNotBlank(webContext)) {
+            webContext = buildUrl(webContext, "", DEFAULT_PATH_SEPARATOR);
+            pathUrl = webContext + pathUrl;
+        }
+        registerFilter(pathUrl, httpMethod, annotation);
+    }
 
     private void matchingAnnotation(Class<?> beanClass) {
         // 获取路径
@@ -84,7 +101,7 @@ public abstract class AbstractSpringMvcPathMatcher<A extends Annotation> extends
         }
         String baseUrl = this.buildUrl(pathUrl, ALL_PATH_MATCH_SEPARATOR_SPRING, ALL_PATH_MATCH_SEPARATOR_SPRING, ALL_PATH_MATCH_SEPARATOR_SERVLET);
         // 拼接
-        this.registerFilter(baseUrl, httpMethod, annotation);
+        this.registerFilterWithContext(baseUrl, httpMethod, annotation);
     }
 
     private void analysisController(Class<?> beanClass, AnnotationMatch annotationMatch) {
@@ -117,7 +134,7 @@ public abstract class AbstractSpringMvcPathMatcher<A extends Annotation> extends
                         if (StringUtils.isNotBlank(url) && !StringUtils.startsWith(url, DEFAULT_PATH_SEPARATOR)) {
                             url = DEFAULT_PATH_SEPARATOR + url;
                         }
-                        this.registerFilter(String.format("%s%s", baseUrl, url), requestMethod, annotation);
+                        this.registerFilterWithContext(String.format("%s%s", baseUrl, url), requestMethod, annotation);
                     }
                 });
             }
@@ -165,6 +182,17 @@ public abstract class AbstractSpringMvcPathMatcher<A extends Annotation> extends
             url = url + suffix;
         }
         return url;
+    }
+
+    /**
+     * 获取spring的上下文
+     */
+    private String obtainSpringWebContext() {
+        ServerProperties.Servlet servlet = serverProperties.getServlet();
+        if (Objects.isNull(servlet)) {
+            return "";
+        }
+        return StringUtil.isBlank(servlet.getContextPath()) ? "" : servlet.getContextPath();
     }
 
 }
