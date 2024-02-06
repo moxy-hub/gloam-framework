@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.gloamframework.web</groupId>
+        <artifactId>gloam-framework-web</artifactId>
+        <version>DragonBall.SR1</version>
+    </parent>
+
+    <artifactId>gloam-web-tomcat</artifactId>
+
+    <dependencies>
+
+        <!-- gloam core -->
+        <dependency>
+            <groupId>com.gloamframework.web</groupId>
+            <artifactId>gloam-web-core</artifactId>
+        </dependency>
+
+        <!-- tomcat -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+        </dependency>
+
+    </dependencies>
+
+</project>

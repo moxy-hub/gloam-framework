@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.gloamframework.file</groupId>
+        <artifactId>gloam-framework-file</artifactId>
+        <version>DragonBall.SR1</version>
+    </parent>
+
+    <artifactId>gloam-file-s3</artifactId>
+    <description>实现基于s3协议的文件管理客户端</description>
+
+    <dependencies>
+
+        <!-- 文件基础 -->
+        <dependency>
+            <groupId>com.gloamframework.file</groupId>
+            <artifactId>gloam-file-core</artifactId>
+        </dependency>
+
+        <!-- 三方云服务相关 -->
+        <dependency>
+            <groupId>io.minio</groupId>
+            <artifactId>minio</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+
+</project>

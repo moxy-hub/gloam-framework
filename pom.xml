@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.gloamframework</groupId>
+    <artifactId>gloam-framework</artifactId>
+    <version>${gloam.version}</version>
+    <packaging>pom</packaging>
+    <description>gloam开发框架，占位pom，防止idea中项目变形</description>
+
+    <developers>
+        <developer>
+            <id>Moxy</id>
+            <name>马晓龙</name>
+            <email>moxy.mxl@gmail.com</email>
+            <url>https://moxy-hub.gitee.io/</url>
+        </developer>
+    </developers>
+
+    <properties>
+        <gloam.version>DragonBall.SR1</gloam.version>
+    </properties>
+
+</project>

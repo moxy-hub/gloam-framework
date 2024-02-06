@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.gloamframework.data</groupId>
+        <artifactId>gloam-framework-data</artifactId>
+        <version>DragonBall.SR1</version>
+    </parent>
+
+    <artifactId>gloam-data-cache</artifactId>
+
+    <description>cache 集成</description>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>com.gloamframework.secure</groupId>
+            <artifactId>gloam-secure-core</artifactId>
+        </dependency>
+
+        <!-- redis -->
+        <dependency>
+            <groupId>com.gloamframework.data</groupId>
+            <artifactId>gloam-data-redis</artifactId>
+        </dependency>
+
+        <!-- spring cache-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
+        </dependency>
+
+    </dependencies>
+</project>

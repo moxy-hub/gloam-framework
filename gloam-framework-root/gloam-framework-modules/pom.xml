@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.gloamframework</groupId>
+        <artifactId>gloam-framework-root</artifactId>
+        <version>DragonBall.SR1</version>
+        <relativePath/>
+    </parent>
+
+    <artifactId>gloam-framework-modules</artifactId>
+    <packaging>pom</packaging>
+    <description>gloam开发框架，模块管理</description>
+
+    <modules>
+        <!-- basic modules -->
+        <module>../../gloam-framework-root</module>
+        <!-- basic core-->
+        <module>../../gloam-framework-secure</module>
+        <!-- basic data-->
+        <module>../../gloam-framework-data</module>
+        <!-- basic web-->
+        <module>../../gloam-framework-web</module>
+        <!-- basic cloud-->
+        <module>../../gloam-framework-cloud</module>
+        <!-- basic file-->
+        <module>../../gloam-framework-file</module>
+        <!-- all dependencies -->
+        <module>../gloam-framework-dependencies</module>
+    </modules>
+
+</project>

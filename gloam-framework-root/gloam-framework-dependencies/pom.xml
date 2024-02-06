@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+
+    <groupId>com.gloamframework</groupId>
+    <artifactId>gloam-framework-dependencies</artifactId>
+    <version>${gloam.version}</version>
+    <packaging>pom</packaging>
+    <description>gloam开发框架，内部依赖版本管理</description>
+
+    <properties>
+        <gloam.version>DragonBall.SR1</gloam.version>
+    </properties>
+    <dependencyManagement>
+
+        <dependencies>
+
+            <dependency>
+                <groupId>com.gloamframework.secure</groupId>
+                <artifactId>gloam-framework-secure</artifactId>
+                <version>${gloam.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.gloamframework.data</groupId>
+                <artifactId>gloam-framework-data</artifactId>
+                <version>${gloam.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.gloamframework.web</groupId>
+                <artifactId>gloam-framework-web</artifactId>
+                <version>${gloam.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.gloamframework.cloud</groupId>
+                <artifactId>gloam-framework-cloud</artifactId>
+                <version>${gloam.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.gloamframework.file</groupId>
+                <artifactId>gloam-framework-file</artifactId>
+                <version>${gloam.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+        </dependencies>
+
+    </dependencyManagement>
+</project>
