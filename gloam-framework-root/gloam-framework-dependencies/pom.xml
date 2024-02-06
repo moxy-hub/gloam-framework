@@ -11,7 +11,6 @@
     <packaging>pom</packaging>
     <description>gloam开发框架，内部依赖版本管理</description>
 
-
     <properties>
         <gloam.version>DragonBall.SR1</gloam.version>
     </properties>
