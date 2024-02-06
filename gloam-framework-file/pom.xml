@@ -3,30 +3,54 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <parent>
         <groupId>com.gloamframework</groupId>
-        <artifactId>gloam-framework-parent</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <artifactId>gloam-framework-root</artifactId>
+        <version>DragonBall.SR1</version>
         <relativePath/>
     </parent>
 
+    <groupId>com.gloamframework.file</groupId>
     <artifactId>gloam-framework-file</artifactId>
-    <description>gloam文件系统，支持多种存储方式，支持分片上传，断点续传</description>
+    <packaging>pom</packaging>
+    <modules>
+        <module>gloam-file-core</module>
+        <module>gloam-file-s3</module>
+    </modules>
 
-    <dependencies>
+    <dependencyManagement>
 
-        <dependency>
-            <groupId>com.gloamframework</groupId>
-            <artifactId>gloam-framework-core</artifactId>
-        </dependency>
+        <dependencies>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
+            <dependency>
+                <groupId>com.gloamframework.secure</groupId>
+                <artifactId>gloam-framework-secure</artifactId>
+                <version>${gloam.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
 
-    </dependencies>
+            <!-- 三方云服务相关 -->
+            <dependency>
+                <groupId>io.minio</groupId>
+                <artifactId>minio</artifactId>
+                <version>8.0.3</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.gloamframework.file</groupId>
+                <artifactId>gloam-file-core</artifactId>
+                <version>${gloam.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.gloamframework.file</groupId>
+                <artifactId>gloam-file-s3</artifactId>
+                <version>${gloam.version}</version>
+            </dependency>
+
+        </dependencies>
+
+    </dependencyManagement>
 
 </project>

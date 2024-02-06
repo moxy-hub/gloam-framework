@@ -5,67 +5,89 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.gloamframework</groupId>
-        <artifactId>gloam-framework-parent</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <artifactId>gloam-framework-root</artifactId>
+        <version>DragonBall.SR1</version>
         <relativePath/>
     </parent>
 
+    <groupId>com.gloamframework.data</groupId>
     <artifactId>gloam-framework-data</artifactId>
+    <packaging>pom</packaging>
+    <description>gloam开发框架 - 数据相关包</description>
+    <modules>
+        <module>gloam-data-redis</module>
+        <module>gloam-data-cache</module>
+        <module>gloam-data-core</module>
+        <module>gloam-data-mybatis-flex</module>
+        <module>gloam-data-mybatis-flex-codegen</module>
+        <module>gloam-data-tenant</module>
+        <module>gloam-data-permission</module>
+    </modules>
 
-    <dependencies>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.gloamframework.secure</groupId>
+                <artifactId>gloam-framework-secure</artifactId>
+                <version>${gloam.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
 
-        <!-- gloam-core -->
-        <dependency>
-            <groupId>com.gloamframework</groupId>
-            <artifactId>gloam-framework-core</artifactId>
-        </dependency>
+            <dependency>
+                <groupId>com.gloamframework.web</groupId>
+                <artifactId>gloam-web-core</artifactId>
+                <version>${gloam.version}</version>
+            </dependency>
 
-        <!-- 动态数据源切换 -->
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
-        </dependency>
+            <dependency>
+                <groupId>com.gloamframework.web</groupId>
+                <artifactId>gloam-web-security</artifactId>
+                <version>${gloam.version}</version>
+            </dependency>
 
-        <!-- 数据库连接池 -->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid</artifactId>
-        </dependency>
+            <dependency>
+                <groupId>com.gloamframework.data</groupId>
+                <artifactId>gloam-data-core</artifactId>
+                <version>${gloam.version}</version>
+            </dependency>
 
-        <!-- servlet 对druid监控进行支持 -->
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
-            <scope>provided</scope>
-            <optional>true</optional>
-        </dependency>
+            <dependency>
+                <groupId>com.gloamframework.data</groupId>
+                <artifactId>gloam-data-mybatis-flex</artifactId>
+                <version>${gloam.version}</version>
+            </dependency>
 
-        <!-- test only -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
+            <dependency>
+                <groupId>com.gloamframework.data</groupId>
+                <artifactId>gloam-data-mybatis-flex-codegen</artifactId>
+                <version>${gloam.version}</version>
+            </dependency>
 
-        <dependency>
-            <groupId>com.gloamframework</groupId>
-            <artifactId>gloam-framework-starter-tomcat</artifactId>
-            <scope>test</scope>
-        </dependency>
+            <dependency>
+                <groupId>com.gloamframework.data</groupId>
+                <artifactId>gloam-data-redis</artifactId>
+                <version>${gloam.version}</version>
+            </dependency>
 
-        <!-- 测试接入mybatis flex-->
-        <dependency>
-            <groupId>com.mybatis-flex</groupId>
-            <artifactId>mybatis-flex-spring-boot-starter</artifactId>
-            <scope>test</scope>
-        </dependency>
+            <dependency>
+                <groupId>com.gloamframework.data</groupId>
+                <artifactId>gloam-data-cache</artifactId>
+                <version>${gloam.version}</version>
+            </dependency>
 
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <scope>test</scope>
-        </dependency>
+            <dependency>
+                <groupId>com.gloamframework.data</groupId>
+                <artifactId>gloam-data-tenant</artifactId>
+                <version>${gloam.version}</version>
+            </dependency>
 
-    </dependencies>
+            <dependency>
+                <groupId>com.gloamframework.data</groupId>
+                <artifactId>gloam-data-permission</artifactId>
+                <version>${gloam.version}</version>
+            </dependency>
 
+        </dependencies>
+    </dependencyManagement>
 </project>
