@@ -49,6 +49,12 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>com.gloamframework.data</groupId>
+            <artifactId>gloam-data-redis</artifactId>
+            <scope>test</scope>
+        </dependency>
+
         <!-- spring test-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

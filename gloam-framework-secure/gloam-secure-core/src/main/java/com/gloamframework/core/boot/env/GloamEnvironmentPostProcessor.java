@@ -8,6 +8,7 @@ import com.gloamframework.core.boot.properties.MappingPropertyDefinition;
 import com.gloamframework.core.boot.properties.conversion.GloamMappingPropertyDefinitionConversion;
 import com.gloamframework.core.boot.properties.conversion.MappingPropertyDefinitionConversion;
 import com.gloamframework.core.logging.GloamLog;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
@@ -27,6 +28,7 @@ import java.util.Set;
  */
 public class GloamEnvironmentPostProcessor implements EnvironmentPostProcessor, Ordered, ApplicationListener<ApplicationEnvironmentPreparedEvent> {
 
+    private static final String SUPPORT_ENV_NAME = "org.springframework.core.env.StandardEnvironment";
     /**
      * gloam log
      */
@@ -48,6 +50,10 @@ public class GloamEnvironmentPostProcessor implements EnvironmentPostProcessor, 
 
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
+        String environmentName = environment.getClass().getName();
+        if (!StringUtils.equalsIgnoreCase(environmentName, SUPPORT_ENV_NAME)) {
+            return;
+        }
         log.info("welcome to use gloam framework");
         // 初始化packages
         GloamAutoScannerPackages.doRegister(application.getClassLoader());

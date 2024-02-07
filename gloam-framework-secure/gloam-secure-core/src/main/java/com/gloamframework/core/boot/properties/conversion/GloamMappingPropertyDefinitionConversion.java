@@ -57,7 +57,7 @@ public class GloamMappingPropertyDefinitionConversion implements MappingProperty
                 defaultValue = conversionService.convert(defaultProperty, String.class);
             }
             if (StrUtil.isBlank(defaultValue)) {
-                defaultValue = "";
+                defaultValue = null;
             }
             // 在spring 环境中拿值
             String property = environment.getProperty(originalPath, defaultValue);
@@ -122,7 +122,7 @@ public class GloamMappingPropertyDefinitionConversion implements MappingProperty
             defaultValue = conversionService.convert(fieldValue, String.class);
         }
         if (StrUtil.isBlank(defaultValue)) {
-            defaultValue = "";
+            defaultValue = null;
         }
         // 获取配置值
         String property = environment.getProperty(originPropertyPath, defaultValue);

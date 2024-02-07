@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.ToString;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import java.util.List;
+
 /**
  * @author 晓龙
  * @version 1.8.271
@@ -16,5 +18,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class OrginProperties {
 
     private String value;
+
+    private List<String> listValue;
 
 }

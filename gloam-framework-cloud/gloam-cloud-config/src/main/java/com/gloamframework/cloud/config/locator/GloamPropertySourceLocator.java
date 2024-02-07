@@ -48,12 +48,11 @@ public class GloamPropertySourceLocator extends NacosPropertySourceLocator {
         if (Objects.isNull(mapPropertySource)) {
             return propertySource;
         }
+        log.debug("start mapping configuration properties whit annotation @MappingConfigurationProperty");
         final Map<String, Object> mapPropertySourceMap = mapPropertySource.getSource();
         mappingPropertyDefinitions.forEach(definition -> {
             Object value = propertySource.getProperty(definition.getOriginalPath());
-            if (Objects.isNull(value)) {
-                value = definition.getValue();
-            }
+            // 这里只处理远程的配置，内部默认值不进行处理
             if (Objects.nonNull(value)) {
                 mapPropertySourceMap.put(definition.getMappingPath(), value);
                 log.trace(StrUtil.format("mapping configuration property -> original:[{}] - mapping:[{}] - value:[{}]", definition.getOriginalPath(), definition.getMappingPath(), value));

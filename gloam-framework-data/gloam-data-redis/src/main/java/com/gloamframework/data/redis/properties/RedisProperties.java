@@ -6,6 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -103,7 +104,7 @@ public class RedisProperties {
          * 哨兵节点：“host:port”对列表，以逗号分隔。
          */
         @MappingConfigurationProperty("nodes")
-        private List<String> nodes;
+        private List<String> nodes = new ArrayList<>();
 
         /**
          * 哨兵的认证密码

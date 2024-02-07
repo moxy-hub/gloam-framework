@@ -49,6 +49,12 @@
             </dependency>
 
             <dependency>
+                <groupId>com.gloamframework.data</groupId>
+                <artifactId>gloam-data-redis</artifactId>
+                <version>${gloam.version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>com.gloamframework.cloud</groupId>
                 <artifactId>gloam-cloud-remote</artifactId>
                 <version>${gloam.version}</version>

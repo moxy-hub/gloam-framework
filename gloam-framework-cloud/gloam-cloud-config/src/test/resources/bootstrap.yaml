@@ -15,3 +15,7 @@ spring:
           data-id: platform-data-admin.properties
           refresh: true
           group: platform
+gloam:
+  logging:
+    level:
+      com.*: trace
