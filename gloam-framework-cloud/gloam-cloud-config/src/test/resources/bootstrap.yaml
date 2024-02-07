@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: platform-admin
+  cloud:
+    nacos:
+      # 认证用户名密码
+      username: nacos
+      password: nacos
+      discovery:
+        server-addr: 192.168.1.136:5478/wdzh
+      config:
+        server-addr: 192.168.1.136:5478/wdzh
+        namespace: 5126cc24-0197-4b8b-abf0-b20c39756625
+        extension-configs[0]:
+          data-id: platform-data-admin.properties
+          refresh: true
+          group: platform
