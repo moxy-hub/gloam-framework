@@ -15,6 +15,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>gloam-cloud-remote</module>
+        <module>gloam-cloud-config</module>
     </modules>
 
     <dependencyManagement>
@@ -36,8 +37,26 @@
             </dependency>
 
             <dependency>
+                <groupId>com.gloamframework.web</groupId>
+                <artifactId>gloam-web-tomcat</artifactId>
+                <version>${gloam.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.gloamframework.data</groupId>
+                <artifactId>gloam-data-mybatis-flex</artifactId>
+                <version>${gloam.version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>com.gloamframework.cloud</groupId>
                 <artifactId>gloam-cloud-remote</artifactId>
+                <version>${gloam.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.gloamframework.cloud</groupId>
+                <artifactId>gloam-cloud-config</artifactId>
                 <version>${gloam.version}</version>
             </dependency>
 

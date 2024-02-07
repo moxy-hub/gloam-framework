@@ -17,6 +17,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.core.Ordered;
 import org.springframework.core.env.ConfigurableEnvironment;
 
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -35,6 +36,8 @@ public class GloamEnvironmentPostProcessor implements EnvironmentPostProcessor, 
      */
     private static final Banner GLOAM_BANNER = new GloamBanner();
 
+    public static Set<MappingPropertyDefinition> definitions = null;
+
     /**
      * 设置环境设置触发优先级
      */
@@ -48,8 +51,11 @@ public class GloamEnvironmentPostProcessor implements EnvironmentPostProcessor, 
         log.info("welcome to use gloam framework");
         // 初始化packages
         GloamAutoScannerPackages.doRegister(application.getClassLoader());
-        // 添加项目启动路径
-        GloamAutoScannerPackages.addPackage(application.getMainApplicationClass().getPackage().getName());
+        Class<?> mainApplicationClass = application.getMainApplicationClass();
+        if (Objects.nonNull(mainApplicationClass)) {
+            // 添加项目启动路径
+            GloamAutoScannerPackages.addPackage(mainApplicationClass.getPackage().getName());
+        }
         // 设置banner
         application.setBanner(GLOAM_BANNER);
         // 配置转换器
@@ -64,7 +70,7 @@ public class GloamEnvironmentPostProcessor implements EnvironmentPostProcessor, 
         MappingProperty mappingProperty = new GloamMappingProperty(environment, mappingPropertyDefinitionConversion, application.getClassLoader());
         log.trace("create GloamMappingProperty with env:" + environment.getClass().getName() + " and classLoader:" + application.getClassLoader().getClass().getName());
         // 收集对应的映射定义
-        Set<MappingPropertyDefinition> definitions = mappingProperty.collectMappingPropertyDefinitions(GloamAutoScannerPackages.getPackageArrays());
+        definitions = mappingProperty.collectMappingPropertyDefinitions(GloamAutoScannerPackages.getPackageArrays());
         // 执行映射
         mappingProperty.doMapping(definitions);
     }
