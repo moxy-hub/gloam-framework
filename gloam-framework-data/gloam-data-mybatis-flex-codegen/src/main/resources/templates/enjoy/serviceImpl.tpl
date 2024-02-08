@@ -9,11 +9,13 @@ import #(packageConfig.mapperPackage).#(table.buildMapperClassName());
 import #(packageConfig.servicePackage).#(table.buildServiceClassName());
 import org.springframework.stereotype.Service;
 #if(isCacheExample)
+import com.mybatisflex.core.query.QueryCondition;
 import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryWrapper;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
+import com.gloamframework.core.boot.context.SpringContext;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -39,6 +41,10 @@ public class #(table.buildServiceImplClassName()) extends #(serviceImplConfig.bu
         return super.remove(query);
     }
 
+    public boolean remove(QueryCondition condition) {
+        return this.getSelf().remove(this.query().where(condition));
+    }
+
     @Override
     @CacheEvict(key = "#id")
     public boolean removeById(Serializable id) {
@@ -49,6 +55,41 @@ public class #(table.buildServiceImplClassName()) extends #(serviceImplConfig.bu
     @CacheEvict(allEntries = true)
     public boolean removeByIds(Collection<? extends Serializable> ids) {
         return super.removeByIds(ids);
+    }
+
+    @Override
+    @CacheEvict(allEntries = true)
+    public boolean save(#(entityClassName) entity) {
+        return super.save(entity);
+    }
+    @Override
+    @CacheEvict(allEntries = true)
+    public boolean saveBatch(Collection<#(entityClassName)> entities) {
+        return super.saveBatch(entities);
+    }
+
+    @Override
+    @CacheEvict(allEntries = true)
+    public boolean saveBatch(Collection<#(entityClassName)> entities, int batchSize) {
+       return super.saveBatch(entities,batchSize);
+    }
+
+    @Override
+    @CacheEvict(allEntries = true)
+    public boolean saveOrUpdate(#(entityClassName) entity) {
+        return super.saveOrUpdate(entity);
+    }
+
+    @Override
+    @CacheEvict(allEntries = true)
+    public boolean saveOrUpdateBatch(Collection<#(entityClassName)> entities) {
+       return super.saveOrUpdateBatch(entities);
+    }
+
+    @Override
+    @CacheEvict(allEntries = true)
+    public boolean saveOrUpdateBatch(Collection<#(entityClassName)> entities, int batchSize) {
+       return super.saveOrUpdateBatch(entities,batchSize);
     }
 
     @Override
@@ -79,6 +120,10 @@ public class #(table.buildServiceImplClassName()) extends #(serviceImplConfig.bu
     @Cacheable(key = "#root.methodName + ':' + #query.toSQL()")
     public #(entityClassName) getOne(QueryWrapper query) {
         return super.getOne(query);
+    }
+
+    public #(entityClassName) getOne(QueryCondition condition) {
+        return this.getSelf().getOne(this.query().where(condition));
     }
 
     @Override
@@ -118,18 +163,19 @@ public class #(table.buildServiceImplClassName()) extends #(serviceImplConfig.bu
     }
 
     @Override
+    public List<#(entityClassName)> list(QueryCondition condition) {
+        return this.getSelf().list(this.query().where(condition));
+    }
+
+    @Override
+    public List<#(entityClassName)> list() {
+         return this.getSelf().list(this.query());
+    }
+
+    @Override
     @Cacheable(key = "#root.methodName + ':' + #query.toSQL()")
     public <R> List<R> listAs(QueryWrapper query, Class<R> asType) {
         return super.listAs(query, asType);
-    }
-
-    /**
-     * @deprecated 无法通过注解进行缓存操作。
-     */
-    @Override
-    @Deprecated
-    public List<#(entityClassName)> listByIds(Collection<? extends Serializable> ids) {
-        return super.listByIds(ids);
     }
 
     @Override
@@ -139,9 +185,28 @@ public class #(table.buildServiceImplClassName()) extends #(serviceImplConfig.bu
     }
 
     @Override
+    public long count() {
+        return this.getSelf().count(this.query());
+    }
+
+    @Override
+    public long count(QueryCondition condition) {
+        return this.getSelf().count(this.query().where(condition));
+    }
+
+    @Override
     @Cacheable(key = "#root.methodName + ':' + #page.getPageSize() + ':' + #page.getPageNumber() + ':' + #query.toSQL()")
     public <R> Page<R> pageAs(Page<R> page, QueryWrapper query, Class<R> asType) {
         return super.pageAs(page, query, asType);
+    }
+
+    @Override
+    public Page<#(entityClassName)> page(Page<#(entityClassName)> page, QueryWrapper query) {
+        return this.getSelf().pageAs(page, query, null);
+    }
+
+    private #(table.buildServiceClassName()) getSelf(){
+        return SpringContext.getContext().getBean(#(table.buildServiceClassName()).class);
     }
 
 #end

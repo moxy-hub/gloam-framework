@@ -16,15 +16,15 @@ public class TestCodegen {
     @Before
     public void before() {
         DruidDataSource dataSource = new DruidDataSource();
-        dataSource.setUrl("jdbc:mysql://192.168.1.136:49156/test_mybatis_flex?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai&autoReconnect=true");
+        dataSource.setUrl("jdbc:mysql://127.0.0.1:3306/Mybatis?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai&autoReconnect=true");
         dataSource.setUsername("root");
-        dataSource.setPassword("wdzh23frgs@isjfd2*^");
+        dataSource.setPassword("19981104");
         generator = new MybatisFlexGenerator(dataSource);
     }
 
     @Test
     public void generate() {
-        String[] tables = {"tb_account"};
+        String[] tables = {"admin_info"};
         generator.generate(false, tablePrefix, "com.gloamframework.data.mybatis.flex.codegen", tables);
     }
 
