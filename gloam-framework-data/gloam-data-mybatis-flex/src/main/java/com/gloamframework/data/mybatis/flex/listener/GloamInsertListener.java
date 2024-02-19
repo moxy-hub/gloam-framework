@@ -6,7 +6,7 @@ import com.gloamframework.web.context.WebContext;
 import com.mybatisflex.annotation.InsertListener;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
@@ -21,7 +21,7 @@ public class GloamInsertListener extends AbstractListener implements InsertListe
             log.warn("[MybatisFlex自动填充]:识别对象为null,不进行填充");
             return;
         }
-        Date currentTime = new Date();
+        LocalDateTime currentTime = LocalDateTime.now();
         FillListenerProperties fillListenerProperties = super.obtainProperties();
         ObjectUtils.fillField(metaObject, fillListenerProperties.getCreateTimeField(), currentTime);
         ObjectUtils.fillField(metaObject, fillListenerProperties.getUpdateTimeField(), currentTime);

@@ -46,7 +46,7 @@ public class #(table.buildServiceImplClassName()) extends #(serviceImplConfig.bu
     }
 
     @Override
-    @CacheEvict(key = "#id")
+    @CacheEvict(allEntries = true)
     public boolean removeById(Serializable id) {
         return super.removeById(id);
     }
@@ -99,9 +99,15 @@ public class #(table.buildServiceImplClassName()) extends #(serviceImplConfig.bu
     }
 
     @Override
-    @CacheEvict(key = "#entity.#(primaryKey)")
+    @CacheEvict(allEntries = true)
     public boolean updateById(#(entityClassName) entity, boolean ignoreNulls) {
         return super.updateById(entity, ignoreNulls);
+    }
+
+    @Override
+    @CacheEvict(allEntries = true)
+    public boolean updateById(#(entityClassName) entity) {
+        return super.updateById(entity);
     }
 
     @Override

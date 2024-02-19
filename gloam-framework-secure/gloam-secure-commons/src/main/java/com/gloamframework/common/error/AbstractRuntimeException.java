@@ -21,6 +21,7 @@ public abstract class AbstractRuntimeException extends RuntimeException {
     }
 
     public AbstractRuntimeException(ErrorCode errorCode) {
+        super(filterErrorCode(errorCode).getMessage());
         this.errorCode = filterErrorCode(errorCode);
     }
 

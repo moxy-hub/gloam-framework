@@ -1,13 +1,20 @@
 package com.gloamframework.cache.redis;
 
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.RandomUtil;
+import cn.hutool.extra.spring.SpringUtil;
+import com.gloamframework.cache.CustomKey;
 import com.gloamframework.cache.ExpireValue;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.support.SimpleValueWrapper;
 import org.springframework.data.redis.cache.RedisCache;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheWriter;
+import org.springframework.lang.NonNull;
 
 import java.time.Duration;
+import java.util.Map;
+import java.util.Objects;
 
 class DynamicRedisCache extends RedisCache {
 
@@ -53,6 +60,30 @@ class DynamicRedisCache extends RedisCache {
         }));
     }
 
+    @Override
+    public void evict(Object key) {
+        super.evict(key);
+    }
+
+    @Override
+    @NonNull
+    protected String createCacheKey(@NonNull Object key) {
+        String cacheKey = super.createCacheKey(key);
+        // 防止全部删除时导致删除失败
+        if (StringUtils.endsWithIgnoreCase(cacheKey, "*")) {
+            return cacheKey;
+        }
+        // 尝试获取内部key自定义的实现
+        Map<String, CustomKey> customKeyMap = SpringUtil.getBeansOfType(CustomKey.class);
+        if (MapUtil.isEmpty(customKeyMap)) {
+            return cacheKey;
+        }
+        for (CustomKey customKey : customKeyMap.values()) {
+            cacheKey = customKey.key(cacheKey);
+        }
+        return cacheKey;
+    }
+
     private Duration getDynamicTtl() {
         // 设置动态失效时间
         int randomTTL = RandomUtil.randomInt(HOUR, HOUR * DAY);
@@ -60,6 +91,9 @@ class DynamicRedisCache extends RedisCache {
     }
 
     private <T> T analysisValue(Object value, ValueAnalysis<T> valueAnalysis) {
+        if (this.isAllowNullValues() && Objects.isNull(value)) {
+            return valueAnalysis.analysis(getDynamicTtl(), null);
+        }
         Duration ttl;
         Object redisValue;
         if (ExpireValue.class.isAssignableFrom(value.getClass())) {

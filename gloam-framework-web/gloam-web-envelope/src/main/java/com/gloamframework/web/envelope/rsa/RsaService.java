@@ -1,5 +1,6 @@
 package com.gloamframework.web.envelope.rsa;
 
+import com.gloamframework.cache.ExpireValue;
 import com.gloamframework.common.crypto.RSAUtil;
 import com.gloamframework.common.error.GloamInternalException;
 import com.gloamframework.web.security.GloamSecurityCacheManager;
@@ -66,7 +67,7 @@ public class RsaService {
             log.debug("init rsa keypair success");
             // 序列化密钥对
             String rsaKey = getServiceRSAKey(serviceCode);
-            cacheManager.getCache().put(rsaKey, rsaKeypair);
+            cacheManager.getCache().put(rsaKey, new ExpireValue(rsaKeypair));
             log.debug("cache rsa : {}", rsaKey);
             return rsaKeypair;
         } catch (NoSuchAlgorithmException e) {

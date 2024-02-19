@@ -1,5 +1,7 @@
 package com.gloamframework.data.tenant;
 
+import cn.hutool.core.util.StrUtil;
+import com.gloamframework.cache.CustomKey;
 import com.gloamframework.common.error.GloamInternalException;
 import com.gloamframework.data.tenant.attribute.TenantAttribute;
 import com.gloamframework.data.tenant.matcher.TenantProtectMatcher;
@@ -9,6 +11,7 @@ import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Bean;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Objects;
 
 /**
  * 多租户配置
@@ -27,6 +30,18 @@ public class TenantConfigure {
     public TenantFilter tenantFilter() {
         return new TenantFilter();
     }
+
+    @Bean
+    public CustomKey tenantCacheKey() {
+        return originalKey -> {
+            Long tenantId = TenantHolder.obtainCurrentTenantId();
+            if (Objects.isNull(tenantId)) {
+                return originalKey;
+            }
+            return originalKey + StrUtil.format(":tenantId[{}]", tenantId);
+        };
+    }
+
 
     @Bean
     public TenantFactory tenantFactory() {

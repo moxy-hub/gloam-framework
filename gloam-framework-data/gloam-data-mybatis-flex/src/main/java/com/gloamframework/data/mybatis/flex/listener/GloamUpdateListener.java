@@ -6,7 +6,7 @@ import com.gloamframework.web.context.WebContext;
 import com.mybatisflex.annotation.UpdateListener;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
@@ -23,7 +23,7 @@ public class GloamUpdateListener extends AbstractListener implements UpdateListe
             return;
         }
         FillListenerProperties fillListenerProperties = super.obtainProperties();
-        Date currentTime = new Date();
+        LocalDateTime currentTime = LocalDateTime.now();
         ObjectUtils.fillField(metaObject, fillListenerProperties.getUpdateTimeField(), currentTime);
         Object authenticatedUser = WebContext.getAuthenticatedUser();
         if (Objects.nonNull(authenticatedUser)) {

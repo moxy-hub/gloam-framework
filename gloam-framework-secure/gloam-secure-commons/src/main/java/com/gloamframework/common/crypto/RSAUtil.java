@@ -10,10 +10,7 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.security.*;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
@@ -36,7 +33,9 @@ public class RSAUtil extends Base64Util {
 
     @Data
     @NoArgsConstructor
-    public static class RsaKeypair {
+    public static class RsaKeypair implements Serializable {
+
+        private static final long serialVersionUID = -5578630298592422379L;
         private String pubKey;
         private String priKey;
         private String pemPubKey;

@@ -58,5 +58,4 @@ public class JsonConfigure {
         log.info("[Jackson]:初始化配置成功");
         return new JsonUtils();
     }
-
 }

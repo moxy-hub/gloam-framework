@@ -1,9 +1,7 @@
 package com.gloamframework.data.mybatis.flex.util;
 
 import cn.hutool.core.util.ReflectUtil;
-import com.gloamframework.common.error.GloamInternalException;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.reflect.FieldUtils;
 
 import java.util.Objects;
 
@@ -26,16 +24,12 @@ public class ObjectUtils {
             log.warn("[对象填充]:对应字段不存在,跳过填充");
             return;
         }
-        try {
-            Object defaultValue = FieldUtils.readDeclaredField(source, field);
-            if (Objects.nonNull(defaultValue)) {
-                log.debug("[对象填充]:对应字段存在默认值,跳过填充");
-                return;
-            }
-            FieldUtils.writeDeclaredField(source, field, value);
-        } catch (IllegalAccessException e) {
-            throw new GloamInternalException("数据读取失败", e);
+        Object defaultValue = ReflectUtil.getFieldValue(source, field);
+        if (Objects.nonNull(defaultValue)) {
+            log.debug("[对象填充]:对应字段存在默认值,跳过填充");
+            return;
         }
+        ReflectUtil.setFieldValue(source, field, value);
     }
 
 }

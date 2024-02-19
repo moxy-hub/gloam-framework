@@ -96,12 +96,20 @@ public abstract class AbstractCacheTokenManager extends AbstractTokenManager {
             log.error("获取当前请求未空");
             throw new TokenAuthenticateException("Token认证失败");
         }
+        String subject = (String) TokenAttribute.TOKEN_SUBJECT.obtain(request);
+        // 是否需要刷新
+        boolean refresh = (boolean) TokenAttribute.TOKEN_REFRESH.obtain(request);
+        if (refresh) {
+            // 移除当前token
+            this.revoke(subject, device);
+            // 重新生成token
+            this.authenticate(subject, device);
+        }
         Token userToken = TokenAttribute.TOKEN.obtainToken(request);
         if (userToken == null) {
             log.error("获取请求携带token失败");
             throw new TokenAuthenticateException("Token认证失败");
         }
-        String subject = (String) TokenAttribute.TOKEN_SUBJECT.obtain(request);
         // 获取缓存token
         TokenInfo tokenInfo = cacheManager.getCache().get(this.generateCacheKey(subject, device), TokenInfo.class);
         if (tokenInfo == null) {
@@ -116,14 +124,7 @@ public abstract class AbstractCacheTokenManager extends AbstractTokenManager {
         if (tokenInfo.isKickOff()) {
             throw new TokenAuthenticateException("您已被踢下线");
         }
-        // 是否需要刷新
-        boolean refresh = (boolean) TokenAttribute.TOKEN_REFRESH.obtain(request);
-        if (refresh) {
-            // 移除当前token
-            this.revoke(subject, device);
-            // 重新生成token
-            this.authenticate(subject, device);
-        }
+
     }
 
     @Override
