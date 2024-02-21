@@ -19,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * token缓存层
@@ -58,22 +59,20 @@ public abstract class AbstractCacheTokenManager extends AbstractTokenManager {
         private boolean kickOff = false;
     }
 
-    private final TokenProperties tokenProperties;
     private final GloamSecurityCacheManager cacheManager;
 
     protected AbstractCacheTokenManager(TokenProperties tokenProperties, GloamSecurityCacheManager cacheManager) {
         super(tokenProperties);
-        this.tokenProperties = tokenProperties;
         this.cacheManager = cacheManager;
     }
 
     @Override
-    public void authenticate(String subject, Device device) {
-        super.authenticate(subject, device);
-        this.tokenWrite2Cache(subject, device);
+    public void authenticate(String subject, Device device, String platform) {
+        super.authenticate(subject, device, platform);
+        this.tokenWrite2Cache(subject, device, platform);
     }
 
-    private void tokenWrite2Cache(String subject, Device device) {
+    private void tokenWrite2Cache(String subject, Device device, String platform) {
         // 获取票据
         HttpServletResponse response = WebContext.obtainResponse();
         if (response == null) {
@@ -83,13 +82,13 @@ public abstract class AbstractCacheTokenManager extends AbstractTokenManager {
         String tokenJSON = response.getHeader(tokenProperties.getHeader());
         Token token = JSON.parseObject(tokenJSON, Token.class);
         TokenInfo tokenInfo = new TokenInfo().setToken(token).setDevice(device).setValidCount(-1);
-        cacheManager.getCache().put(this.generateCacheKey(subject, device), tokenInfo, tokenProperties.getRefreshTokenExpire());
+        cacheManager.getCache().put(this.generateCacheKey(subject, device, platform), tokenInfo, tokenProperties.getRefreshTokenExpire());
     }
 
     @Override
-    public void checkAuthentication(Device device) {
+    public void checkAuthentication(Device device, String platform) {
         // 先检查token
-        super.checkAuthentication(device);
+        super.checkAuthentication(device, platform);
         // 获取到解析的token主题
         HttpServletRequest request = WebContext.obtainRequest();
         if (request == null) {
@@ -101,9 +100,9 @@ public abstract class AbstractCacheTokenManager extends AbstractTokenManager {
         boolean refresh = (boolean) TokenAttribute.TOKEN_REFRESH.obtain(request);
         if (refresh) {
             // 移除当前token
-            this.revoke(subject, device);
+            this.revoke(subject, device, platform);
             // 重新生成token
-            this.authenticate(subject, device);
+            this.authenticate(subject, device, platform);
         }
         Token userToken = TokenAttribute.TOKEN.obtainToken(request);
         if (userToken == null) {
@@ -111,7 +110,7 @@ public abstract class AbstractCacheTokenManager extends AbstractTokenManager {
             throw new TokenAuthenticateException("Token认证失败");
         }
         // 获取缓存token
-        TokenInfo tokenInfo = cacheManager.getCache().get(this.generateCacheKey(subject, device), TokenInfo.class);
+        TokenInfo tokenInfo = cacheManager.getCache().get(this.generateCacheKey(subject, device, platform), TokenInfo.class);
         if (tokenInfo == null) {
             log.error("token认证: 在缓存中没有查询到相应的token，是否已过期");
             throw new TokenAuthenticateException("无效token");
@@ -128,14 +127,14 @@ public abstract class AbstractCacheTokenManager extends AbstractTokenManager {
     }
 
     @Override
-    public void revoke(String subject, Device device) {
+    public void revoke(String subject, Device device, String platform) {
         // 在缓存中移除token
-        cacheManager.getCache().evict(this.generateCacheKey(subject, device));
+        cacheManager.getCache().evict(this.generateCacheKey(subject, device, platform));
     }
 
     @Override
-    public void kickOff(String subject, Device device) {
-        String cacheKey = this.generateCacheKey(subject, device);
+    public void kickOff(String subject, Device device, String platform) {
+        String cacheKey = this.generateCacheKey(subject, device, platform);
         // 在缓存中修改token信息
         TokenInfo tokenInfo = cacheManager.getCache().get(cacheKey, TokenInfo.class);
         if (tokenInfo == null) {
@@ -151,14 +150,7 @@ public abstract class AbstractCacheTokenManager extends AbstractTokenManager {
      * @param subject token主题
      * @param device  设备
      */
-    private String generateCacheKey(String subject, Device device) {
-        // 处理设备
-        String deviceValue;
-        if (device != null) {
-            deviceValue = device.name();
-        } else {
-            deviceValue = "*";
-        }
+    private String generateCacheKey(String subject, Device device, String platform) {
         // 处理主题
         if (StrUtil.isBlank(subject)) {
             subject = "anonymous";
@@ -174,7 +166,16 @@ public abstract class AbstractCacheTokenManager extends AbstractTokenManager {
             }
             repel = token.getAccessToken().substring(0, 6);
         }
-        return "GLOAM_TOKEN:" + subject + ":" + repel + ":" + deviceValue;
+        String key = "GLOAM_TOKEN:" + subject + ":" + repel;
+        // 处理设备
+        if (Objects.nonNull(device)) {
+            key = key + ":" + device.name();
+        }
+        // 处理平台
+        if (StrUtil.isNotBlank(platform)) {
+            key = key + ":" + platform;
+        }
+        return key;
     }
 
 }

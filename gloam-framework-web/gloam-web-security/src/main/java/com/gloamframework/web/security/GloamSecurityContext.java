@@ -60,25 +60,25 @@ public class GloamSecurityContext {
      * @param credentials 凭证
      * @param device      认证设备
      */
-    public static void passAuthenticationWithResponseHeader(String principal, Object credentials, Device device) {
+    public static void passAuthenticationWithResponseHeader(String principal, Object credentials, Device device, String platform) {
         // 认证通过
         passAuthentication(principal, credentials);
         // 生成token
-        tokenManager().authenticate(principal, device);
+        tokenManager().authenticate(principal, device, platform);
+    }
+
+    /**
+     * 通过认证，该方法会返回携带token的响应头，使用场景：登录
+     */
+    public static void passAuthenticationWithResponseHeader(String principal, Device device, String platform) {
+        passAuthenticationWithResponseHeader(principal, null, device, platform);
     }
 
     /**
      * 通过认证，该方法会返回携带token的响应头，使用场景：登录
      */
     public static void passAuthenticationWithResponseHeader(String principal, Device device) {
-        passAuthenticationWithResponseHeader(principal, null, device);
-    }
-
-    /**
-     * 通过认证，该方法会返回携带token的响应头，使用场景：登录
-     */
-    public static void passAuthenticationWithResponseHeader(String principal) {
-        passAuthenticationWithResponseHeader(principal, null, null);
+        passAuthenticationWithResponseHeader(principal, device, null);
     }
 
     /**
@@ -87,9 +87,9 @@ public class GloamSecurityContext {
      * @param subject 认证主题
      * @param device  认证设备
      */
-    public static void revokeAuthentication(String subject, Device device) {
+    public static void revokeAuthentication(String subject, Device device, String platform) {
         // 清除token
-        tokenManager().revoke(subject, device);
+        tokenManager().revoke(subject, device, platform);
         if (StrUtil.equals(obtainAuthenticationPrincipal(), subject)) {
             securityContextLogoutHandler.logout(WebContext.obtainRequest(), WebContext.obtainResponse(), obtainAuthentication());
         }
@@ -100,8 +100,8 @@ public class GloamSecurityContext {
      *
      * @param subject 认证主题
      */
-    public static void revokeAuthentication(String subject) {
-        revokeAuthentication(subject, null);
+    public static void revokeAuthentication(String subject, Device device) {
+        revokeAuthentication(subject, device, null);
     }
 
     /**
@@ -110,8 +110,8 @@ public class GloamSecurityContext {
      * @param subject 认证主题
      * @param device  认证设备
      */
-    public static void kickOffAuthentication(String subject, Device device) {
-        tokenManager().kickOff(subject, device);
+    public static void kickOffAuthentication(String subject, Device device, String platform) {
+        tokenManager().kickOff(subject, device, platform);
         if (StrUtil.equals(obtainAuthenticationPrincipal(), subject)) {
             securityContextLogoutHandler.logout(WebContext.obtainRequest(), WebContext.obtainResponse(), obtainAuthentication());
         }
@@ -122,8 +122,8 @@ public class GloamSecurityContext {
      *
      * @param subject 认证主题
      */
-    public static void kickOffAuthentication(String subject) {
-        kickOffAuthentication(subject, null);
+    public static void kickOffAuthentication(String subject, Device device) {
+        kickOffAuthentication(subject, device, null);
     }
 
     /**

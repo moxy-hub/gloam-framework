@@ -25,4 +25,5 @@ public class SecurityProperties {
     @NestedConfigurationProperty
     private final TokenProperties token = new TokenProperties();
 
+
 }

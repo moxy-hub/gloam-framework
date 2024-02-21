@@ -51,7 +51,7 @@ public class TestApiController {
 
     @PostMapping("/login")
     public WebResult<String> login() {
-        tokenManager.authenticate("123456", Device.PC);
+        tokenManager.authenticate("123456", Device.PC,null);
         return WebResult.success("登录成功");
     }
 

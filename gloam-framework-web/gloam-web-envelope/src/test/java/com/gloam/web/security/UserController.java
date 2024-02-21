@@ -33,7 +33,7 @@ public class UserController {
     @PostMapping("/login")
     public WebResult<User> login(@RequestBody User user) {
         if ("admin".equals(user.username) && "admin".equals(user.password)) {
-            GloamSecurityContext.passAuthenticationWithResponseHeader(user.username, user.password, Device.PC);
+            GloamSecurityContext.passAuthenticationWithResponseHeader(user.username, user.password, Device.PC,null);
             return WebResult.success(user, "登录成功");
         }
         return WebResult.fail("用户名密码错误");

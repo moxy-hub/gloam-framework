@@ -68,6 +68,12 @@ public class TokenProperties {
     @NestedConfigurationProperty
     private AuthenticationProperties authentication = new AuthenticationProperties();
 
+    /**
+     * 安全环境配置
+     */
+    @NestedConfigurationProperty
+    private Env env = new Env();
+
     @Data
     public static class AuthenticationProperties {
 
@@ -75,5 +81,15 @@ public class TokenProperties {
          * token被踢下线的时长
          */
         private long kickOffTime = 60 * 60 * 1000;
+    }
+
+    @Data
+    public static class Env {
+
+        /**
+         * 平台
+         */
+        private String platform;
+
     }
 }

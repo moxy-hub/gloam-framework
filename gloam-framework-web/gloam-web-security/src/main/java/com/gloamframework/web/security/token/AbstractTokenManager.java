@@ -26,7 +26,7 @@ import java.util.Date;
 @Slf4j
 public abstract class AbstractTokenManager implements TokenManager {
 
-    private final TokenProperties tokenProperties;
+    protected final TokenProperties tokenProperties;
 
     protected AbstractTokenManager(TokenProperties tokenProperties) {
         this.tokenProperties = tokenProperties;
@@ -34,7 +34,7 @@ public abstract class AbstractTokenManager implements TokenManager {
 
 
     @Override
-    public void authenticate(String subject, Device device) {
+    public void authenticate(String subject, Device device, String platform) {
         if (StrUtil.isBlank(subject)) {
             throw new TokenGenerateException("Token生成失败:没有指定token的主题");
         }
@@ -59,7 +59,7 @@ public abstract class AbstractTokenManager implements TokenManager {
     }
 
     @Override
-    public void checkAuthentication(Device device) {
+    public void checkAuthentication(Device device, String platform) {
         HttpServletRequest request = WebContext.obtainRequest();
         // 请求携带的token
         Token token = TokenAttribute.TOKEN.obtainToken(request);

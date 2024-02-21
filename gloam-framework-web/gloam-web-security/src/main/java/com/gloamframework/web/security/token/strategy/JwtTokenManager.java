@@ -20,11 +20,8 @@ import java.util.Date;
  */
 public class JwtTokenManager extends AbstractCacheTokenManager {
 
-    private final TokenProperties tokenProperties;
-
     public JwtTokenManager(TokenProperties tokenProperties, GloamSecurityCacheManager cacheManager) {
         super(tokenProperties, cacheManager);
-        this.tokenProperties = tokenProperties;
     }
 
     /**
