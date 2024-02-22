@@ -50,6 +50,8 @@ public class GloamEnvironmentPostProcessor implements EnvironmentPostProcessor, 
 
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
+        // 设置banner
+        application.setBanner(GLOAM_BANNER);
         if (this.checkStartup()) {
             return;
         }
@@ -61,8 +63,6 @@ public class GloamEnvironmentPostProcessor implements EnvironmentPostProcessor, 
             // 添加项目启动路径
             GloamAutoScannerPackages.addPackage(mainApplicationClass.getPackage().getName());
         }
-        // 设置banner
-        application.setBanner(GLOAM_BANNER);
         // 配置转换器
         GloamConverterDiscover gloamConverterDiscover = new GloamConverterDiscover(environment.getConversionService(), application.getClassLoader());
         log.trace("create GloamConverterDiscover with conversionService:" + environment.getConversionService().getClass().getName());
