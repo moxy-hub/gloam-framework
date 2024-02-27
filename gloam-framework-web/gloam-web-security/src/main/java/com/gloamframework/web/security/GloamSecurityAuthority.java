@@ -7,7 +7,6 @@ import java.util.Set;
  *
  * @author 晓龙
  */
-@FunctionalInterface
 public interface GloamSecurityAuthority {
 
     /**
@@ -18,5 +17,11 @@ public interface GloamSecurityAuthority {
      * @return
      */
     Set<String> authorities(Object principal);
+
+    /**
+     * 支持的平台
+     * @return 当前配置支持的平台
+     */
+    String support();
 
 }

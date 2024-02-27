@@ -17,4 +17,9 @@ public class TestAuth implements GloamSecurityAuthority {
         auths.add("sss:ss");
         return auths;
     }
+
+    @Override
+    public String support() {
+        return null;
+    }
 }

@@ -10,6 +10,7 @@ import com.gloamframework.web.context.WebContext;
 import com.gloamframework.web.security.token.TokenManager;
 import com.gloamframework.web.security.token.constant.Device;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -33,16 +34,16 @@ public class GloamSecurityContext {
     /**
      * 通过认证，该方法只会通过spring security的认证，不会有响应头的携带，使用场景：验证token
      */
-    public static void passAuthentication(Object principal) {
-        passAuthentication(principal, null);
+    public static void passAuthentication(Object principal, String platform) {
+        passAuthentication(principal, null, platform);
     }
 
     /**
      * 通过认证
      */
-    public static void passAuthentication(Object principal, Object credentials) {
+    public static void passAuthentication(Object principal, Object credentials, String platform) {
         // 拉取权限
-        List<GrantedAuthority> authorities = pullAuthorities(principal);
+        List<GrantedAuthority> authorities = pullAuthorities(principal, platform);
         // 生成spring security认证token
         GloamAuthenticationToken gloamAuthenticationToken = new GloamAuthenticationToken(principal, credentials, authorities);
         if (!gloamAuthenticationToken.isAuthenticated()) {
@@ -62,7 +63,7 @@ public class GloamSecurityContext {
      */
     public static void passAuthenticationWithResponseHeader(String principal, Object credentials, Device device, String platform) {
         // 认证通过
-        passAuthentication(principal, credentials);
+        passAuthentication(principal, credentials, platform);
         // 生成token
         tokenManager().authenticate(principal, device, platform);
     }
@@ -157,16 +158,23 @@ public class GloamSecurityContext {
     /**
      * 获取权限实现类
      */
-    private static List<GloamSecurityAuthority> gloamSecurityAuthorities() {
+    private static List<GloamSecurityAuthority> gloamSecurityAuthorities(String platform) {
         if (CollectionUtil.isNotEmpty(gloamSecurityAuthorities)) {
             return gloamSecurityAuthorities;
+        }
+        if (Objects.isNull(gloamSecurityAuthorities)) {
+            gloamSecurityAuthorities = new ArrayList<>();
         }
         Map<String, GloamSecurityAuthority> beanMaps = SpringUtil.getBeansOfType(GloamSecurityAuthority.class);
         if (MapUtil.isEmpty(beanMaps)) {
             log.error("没有找到配置的权限注入实现类，请实现GloamSecurityAuthority接口，并注入spring中");
-            gloamSecurityAuthorities = new ArrayList<>();
-        } else {
-            gloamSecurityAuthorities = new ArrayList<>(beanMaps.values());
+            return gloamSecurityAuthorities;
+        }
+        for (GloamSecurityAuthority securityAuthority : beanMaps.values()) {
+            if (!StringUtils.equalsIgnoreCase(platform, securityAuthority.support())) {
+                continue;
+            }
+            gloamSecurityAuthorities.add(securityAuthority);
         }
         return gloamSecurityAuthorities;
     }
@@ -174,8 +182,8 @@ public class GloamSecurityContext {
     /**
      * 拉取全部权限
      */
-    private static List<GrantedAuthority> pullAuthorities(Object principal) {
-        List<GloamSecurityAuthority> authorities = gloamSecurityAuthorities();
+    private static List<GrantedAuthority> pullAuthorities(Object principal, String platform) {
+        List<GloamSecurityAuthority> authorities = gloamSecurityAuthorities(platform);
         Set<String> allAuths = new HashSet<>();
         authorities.forEach(a -> allAuths.addAll(a.authorities(principal)));
         return AuthorityUtils.createAuthorityList(allAuths.toArray(new String[]{}));

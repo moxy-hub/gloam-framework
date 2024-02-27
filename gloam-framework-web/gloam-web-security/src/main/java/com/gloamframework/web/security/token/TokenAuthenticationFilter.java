@@ -77,7 +77,7 @@ public class TokenAuthenticationFilter extends GloamOncePerRequestFilter {
         // 进行token认证
         tokenManager.checkAuthentication((Device) request.getAttribute(TokenAttribute.DEVICE.name()), platform);
         // 认证通过
-        GloamSecurityContext.passAuthentication(TokenAttribute.TOKEN_SUBJECT.obtain(request));
+        GloamSecurityContext.passAuthentication(TokenAttribute.TOKEN_SUBJECT.obtain(request),platform);
     }
 
     private void tokenPreHandler(HttpServletRequest request) {
