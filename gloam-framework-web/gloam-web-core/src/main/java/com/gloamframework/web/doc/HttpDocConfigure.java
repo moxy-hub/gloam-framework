@@ -1,8 +1,10 @@
 package com.gloamframework.web.doc;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
 import com.github.xiaoymin.swaggerbootstrapui.annotations.EnableSwaggerBootstrapUI;
+import com.gloamframework.core.boot.env.GloamAutoScannerPackages;
 import com.gloamframework.core.boot.scanner.ResourceScanner;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Configurable;
@@ -54,14 +56,20 @@ public class HttpDocConfigure {
             throw new HttpDocInitializeException("初始化在线文档失败，没有正确识别到启动注解");
         }
         // 如果有多个启动注解，只进行识别第一个注解路径
-        String basePackage = enableAnnotationBean.values().stream()
+        String annoBasePackage = enableAnnotationBean.values().stream()
                 .findFirst().orElseThrow(() -> new HttpDocInitializeException("初始化在线文档失败，获取基础扫描路径失败"))
                 .getClass().getPackage().getName();
-        boolean containBasePackage = false;
+        String[] packageArrays = GloamAutoScannerPackages.getPackageArrays();
+        if (ArrayUtil.isEmpty(packageArrays)) {
+            throw new HttpDocInitializeException("初始化在线文档失败，获取基础扫描路径失败");
+        }
         // 进行扫描
-        Set<Class<?>> packageInfoList;
+        Set<Class<?>> packageInfoList = new HashSet<>();
         try {
-            packageInfoList = new HashSet<>(resourceScanner.scannerForClasses(basePackage, this.getClass().getClassLoader(), "package-info"));
+            for (String basePackage : packageArrays) {
+                HashSet<Class<?>> classes = new HashSet<>(resourceScanner.scannerForClasses(basePackage, this.getClass().getClassLoader(), "package-info"));
+                packageInfoList.addAll(classes);
+            }
         } catch (IOException e) {
             throw new HttpDocInitializeException("获取swagger包信息资源失败", "swagger配置错误", e);
         }
@@ -98,7 +106,7 @@ public class HttpDocConfigure {
         }
         if (CollectionUtil.isEmpty(packageInfoList)) {
             // 没有package-info，直接创建docket
-            this.registerHttpDocBean(applicationContext, this.assembleDefaultConstructorArgValue(basePackage));
+            this.registerHttpDocBean(applicationContext, this.assembleDefaultConstructorArgValue(annoBasePackage));
         }
     }
 
