@@ -4,7 +4,7 @@
 #set(withActiveRecord = entityConfig.isWithActiveRecord())
 #set(entityClassName = table.buildEntityClassName())
 package #(packageConfig.entityPackage);
-
+import com.gloamframework.data.mybatis.flex.util.ObjectUtils;
 #for(importClass : table.buildImports())
 import #(importClass);
 #end
@@ -101,4 +101,16 @@ public class #(entityClassName)#if(withActiveRecord) #else#(table.buildExtends()
     #end
 
     #end
-#end}
+
+
+
+#end
+
+#for(column: table.columns)
+    public #(entityClassName) #(column.setterMethod())IfPresent(#(column.propertySimpleType) #(column.property)) {
+         // 判断是否为空，为空设置为null
+         this.#(column.property) = ObjectUtils.isBlank(#(column.property))?null:#(column.property);
+         return this;
+    }
+#end
+}

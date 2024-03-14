@@ -1,6 +1,7 @@
 package com.gloamframework.data.mybatis.flex.util;
 
 import cn.hutool.core.util.ReflectUtil;
+import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Objects;
@@ -32,4 +33,13 @@ public class ObjectUtils {
         ReflectUtil.setFieldValue(source, field, value);
     }
 
+    public static boolean isBlank(Object object) {
+        if (Objects.isNull(object)) {
+            return true;
+        }
+        if (object instanceof String) {
+            return StrUtil.isBlank((CharSequence) object);
+        }
+        return false;
+    }
 }
