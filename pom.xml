@@ -9,7 +9,12 @@
     <version>${gloam.version}</version>
     <packaging>pom</packaging>
     <description>gloam开发框架，占位pom，防止idea中项目变形</description>
-
+    <licenses>
+        <license>
+            <name>Apache2.0</name>
+            <url>https://github.com/moxy-hub/gloam-framework/blob/DragonBall.SR1/LICENSE</url>
+        </license>
+    </licenses>
     <developers>
         <developer>
             <id>Moxy</id>
