@@ -1,5 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.gloamframework.core.GloamCoreConfigure
-org.springframework.boot.diagnostics.FailureAnalyzer=com.gloamframework.core.boot.diagnostics.GloamStartExceptionDiagnostics
-org.springframework.boot.env.EnvironmentPostProcessor=com.gloamframework.core.boot.env.GloamEnvironmentPostProcessor
-org.springframework.context.ApplicationListener=com.gloamframework.core.boot.env.GloamEnvironmentPostProcessor
-com.gloamframework.core.boot.env.GloamPackageRegister=com.gloamframework.core.boot.env.DefaultGloamPackageRegister

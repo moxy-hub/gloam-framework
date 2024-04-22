@@ -6,9 +6,19 @@
 
     <groupId>com.gloamframework</groupId>
     <artifactId>gloam-framework</artifactId>
-    <version>${gloam.version}</version>
+    <version>DragonBall.SR2</version>
     <packaging>pom</packaging>
-    <description>gloam开发框架，占位pom，防止idea中项目变形</description>
+    <description>glaom framework is base on spring framework which can help you make project more quickly</description>
+
+    <modules>
+        <module>gloam-common</module>
+        <module>gloam-core</module>
+        <module>gloam-property</module>
+        <module>gloam-async</module>
+        <module>gloam-storage</module>
+        <module>gloam-webmvc</module>
+        <module>gloam-scanner</module>
+    </modules>
 
     <developers>
         <developer>
@@ -19,8 +29,136 @@
         </developer>
     </developers>
 
+    <licenses>
+        <license>
+            <name>Apache2.0</name>
+            <url>https://github.com/moxy-hub/gloam-framework/blob/DragonBall.SR1/LICENSE</url>
+        </license>
+    </licenses>
+
+    <distributionManagement>
+        <repository>
+            <id>maven-nexus</id>
+            <name>Gloam Release Repository</name>
+            <url>http://192.168.1.136:8081/repository/wdzh-mix/</url>
+        </repository>
+        <snapshotRepository>
+            <id>maven-nexus</id>
+            <name>Gloam Snapshot Repository</name>
+            <url>http://192.168.1.136:8081/repository/wdzh-mix/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
     <properties>
-        <gloam.version>DragonBall.SR1</gloam.version>
+        <spring.cloud.version>Hoxton.SR9</spring.cloud.version>
+        <spring.cloud.alibaba.version>2.2.6.RELEASE</spring.cloud.alibaba.version>
+        <gloam.version>DragonBall.SR2</gloam.version>
     </properties>
+
+    <dependencies>
+        <!-- 基于lombok开发 -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+    </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+
+            <!-- spring cloud -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-parent</artifactId>
+                <version>${spring.cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- spring cloud alibaba -->
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>${spring.cloud.alibaba.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- 内部依赖管理 -->
+            <dependency>
+                <groupId>com.gloamframework</groupId>
+                <artifactId>gloam-common</artifactId>
+                <version>${gloam.version}</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <!-- 使用2.8以上的maven发布插件，使用xml仓库信息-->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>2.8.2</version>
+                </plugin>
+
+                <!-- 上传源码 -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>3.0.1</version>
+                    <configuration>
+                        <attach>true</attach>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <phase>compile</phase>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <!-- apcectj编译器编译源码 -->
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>aspectj-maven-plugin</artifactId>
+                    <version>1.4</version>
+                    <configuration>
+                        <source>1.8</source>
+                        <target>1.8</target>
+                        <complianceLevel>1.8</complianceLevel>
+                    </configuration>
+                </plugin>
+
+                <!-- java编译器 -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <configuration>
+                        <source>1.8</source>
+                        <target>1.8</target>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                    <include>**/*.vm</include>
+                    <include>**/*.bpmn</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
 
 </project>
