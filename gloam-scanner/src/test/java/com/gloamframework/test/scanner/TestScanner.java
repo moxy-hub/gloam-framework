@@ -21,17 +21,18 @@ import java.util.Set;
 @Slf4j
 public class TestScanner {
     private final DeferredLog deferredLog = new DeferredLog();
-    private final ResourceCentre resourceCentre = ResourceCentreFactory.ofSingleDefault(null, deferredLog);
+    private final ResourceCentre resourceCentre = ResourceCentreFactory.ofSingleDefault();
 
     public TestScanner() throws IOException {
     }
 
     @Test
     public void testScannerResource() throws IOException {
-        deferredLog.replayTo(Application.class);
+        // 获取资源中心
+        ResourceCentre resourceCentre = ResourceCentreFactory.ofSingleDefault();
+        // 获取对应分组的class集合
         Set<Class<?>> resourcesClasses = resourceCentre.getResourcesClasses(null);
         System.out.println(resourcesClasses);
-
     }
 
     @Test

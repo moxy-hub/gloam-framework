@@ -32,6 +32,14 @@ public class ResourceCentreFactory {
     }
 
     /**
+     * 获取系统内置的默认实现的资源中心，获取到的资源中心为单例模式
+     * <p>默认实现:{@link DefaultResourceCentre}</p>
+     */
+    public static ResourceCentre ofSingleDefault() throws IOException {
+        return ofSingleDefault(null, null);
+    }
+
+    /**
      * 获取系统内置的默认实现的资源中心，获取到的资源中心为多例模式，每次调用都会创建新的资源中心
      * <p>
      * <b>Importance:</b>

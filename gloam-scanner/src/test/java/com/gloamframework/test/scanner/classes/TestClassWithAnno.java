@@ -8,6 +8,6 @@ import com.gloamframework.test.scanner.annotation.TestResourceAnno;
  * @protectName gloam-framework
  * @date 2024年04月22日 16:15
  */
-@TestResourceAnno
+//@TestResourceAnno
 public class TestClassWithAnno {
 }
