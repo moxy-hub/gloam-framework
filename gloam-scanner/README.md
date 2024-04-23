@@ -218,8 +218,200 @@
 
 ## 资源中心
 
+在上面的案例中，其实已经把资源中心功能进行了覆盖，资源中心，顾名思义就是通过当前接口可以获取到被扫描到的资源，主要分为两种获取模式，如何获取资源中心，请参考最后一章 `资源中心工厂`
 
+- 默认获取资源
 
+  > 获取到系统中的标注的@GloamResource注解的资源，并将资源加载为class
+  >
+  > 注：
+  >
+  > - 查询的资源全部都为class，使用本接口不会获取到class之外的资源
 
+  > 参数：
+  >
+  > - group – 获取的资源分组，不传入则为默认的DEFAULT，需要和@GloamResource注解的group字段对应
+  >
+  >   ​	       [如果不传入，可以直接调用重载方法]
+
+  ```java
+  /**
+   * 获取到系统中的标注的@{@link GloamResource}注解的资源，并将资源加载为class
+   * <p>Tip:
+   * <li>查询的资源全部都为class，使用本接口不会获取到class之外的资源</li>
+   * </p>
+   *
+   * @param group 获取的资源分组，不传入则为默认的DEFAULT，需要和@GloamResource注解的group字段对应
+   */
+  Set<Class<?>> getResourcesClasses(String group);
+  
+  /**
+   * 获取到系统中的标注的@{@link GloamResource}注解的资源，并将资源加载为class
+   * <p>Tip:
+   * <li>查询的资源全部都为class，使用本接口不会获取到class之外的资源</li>
+   * </p>
+   */
+  default Set<Class<?>> getResourcesClasses() {
+      return this.getResourcesClasses(null);
+  }
+  
+  ```
+
+  
+
+- 通过指定注解获取资源
+
+  > 获取到系统中的标注的@GloamResource注解和指定的注解的资源，并将资源加载为class
+  >
+  > 注：
+  >
+  > - 查询的资源全部都为class，使用本接口不会获取到class之外的资源
+
+  > 参数：
+  >
+  > - group – 获取的资源分组，不传入则为默认的DEFAULT，需要和@GloamResource注解的group字段对应 
+  >
+  >   ​	       [如果不传入，可以直接调用重载方法]
+  >
+  > - annotationClass – 资源class上绑定的其他注解
+
+  ```java
+  /**
+   * 获取到系统中的标注的@{@link GloamResource}注解和指定的注解的资源，并将资源加载为class
+   * <p>Tip:
+   * <li>查询的资源全部都为class，使用本接口不会获取到class之外的资源</li>
+   * </p>
+   *
+   * @param group           获取的资源分组，不传入则为默认的DEFAULT，需要和@GloamResource注解的group字段对应
+   * @param annotationClass 资源class上绑定的其他注解
+   * @see #getResourcesClasses(String)
+   */
+  Set<Class<?>> getResourcesClassesByAnnotation(String group, Class<? extends Annotation> annotationClass);
+  
+  /**
+   * 获取到系统中的标注的@{@link GloamResource}注解和指定的注解的资源，并将资源加载为class
+   * <p>Tip:
+   * <li>查询的资源全部都为class，使用本接口不会获取到class之外的资源</li>
+   * </p>
+   *
+   * @param annotationClass 资源class上绑定的其他注解
+   * @see #getResourcesClasses(String)
+   */
+  default Set<Class<?>> getResourcesClassesByAnnotation(Class<? extends Annotation> annotationClass) {
+      return getResourcesClassesByAnnotation(null, annotationClass);
+  }
+  ```
+
+  
 
 ## 资源中心工厂
+
+资源中心工厂是获取一个资源中心唯一的途径，当然您也可以实现资源中心接口，自定义您的资源扫描功能，如果是这样的话，那么资源中心工厂将毫无意义，因为它只能获取到默认的实现。
+
+
+
+**资源中心工厂获取的资源中心是有两种方式**
+
+- 单例获取
+
+  > 优势：系统维护一个资源中心实例，系统只会扫描一次，减省系统的开销
+  >
+  > 缺点：因为获取时需要传入类加载器和日志系统，由于是单例模式，那么后续获取传入的值是不会被进行处理的
+
+- 多实例获取
+
+  > 优势：和单例相反，由于每次获取都是一个新的实例，那么每次的参数都是会生效的
+  >
+  > 缺点：同样，因为每次是新的实例，那么在实例化时就会进行资源扫描，如果有太多实例的话，可能会对系统的性能有影响
+
+
+
+**参数详解**
+
+- classLoader
+
+  > 用于获取spring.factory和将资源加载为类的类加载器
+  >
+  > 默认为SpringFactoriesLoader.class.getClassLoader() 和ClassLoader.getSystemClassLoader()
+  >
+  > 如果外部传入，则统一使用外部的加载器
+
+- log
+
+  > 用于内部日志的输出
+  >
+  > 默认为LogFactory.getLog(String)获取的日志
+  >
+  > 为什么要外部传入日志，主要是考虑到在spring boot的env处理时，日志系统还未加载，可能需要使用到延迟的日志
+
+
+
+**代码接口**
+
+```java
+package com.gloamframework.scanner;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.core.io.support.SpringFactoriesLoader;
+
+import java.io.IOException;
+import java.util.Objects;
+
+/**
+ * 资源中心工程获取类，通过本工厂可以获取到系统默认的资源中心
+ *
+ * @author 晓龙
+ * @see ResourceCentre
+ */
+public class ResourceCentreFactory {
+
+    private static volatile ResourceCentre resourceCentre;
+
+    /**
+     * 获取系统内置的默认实现的资源中心，获取到的资源中心为单例模式
+     * 在第一次获取时传入的classLoader和log有效，后续的则无效
+     * <p>默认实现:{@link DefaultResourceCentre}</p>
+     *
+     * @param classLoader 获取spring.factory的类加载器，
+     *                    默认为{@link SpringFactoriesLoader}.class.getClassLoader()
+     *                    和{@link ClassLoader#getSystemClassLoader()}
+     * @param log         外部传入的日志模块，主要为了方便延迟日志的实现，
+     *                    默认为{@link LogFactory#getLog(String)}获取的日志
+     */
+    public static synchronized ResourceCentre ofSingleDefault(ClassLoader classLoader, Log log) throws IOException {
+        if (Objects.isNull(resourceCentre)) {
+            resourceCentre = ofDefault(classLoader, log);
+        }
+        return resourceCentre;
+    }
+
+    /**
+     * 获取系统内置的默认实现的资源中心，获取到的资源中心为单例模式
+     * <p>默认实现:{@link DefaultResourceCentre}</p>
+     */
+    public static ResourceCentre ofSingleDefault() throws IOException {
+        return ofSingleDefault(null, null);
+    }
+
+    /**
+     * 获取系统内置的默认实现的资源中心，获取到的资源中心为多例模式，每次调用都会创建新的资源中心
+     * <p>
+     * <b>Importance:</b>
+     * 每次创建资源中心都会进行资源扫描，由于会产生额外的资源浪费，谨慎使用
+     * </p>
+     * <p>默认实现:{@link DefaultResourceCentre}</p>
+     *
+     * @param classLoader 获取spring.factory的类加载器，默认为{@link SpringFactoriesLoader}.class.getClassLoader()
+     * @param log         外部传入的日志模块，主要为了方便延迟日志的实现，默认为{@link LogFactory#getLog(String)}获取的日志
+     */
+    public static ResourceCentre ofDefault(ClassLoader classLoader, Log log) throws IOException {
+        if (Objects.isNull(log)) {
+            log = LogFactory.getLog(ResourceCentreFactory.class);
+        }
+        return new DefaultResourceCentre(classLoader, log);
+    }
+    
+}
+```
+

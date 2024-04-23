@@ -46,7 +46,7 @@ final class DefaultResourceCentre extends ResourcePackagesRegister implements Re
 
     private void doScanner() throws IOException {
         // 创建路径资源处理器
-        ResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
+        ResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver(this.classLoader);
         Set<String> packages = super.getPackages();
         if (logExist()) {
             log.info("[资源扫描]:启动包资源扫描,扫描包范围:" + packages);

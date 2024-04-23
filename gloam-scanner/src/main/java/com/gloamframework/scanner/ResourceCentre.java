@@ -6,7 +6,7 @@ import java.lang.annotation.Annotation;
 import java.util.Set;
 
 /**
- * 资源中心，可以获取到系统中标注了@{@link GloamResource}注解的资源或类
+ * 资源中心，可以获取到系统中标注了@{@link GloamResource}注解的资源
  * <p>获取本接口，可以通过工厂类获取 {@link ResourceCentreFactory}</p>
  *
  * @author 晓龙

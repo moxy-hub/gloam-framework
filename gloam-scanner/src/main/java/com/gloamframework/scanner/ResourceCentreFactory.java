@@ -61,5 +61,4 @@ public class ResourceCentreFactory {
         return new DefaultResourceCentre(classLoader, log);
     }
 
-
 }
