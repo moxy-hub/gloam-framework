@@ -50,8 +50,9 @@
     </distributionManagement>
 
     <properties>
-        <spring.cloud.version>Hoxton.SR9</spring.cloud.version>
-        <spring.cloud.alibaba.version>2.2.6.RELEASE</spring.cloud.alibaba.version>
+        <spring.cloud.version>2021.0.9</spring.cloud.version>
+        <spring.boot.version>2.7.17</spring.boot.version>
+        <spring.cloud.alibaba.version>2021.0.5.0</spring.cloud.alibaba.version>
         <gloam.version>DragonBall.SR2</gloam.version>
     </properties>
 
@@ -66,10 +67,19 @@
     <dependencyManagement>
         <dependencies>
 
+            <!-- spring boot -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring.boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
             <!-- spring cloud -->
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-starter-parent</artifactId>
+                <artifactId>spring-cloud-dependencies</artifactId>
                 <version>${spring.cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>

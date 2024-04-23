@@ -11,6 +11,20 @@
 
     <artifactId>gloam-scanner</artifactId>
 
+    <description>
+        gloam-scanner在gloam框架中承担着重要的角色，通过特定的注解，将我们的Java Class读取到内存，
+        在我们需要获取的时候，随时可以获取到这些Class进行使用
+    </description>
+
+    <developers>
+        <developer>
+            <id>Moxy</id>
+            <name>马晓龙</name>
+            <email>moxy.mxl@gmail.com</email>
+            <url>https://moxy-hub.gitee.io/</url>
+        </developer>
+    </developers>
+
     <dependencies>
 
         <dependency>
@@ -27,6 +41,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
 
