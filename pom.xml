@@ -94,12 +94,30 @@
                 <scope>import</scope>
             </dependency>
 
-            <!-- 内部依赖管理 -->
+            <!-- ================================= 内部依赖管理 START ===================================== -->
+
+            <!-- 基础工具包-->
             <dependency>
                 <groupId>com.gloamframework</groupId>
                 <artifactId>gloam-common</artifactId>
                 <version>${gloam.version}</version>
             </dependency>
+
+            <!-- 资源扫描包-->
+            <dependency>
+                <groupId>com.gloamframework</groupId>
+                <artifactId>gloam-scanner</artifactId>
+                <version>${gloam.version}</version>
+            </dependency>
+
+            <!-- 核心环境包-->
+            <dependency>
+                <groupId>com.gloamframework</groupId>
+                <artifactId>gloam-core</artifactId>
+                <version>${gloam.version}</version>
+            </dependency>
+
+            <!-- ================================= 内部依赖管理 END ===================================== -->
 
         </dependencies>
     </dependencyManagement>

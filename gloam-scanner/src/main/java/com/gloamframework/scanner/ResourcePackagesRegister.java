@@ -17,7 +17,7 @@ import java.util.*;
  *
  * @author 晓龙
  */
-abstract class ResourcePackagesRegister {
+public abstract class ResourcePackagesRegister {
 
     protected final Log log;
 

@@ -12,8 +12,6 @@
 
 - 通过获取到的资源中心，获取匹配的类
 
-  
-
 **实例代码：**
 
 - 需要扫描的目标class
@@ -45,18 +43,15 @@
   [class com.gloamframework.test.scanner.classes.TestClass]
   ```
 
-
-
 ## 包注册机制
 
-包注册机制的实现核心是基于Spring框架的SPI机制，通过实现对应的接口，并将接口的实现在`spring.factory`中进行创建，如果您还不了解spring.factory机制，请先自行了解即可。
+包注册机制的实现核心是基于Spring框架的SPI机制，通过实现对应的接口，并将接口的实现在`spring.factory`
+中进行创建，如果您还不了解spring.factory机制，请先自行了解即可。
 
 **TIP:**
 
 - 默认扫描的地址为`com.gloamframework`
 - 如果您接入了`gloam-core`，则同时会添加SpringBoot的启动类所在路径之下
-
-
 
 **实例代码：**
 
@@ -84,18 +79,15 @@
   com.gloamframework.scanner.ResourcePackage = com.gloamframework.scanner.packages.GloamResourcePackage
   ```
 
-  
-
 ## 资源分组
 
-由于有时候我们可能只希望获取到一组class，但是GloamScanner扫描到的资源都是放在内存中，为了获取的时候直接拿取，而不是每次都循环筛选，所以就有了分组的功能。GloamScanner会在扫描资源时，以`@GloamResource`注解的`group`属性为分组的依据，会将相同一类的资源以`Map`的方式存放，随用随取。
+由于有时候我们可能只希望获取到一组class，但是GloamScanner扫描到的资源都是放在内存中，为了获取的时候直接拿取，而不是每次都循环筛选，所以就有了分组的功能。GloamScanner会在扫描资源时，以`@GloamResource`
+注解的`group`属性为分组的依据，会将相同一类的资源以`Map`的方式存放，随用随取。
 
 **TIP:**
 
 - 如果在`@GloamResource`注解中没有设置`group`属性，则会将资源放在默认的组内，那么在获取资源的时候，分组参数也就无需传入
 - 如果出现资源没有获取到的情况，请仔细核对注解`@GloamResource`的`group`属性是否和获取资源时传入的`group`一致
-
-
 
 **实例代码：**
 
@@ -131,18 +123,16 @@
   [class com.gloamframework.test.scanner.classes.TestClass]
   ```
 
-
-
 ## 自定义注解
 
-考虑到我们可能需要自定义一些自己的注解，又想要将这个注解标注的资源扫描进去，那么第一想法，就是联合使用自定义注解和`@GloamResource`注解，将两个注解同时放在资源上，这样确实可以实现功能，但是却不是很优雅，所以`@GloamResource`同样支持标注在其他自定义注解上，那么此时的自定义注解将拥有和`@GloamResource`相同的功能，那么在使用时只需要标注您的自定义注解即可。
+考虑到我们可能需要自定义一些自己的注解，又想要将这个注解标注的资源扫描进去，那么第一想法，就是联合使用自定义注解和`@GloamResource`
+注解，将两个注解同时放在资源上，这样确实可以实现功能，但是却不是很优雅，所以`@GloamResource`
+同样支持标注在其他自定义注解上，那么此时的自定义注解将拥有和`@GloamResource`相同的功能，那么在使用时只需要标注您的自定义注解即可。
 
 **TIP:**
 
 - 标注`@GloamResource`注解的自定义注解，是不会作为资源被添加到GloamScanner中
 - 通过自定义注解，和资源中心的通过注解获取资源的方式，也可以实现基于注解的分组，但是这种获取会进行资源遍历，建议配合分组功能来缩小遍历范围
-
-
 
 **实例代码:**
 
@@ -214,8 +204,6 @@
   [class com.gloamframework.test.scanner.classes.TestClassWithAnno]
   ```
 
-  
-
 ## 资源中心
 
 在上面的案例中，其实已经把资源中心功能进行了覆盖，资源中心，顾名思义就是通过当前接口可以获取到被扫描到的资源，主要分为两种获取模式，如何获取资源中心，请参考最后一章 `资源中心工厂`
@@ -231,8 +219,8 @@
   > 参数：
   >
   > - group – 获取的资源分组，不传入则为默认的DEFAULT，需要和@GloamResource注解的group字段对应
-  >
-  >   ​	       [如果不传入，可以直接调用重载方法]
+      >
+      >   ​           [如果不传入，可以直接调用重载方法]
 
   ```java
   /**
@@ -257,7 +245,6 @@
   
   ```
 
-  
 
 - 通过指定注解获取资源
 
@@ -269,9 +256,9 @@
 
   > 参数：
   >
-  > - group – 获取的资源分组，不传入则为默认的DEFAULT，需要和@GloamResource注解的group字段对应 
-  >
-  >   ​	       [如果不传入，可以直接调用重载方法]
+  > - group – 获取的资源分组，不传入则为默认的DEFAULT，需要和@GloamResource注解的group字段对应
+      >
+      >   ​           [如果不传入，可以直接调用重载方法]
   >
   > - annotationClass – 资源class上绑定的其他注解
 
@@ -302,13 +289,9 @@
   }
   ```
 
-  
-
 ## 资源中心工厂
 
 资源中心工厂是获取一个资源中心唯一的途径，当然您也可以实现资源中心接口，自定义您的资源扫描功能，如果是这样的话，那么资源中心工厂将毫无意义，因为它只能获取到默认的实现。
-
-
 
 **资源中心工厂获取的资源中心是有两种方式**
 
@@ -323,8 +306,6 @@
   > 优势：和单例相反，由于每次获取都是一个新的实例，那么每次的参数都是会生效的
   >
   > 缺点：同样，因为每次是新的实例，那么在实例化时就会进行资源扫描，如果有太多实例的话，可能会对系统的性能有影响
-
-
 
 **参数详解**
 
@@ -343,8 +324,6 @@
   > 默认为LogFactory.getLog(String)获取的日志
   >
   > 为什么要外部传入日志，主要是考虑到在spring boot的env处理时，日志系统还未加载，可能需要使用到延迟的日志
-
-
 
 **代码接口**
 
@@ -411,7 +390,7 @@ public class ResourceCentreFactory {
         }
         return new DefaultResourceCentre(classLoader, log);
     }
-    
+
 }
 ```
 
