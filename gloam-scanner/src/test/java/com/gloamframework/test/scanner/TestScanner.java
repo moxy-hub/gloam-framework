@@ -30,15 +30,20 @@ public class TestScanner {
     public void testScannerResource() throws IOException {
         // 获取资源中心
         ResourceCentre resourceCentre = ResourceCentreFactory.ofSingleDefault();
-        // 获取对应分组的class集合
+        // 获取class集合
         Set<Class<?>> resourcesClasses = resourceCentre.getResourcesClasses(null);
         System.out.println(resourcesClasses);
     }
 
     @Test
-    public void testScannerClasses() throws IOException {
-        deferredLog.replayTo(Application.class);
-        Set<Class<?>> resourcesClasses = resourceCentre.getResourcesClassesByAnnotation(null, TestResourceAnno.class);
+    public void testScannerResourceByAnnotation() throws IOException {
+        // 获取资源中心
+        ResourceCentre resourceCentre = ResourceCentreFactory.ofSingleDefault();
+        // 获取标注了指定注解的class集合
+        Set<Class<?>> resourcesClasses = resourceCentre.getResourcesClassesByAnnotation(
+                null,
+                TestResourceAnno.class
+        );
         System.out.println(resourcesClasses);
     }
 }

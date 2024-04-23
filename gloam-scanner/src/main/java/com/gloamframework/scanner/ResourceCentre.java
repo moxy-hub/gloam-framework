@@ -17,7 +17,6 @@ public interface ResourceCentre {
      * 获取到系统中的标注的@{@link GloamResource}注解和指定的注解的资源，并将资源加载为class
      * <p>Tip:
      * <li>查询的资源全部都为class，使用本接口不会获取到class之外的资源</li>
-     * <li>如果没有传入类加载器，则会使用系统默认的类加载器：{@link ClassLoader#getSystemClassLoader()}</li>
      * </p>
      *
      * @param group           获取的资源分组，不传入则为默认的DEFAULT，需要和@GloamResource注解的group字段对应
@@ -27,16 +26,38 @@ public interface ResourceCentre {
     Set<Class<?>> getResourcesClassesByAnnotation(String group, Class<? extends Annotation> annotationClass);
 
     /**
+     * 获取到系统中的标注的@{@link GloamResource}注解和指定的注解的资源，并将资源加载为class
+     * <p>Tip:
+     * <li>查询的资源全部都为class，使用本接口不会获取到class之外的资源</li>
+     * </p>
+     *
+     * @param annotationClass 资源class上绑定的其他注解
+     * @see #getResourcesClasses(String)
+     */
+    default Set<Class<?>> getResourcesClassesByAnnotation(Class<? extends Annotation> annotationClass) {
+        return getResourcesClassesByAnnotation(null, annotationClass);
+    }
+
+    /**
      * 获取到系统中的标注的@{@link GloamResource}注解的资源，并将资源加载为class
      * <p>Tip:
      * <li>查询的资源全部都为class，使用本接口不会获取到class之外的资源</li>
-     * <li>如果没有传入类加载器，则会使用系统默认的类加载器：{@link ClassLoader#getSystemClassLoader()}</li>
      * </p>
      *
      * @param group 获取的资源分组，不传入则为默认的DEFAULT，需要和@GloamResource注解的group字段对应
      */
     default Set<Class<?>> getResourcesClasses(String group) {
         return this.getResourcesClassesByAnnotation(group, null);
+    }
+
+    /**
+     * 获取到系统中的标注的@{@link GloamResource}注解的资源，并将资源加载为class
+     * <p>Tip:
+     * <li>查询的资源全部都为class，使用本接口不会获取到class之外的资源</li>
+     * </p>
+     */
+    default Set<Class<?>> getResourcesClasses() {
+        return this.getResourcesClasses(null);
     }
 
 }

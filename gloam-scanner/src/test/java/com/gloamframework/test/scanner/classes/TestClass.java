@@ -3,11 +3,8 @@ package com.gloamframework.test.scanner.classes;
 import com.gloamframework.scanner.annotation.GloamResource;
 
 /**
- * @author 晓龙
- * @version 1.8.271
- * @protectName gloam-framework
- * @date 2024年04月22日 16:11
+ * 在资源扫描注解中，设置分组
  */
-@GloamResource
+@GloamResource(group = "myGroup")
 public class TestClass {
 }

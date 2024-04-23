@@ -5,14 +5,11 @@ import com.gloamframework.scanner.annotation.GloamResource;
 import java.lang.annotation.*;
 
 /**
- * @author 晓龙
- * @version 1.8.271
- * @protectName gloam-framework
- * @date 2024年04月22日 16:14
+ * 添加@GloamResource注解，获取资源扫描能力
  */
+@GloamResource
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@GloamResource
 public @interface TestResourceAnno {
 }

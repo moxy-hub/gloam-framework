@@ -1,6 +1,7 @@
 package com.gloamframework.scanner;
 
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.core.io.support.SpringFactoriesLoader;
 
 import java.io.IOException;
@@ -21,12 +22,15 @@ public class ResourceCentreFactory {
      * 在第一次获取时传入的classLoader和log有效，后续的则无效
      * <p>默认实现:{@link DefaultResourceCentre}</p>
      *
-     * @param classLoader 获取spring.factory的类加载器，默认为{@link SpringFactoriesLoader}.class.getClassLoader()
-     * @param log         外部传入的日志模块，主要为了方便延迟日志的实现，默认为{@link org.slf4j.LoggerFactory#getLogger(String)}获取的日志
+     * @param classLoader 获取spring.factory的类加载器，
+     *                    默认为{@link SpringFactoriesLoader}.class.getClassLoader()
+     *                    和{@link ClassLoader#getSystemClassLoader()}
+     * @param log         外部传入的日志模块，主要为了方便延迟日志的实现，
+     *                    默认为{@link LogFactory#getLog(String)}获取的日志
      */
     public static synchronized ResourceCentre ofSingleDefault(ClassLoader classLoader, Log log) throws IOException {
         if (Objects.isNull(resourceCentre)) {
-            resourceCentre = new DefaultResourceCentre(classLoader, log);
+            resourceCentre = ofDefault(classLoader, log);
         }
         return resourceCentre;
     }
@@ -48,9 +52,12 @@ public class ResourceCentreFactory {
      * <p>默认实现:{@link DefaultResourceCentre}</p>
      *
      * @param classLoader 获取spring.factory的类加载器，默认为{@link SpringFactoriesLoader}.class.getClassLoader()
-     * @param log         外部传入的日志模块，主要为了方便延迟日志的实现，默认为{@link org.slf4j.LoggerFactory#getLogger(String)}获取的日志
+     * @param log         外部传入的日志模块，主要为了方便延迟日志的实现，默认为{@link LogFactory#getLog(String)}获取的日志
      */
     public static ResourceCentre ofDefault(ClassLoader classLoader, Log log) throws IOException {
+        if (Objects.isNull(log)) {
+            log = LogFactory.getLog(ResourceCentreFactory.class);
+        }
         return new DefaultResourceCentre(classLoader, log);
     }
 
