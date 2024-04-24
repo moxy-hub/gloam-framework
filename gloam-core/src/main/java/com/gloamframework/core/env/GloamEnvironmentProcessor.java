@@ -2,6 +2,10 @@ package com.gloamframework.core.env;
 
 import com.gloamframework.core.banner.GloamBanner;
 import com.gloamframework.core.diagnostics.GloamStartException;
+import com.gloamframework.property.DefaultMappingPropertyCollector;
+import com.gloamframework.property.MappingProperty;
+import com.gloamframework.property.conversion.GloamMappingPropertyDefinitionConversion;
+import com.gloamframework.property.conversion.MappingPropertyDefinitionConversion;
 import com.gloamframework.scanner.ResourceCentreFactory;
 import com.gloamframework.scanner.ResourcePackagesRegister;
 import org.springframework.boot.Banner;
@@ -49,18 +53,21 @@ public class GloamEnvironmentProcessor implements EnvironmentPostProcessor, Orde
         if (this.checkStartup()) {
             return;
         }
-        log.info("welcome to use gloam framework");
+        log.info("Welcome to use gloam framework");
         // 初始化资源扫描
         Class<?> mainApplicationClass = application.getMainApplicationClass();
         if (Objects.nonNull(mainApplicationClass)) {
             // 添加项目启动路径
             ResourcePackagesRegister.registerPackages(mainApplicationClass.getPackage().getName());
         }
-        try {
-            ResourceCentreFactory.ofSingleDefault(application.getClassLoader(), log);
-        } catch (IOException e) {
-            throw new GloamStartException("Gloam初始化资源中心失败", "Gloam启动错误", e);
-        }
+        // 创建映射对象转换器
+        MappingPropertyDefinitionConversion mappingPropertyDefinitionConversion = new GloamMappingPropertyDefinitionConversion(environment);
+        log.trace("Create MappingPropertyDefinitionConversion with env:" + environment.getClass().getName());
+        // 创建映射服务
+        MappingProperty mappingProperty = new DefaultMappingPropertyCollector(environment, mappingPropertyDefinitionConversion, application.getClassLoader(), log);
+        log.trace("Create MappingProperty with env:" + environment.getClass().getName() + " and classLoader:" + application.getClassLoader().getClass().getName());
+        // 执行映射
+        mappingProperty.mapping();
     }
 
     private synchronized boolean checkStartup() {

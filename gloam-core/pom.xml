@@ -33,7 +33,7 @@
 
         <dependency>
             <groupId>com.gloamframework</groupId>
-            <artifactId>gloam-scanner</artifactId>
+            <artifactId>gloam-property</artifactId>
         </dependency>
 
     </dependencies>

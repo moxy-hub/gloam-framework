@@ -1,7 +1,9 @@
 package com.gloamframework.core;
 
 import com.gloamframework.core.context.SpringContext;
+import com.gloamframework.core.logging.properties.LoggingProperties;
 import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
@@ -12,6 +14,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
  */
 @Configurable
 @EnableAspectJAutoProxy(exposeProxy = true, proxyTargetClass = true)
+@EnableConfigurationProperties(LoggingProperties.class)
 public class GloamCoreConfigure {
 
     @Bean
