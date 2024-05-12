@@ -5,7 +5,7 @@ package com.gloamframework.property;
  *
  * @author 晓龙
  */
-public interface MappingProperty {
+public interface PropertyMapper {
 
     /**
      * 将映射对象进行映射

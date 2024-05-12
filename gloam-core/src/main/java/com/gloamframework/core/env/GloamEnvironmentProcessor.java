@@ -1,12 +1,8 @@
 package com.gloamframework.core.env;
 
 import com.gloamframework.core.banner.GloamBanner;
-import com.gloamframework.core.diagnostics.GloamStartException;
-import com.gloamframework.property.DefaultMappingPropertyCollector;
-import com.gloamframework.property.MappingProperty;
-import com.gloamframework.property.conversion.GloamMappingPropertyDefinitionConversion;
-import com.gloamframework.property.conversion.MappingPropertyDefinitionConversion;
-import com.gloamframework.scanner.ResourceCentreFactory;
+import com.gloamframework.property.DefaultPropertyMapper;
+import com.gloamframework.property.PropertyMapper;
 import com.gloamframework.scanner.ResourcePackagesRegister;
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
@@ -17,7 +13,6 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.core.Ordered;
 import org.springframework.core.env.ConfigurableEnvironment;
 
-import java.io.IOException;
 import java.util.Objects;
 
 /**
@@ -60,14 +55,10 @@ public class GloamEnvironmentProcessor implements EnvironmentPostProcessor, Orde
             // 添加项目启动路径
             ResourcePackagesRegister.registerPackages(mainApplicationClass.getPackage().getName());
         }
-        // 创建映射对象转换器
-        MappingPropertyDefinitionConversion mappingPropertyDefinitionConversion = new GloamMappingPropertyDefinitionConversion(environment);
-        log.trace("Create MappingPropertyDefinitionConversion with env:" + environment.getClass().getName());
-        // 创建映射服务
-        MappingProperty mappingProperty = new DefaultMappingPropertyCollector(environment, mappingPropertyDefinitionConversion, application.getClassLoader(), log);
-        log.trace("Create MappingProperty with env:" + environment.getClass().getName() + " and classLoader:" + application.getClassLoader().getClass().getName());
+        PropertyMapper propertyMapper = new DefaultPropertyMapper(log, environment, "eee", application.getClassLoader());
+        log.trace("Create PropertyMapper with env:" + environment.getClass().getName());
         // 执行映射
-        mappingProperty.mapping();
+        propertyMapper.mapping();
     }
 
     private synchronized boolean checkStartup() {

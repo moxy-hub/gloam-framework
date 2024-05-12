@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-public class MappingPropertyDefinition {
+public class PropertyMapperDefinition {
 
     /**
      * 原始路径

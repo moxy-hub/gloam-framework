@@ -1,0 +1,4 @@
+org.springframework.boot.env.EnvironmentPostProcessor=com.gloamframework.test.proerty.env.SpringEnvPost
+org.springframework.context.ApplicationListener=com.gloamframework.test.proerty.env.SpringEnvPost
+
+

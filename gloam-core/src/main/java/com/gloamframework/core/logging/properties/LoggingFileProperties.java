@@ -38,17 +38,17 @@ public class LoggingFileProperties {
      */
     @MappingConfigurationProperty("clean-history-on-start")
     private Boolean cleanHistoryOnStart;
-//
-//    /**
-//     * 设置一个文件的最大大小，如果超过该文件大小，将创建一个新文件,gloam默认50MB
-//     */
-//    @MappingConfigurationProperty("max-size")
-//    private DataSize maxSize = DataSize.ofMegabytes(50);
-//
-//    /**
-//     * 设置所有日志文件的总大小限制,默认100MB
-//     */
-//    @MappingConfigurationProperty("total-size-cap")
-//    private DataSize totalSizeCap = DataSize.ofMegabytes(100);
+
+    /**
+     * 设置一个文件的最大大小，如果超过该文件大小，将创建一个新文件,gloam默认50MB
+     */
+    @MappingConfigurationProperty("max-size")
+    private DataSize maxSize = DataSize.ofMegabytes(50);
+
+    /**
+     * 设置所有日志文件的总大小限制,默认100MB
+     */
+    @MappingConfigurationProperty("total-size-cap")
+    private DataSize totalSizeCap = DataSize.ofMegabytes(100);
 
 }

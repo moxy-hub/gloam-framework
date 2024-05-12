@@ -1,7 +1,9 @@
 package com.gloamframework.test.core;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.logging.LoggingSystemProperties;
 
 /**
  * @author 晓龙
@@ -13,4 +15,8 @@ public class CoreApplication {
         SpringApplication.run(CoreApplication.class, args);
     }
 
+    @Autowired
+    public void testMock(Mock2Properties mockProperties){
+        System.out.println(mockProperties);
+    }
 }
