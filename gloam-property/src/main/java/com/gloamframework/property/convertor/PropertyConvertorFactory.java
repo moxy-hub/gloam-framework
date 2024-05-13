@@ -15,20 +15,30 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * 属性转换工厂
+ * 属性转换工厂，用于收集的转换器的工厂，并处理转换器的匹配
  *
  * @author 晓龙
  */
 public class PropertyConvertorFactory {
 
+    /**
+     * 注册的支持的转换器
+     */
     private final Collection<PropertyConvertor> SUPPORT_CONVERTS;
 
+    /**
+     * 单例工厂，如果在实例化{@link com.gloamframework.property.PropertyMapper}后，工厂就会被实例，可以直接使用静态方法获取到工厂
+     */
     private static PropertyConvertorFactory propertyConvertorFactory;
 
     /**
      * spring 配置环境
      */
     private final ConfigurableEnvironment environment;
+
+    /**
+     * 日志系统
+     */
     private final Log log;
 
     public PropertyConvertorFactory(ConfigurableEnvironment environment, ClassLoader classLoader, Log log) {
@@ -60,6 +70,9 @@ public class PropertyConvertorFactory {
     }
 
     public static PropertyConvertorFactory getSingle() {
+        if (Objects.isNull(propertyConvertorFactory)) {
+            throw new PropertyConvertException("Can not get PropertyConvertorFactory,because it is not instance");
+        }
         return propertyConvertorFactory;
     }
 

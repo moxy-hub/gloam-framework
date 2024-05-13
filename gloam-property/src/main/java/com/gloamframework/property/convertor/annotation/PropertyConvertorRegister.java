@@ -7,6 +7,8 @@ import java.lang.annotation.*;
 import static com.gloamframework.property.convertor.annotation.PropertyConvertorRegister.GloamPropertyConvertorResource;
 
 /**
+ * 标注该注解的类，表示注册为转换器，必须实现接口:{@link com.gloamframework.property.convertor.PropertyConvertor}
+ *
  * @author 晓龙
  */
 @Target(ElementType.TYPE)

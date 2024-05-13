@@ -12,13 +12,13 @@ import java.util.Objects;
 import java.util.Set;
 
 /**
+ * Spring中{@link DataSize}的转化器，将该对象处理为String类型
+ *
  * @author 晓龙
- * @version 1.8.271
- * @protectName gloam-framework
- * @date 2024年05月12日 20:23
  */
 @PropertyConvertorRegister
 public class DataSize2StringConvertor implements PropertyConvertor {
+
     @Override
     public Set<PropertyMapperDefinition> convert(String originPropertyPath, String mappingProperPath, Class<?> propertyType, ConfigurableEnvironment environment, Object defaultFieldValue, MappingConfigurationProperty mappingConfigurationProperty, Log log) {
         String property = Objects.isNull(defaultFieldValue) ? "" : String.valueOf(defaultFieldValue);

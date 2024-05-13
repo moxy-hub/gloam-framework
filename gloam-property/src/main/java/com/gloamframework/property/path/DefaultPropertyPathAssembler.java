@@ -11,14 +11,21 @@ import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.unit.DataSize;
 
 import java.lang.reflect.Field;
+import java.util.Collection;
+import java.util.Map;
 import java.util.Objects;
 
 /**
+ * 默认实现的基础路径装配器
+ *
  * @author 晓龙
  */
 public class DefaultPropertyPathAssembler implements PropertyPathAssembler {
 
-    private static final Class<?>[] ignoreClasses = {String.class, DataSize.class};
+    /**
+     * 忽略的class字段，在基本数据类型基础上增加，防止标注了{@link NestedConfigurationProperty}注解的基础类型，即使解析进去也是没有结果
+     */
+    private static final Class<?>[] ignoreClasses = {String.class, DataSize.class, Map.class, Collection.class};
     /**
      * 配置分割符
      */
@@ -29,9 +36,12 @@ public class DefaultPropertyPathAssembler implements PropertyPathAssembler {
         this.assemblePath(originalPath, mappingPath, mappingClass, null, pathAnalysisAcquirer);
     }
 
+    /**
+     * 这里重载方法，方便内部进行递归解析
+     */
     public void assemblePath(String originalPath, String mappingPath, Class<?> mappingClass, Object defaultValue, PathAnalysisAcquirer pathAnalysisAcquirer) {
         // 如果是基本数据类型或者String类型，则直接感知出去
-        if (ClassUtils.isPrimitiveOrWrapper(mappingClass) || ArrayUtils.contains(ignoreClasses, mappingClass)) {
+        if (ClassUtils.isPrimitiveOrWrapper(mappingClass) || ArrayUtils.contains(ignoreClasses, mappingClass) || mappingClass.isArray()) {
             pathAnalysisAcquirer.acquirer(originalPath, mappingPath, mappingClass, defaultValue, null);
             return;
         }
@@ -63,7 +73,7 @@ public class DefaultPropertyPathAssembler implements PropertyPathAssembler {
     }
 
     /**
-     * 重写字段的注入
+     * 具体的字段解析与凭借
      */
     private void assemblePath(String originalPath, String mappingPath, Field field, Object mappingObject, Object defaultValue, MappingConfigurationProperty mappingConfigurationProperty, PathAnalysisAcquirer pathAnalysisAcquirer) {
         // 处理路径

@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * 映射抽象类，主要负责将参数在spring的环境中进行替换
+ * 当前抽象类是对统一的定义对象在Spring环境中进行映射替换
  *
  * @author 晓龙
  */
@@ -25,7 +25,7 @@ public abstract class AbstractPropertyMapper implements PropertyMapperCollector 
     protected final Log log;
 
     /**
-     * spring environment
+     * Spring环境
      */
     private final ConfigurableEnvironment environment;
 
@@ -34,6 +34,9 @@ public abstract class AbstractPropertyMapper implements PropertyMapperCollector 
      */
     private final String environmentNamespace;
 
+    /**
+     * 实现对映射的替换，将实现类中获取到的定义对象，映射在Spring环境中
+     */
     @Override
     public void mapping() {
         Set<PropertyMapperDefinition> mappingPropertyDefinitions = this.collectMappingPropertyDefinitions();

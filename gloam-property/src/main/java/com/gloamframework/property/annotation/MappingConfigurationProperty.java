@@ -6,7 +6,7 @@ import java.lang.annotation.*;
 
 /**
  * 用于映射配置到spring环境中的配置
- * <p>1、可以实现配置的重写</p>
+ * <p>1、可以实现配置的映射</p>
  * <p>2、可以实现配置的注入</p>
  *
  * @author 晓龙

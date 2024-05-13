@@ -10,6 +10,8 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
+ * map对象的转换器，实现于复杂转换器
+ *
  * @author 晓龙
  */
 @PropertyConvertorRegister

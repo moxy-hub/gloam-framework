@@ -14,7 +14,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /**
- * spring环境中默认的转换器支持
+ * spring环境中默认的转换器支持，主要适配Spring的{@link ConfigurableConversionService}转化服务，在spring的基础上进行扩展
  *
  * @author 晓龙
  */
@@ -37,6 +37,7 @@ public class SpringEnvironmentPropertyConvertor implements PropertyConvertor {
             defaultValue = null;
         }
         // 获取配置值
+        @SuppressWarnings("all")
         String property = environment.getProperty(originPropertyPath, defaultValue);
         return Collections.singleton(new PropertyMapperDefinition().setOriginalPath(originPropertyPath)
                 .setMappingPath(mappingProperPath).setValue(property));
@@ -50,6 +51,9 @@ public class SpringEnvironmentPropertyConvertor implements PropertyConvertor {
         return environment.getConversionService().canConvert(String.class, propertyType);
     }
 
+    /**
+     * 保证spring的转换器在最后被匹配，防止spring转换不了导致的异常
+     */
     @Override
     public int getOrder() {
         // 最后触发spring的转换

@@ -110,6 +110,17 @@ public abstract class AbstractComplexPropertyConvertor implements PropertyConver
         return definitions;
     }
 
+    /**
+     * 基于复杂对象的Spring环境值处理后，实现类需要处理在class中的默认值
+     *
+     * @param environment                 spring环境
+     * @param originPropertyPath          目前的原始路径
+     * @param mappingProperPath           目前的原始路径
+     * @param defaultFieldValue           目前的值
+     * @param nestedPropertyType          泛形的嵌套类型
+     * @param pathDefaultPropertyMappings 目前收集到的路径参数，实现类中需要在此map中继续添加
+     * @param log                         日志系统
+     */
     protected abstract TernaryHashMap<String, String, Object> complexConvert(
             ConfigurableEnvironment environment,
             String originPropertyPath,

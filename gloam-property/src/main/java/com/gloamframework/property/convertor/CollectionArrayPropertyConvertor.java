@@ -10,10 +10,9 @@ import java.util.Collection;
 import java.util.Objects;
 
 /**
+ * 集合｜数组的转换器，实现于复杂转换器
+ *
  * @author 晓龙
- * @version 1.8.271
- * @protectName gloam-framework
- * @date 2024年05月13日 00:19
  */
 @PropertyConvertorRegister
 public class CollectionArrayPropertyConvertor extends AbstractComplexPropertyConvertor {
