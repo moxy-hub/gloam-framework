@@ -1,6 +1,5 @@
 package com.gloamframework.web.security;
 
-import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
@@ -10,7 +9,6 @@ import com.gloamframework.web.context.WebContext;
 import com.gloamframework.web.security.token.TokenManager;
 import com.gloamframework.web.security.token.constant.Device;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -18,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * gloam对于认证的上下文处理
@@ -29,7 +28,7 @@ public class GloamSecurityContext {
 
     private static final SecurityContextLogoutHandler securityContextLogoutHandler = new SecurityContextLogoutHandler();
     private static TokenManager tokenManager;
-    private static List<GloamSecurityAuthority> gloamSecurityAuthorities;
+    private static Map<String, List<GloamSecurityAuthority>> gloamSecurityAuthorities;
 
     /**
      * 通过认证，该方法只会通过spring security的认证，不会有响应头的携带，使用场景：验证token
@@ -159,24 +158,26 @@ public class GloamSecurityContext {
      * 获取权限实现类
      */
     private static List<GloamSecurityAuthority> gloamSecurityAuthorities(String platform) {
-        if (CollectionUtil.isNotEmpty(gloamSecurityAuthorities)) {
-            return gloamSecurityAuthorities;
+        if (MapUtil.isNotEmpty(gloamSecurityAuthorities)) {
+            return gloamSecurityAuthorities.get(platform);
         }
         if (Objects.isNull(gloamSecurityAuthorities)) {
-            gloamSecurityAuthorities = new ArrayList<>();
+            gloamSecurityAuthorities = new ConcurrentHashMap<>();
         }
         Map<String, GloamSecurityAuthority> beanMaps = SpringUtil.getBeansOfType(GloamSecurityAuthority.class);
         if (MapUtil.isEmpty(beanMaps)) {
             log.error("没有找到配置的权限注入实现类，请实现GloamSecurityAuthority接口，并注入spring中");
-            return gloamSecurityAuthorities;
+            return new ArrayList<>();
         }
         for (GloamSecurityAuthority securityAuthority : beanMaps.values()) {
-            if (!StringUtils.equalsIgnoreCase(platform, securityAuthority.support())) {
-                continue;
-            }
-            gloamSecurityAuthorities.add(securityAuthority);
+            // 先获取原先的权限
+            List<GloamSecurityAuthority> authorities = gloamSecurityAuthorities.getOrDefault(securityAuthority.support(), new ArrayList<>());
+            // 放入本组
+            authorities.add(securityAuthority);
+            // 放入全部
+            gloamSecurityAuthorities.put(securityAuthority.support(), authorities);
         }
-        return gloamSecurityAuthorities;
+        return gloamSecurityAuthorities.get(platform);
     }
 
     /**
