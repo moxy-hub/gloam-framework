@@ -1,6 +1,5 @@
 package com.gloamframework.test.proerty;
 
-import com.gloamframework.test.proerty.mock.Mock2Properties;
 import com.gloamframework.test.proerty.mock.source.MappingProperties;
 import com.gloamframework.test.proerty.mock.source.SourceProperties;
 import lombok.extern.slf4j.Slf4j;
@@ -29,9 +28,9 @@ public class TestPropertyMapper {
     private MappingProperties mappingProperties;
 
     @Test
-    public void testMapping(){
+    public void testMapping() {
         // 先检查两个类的值是否一致，如果成功，则代表映射成功
-        Assert.assertEquals("映射失败",sourceProperties.getTestMapping(),mappingProperties.getTestMapping());
+        Assert.assertEquals("映射失败", sourceProperties.getTestMapping(), mappingProperties.getTestMapping());
         // 同样我们可以将映射类的值打印出来看看
         System.out.println(mappingProperties.getTestMapping());
     }

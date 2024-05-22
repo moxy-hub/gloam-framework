@@ -1,6 +1,5 @@
 package com.gloamframework.test.proerty;
 
-import com.gloamframework.test.proerty.env.SpringEnvPost;
 import com.gloamframework.test.proerty.mock.DocTestProperties;
 import com.gloamframework.test.proerty.mock.Mock2Properties;
 import com.gloamframework.test.proerty.mock.MockProperties;
@@ -23,11 +22,12 @@ public class TestPropertyApplication {
     }
 
     @Autowired
-    public void testMock(MockProperties mockProperties){
+    public void testMock(MockProperties mockProperties) {
         System.out.println(mockProperties);
     }
+
     @Autowired
-    public void testAnnotaion(DocTestProperties mockProperties){
+    public void testAnnotaion(DocTestProperties mockProperties) {
         System.out.println(mockProperties);
     }
 }

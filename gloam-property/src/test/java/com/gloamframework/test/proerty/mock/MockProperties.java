@@ -32,22 +32,23 @@ public class MockProperties {
     private List<String> list;
 
     @MappingConfigurationProperty("gloam2.map")
-    private Map<String,String> map;
+    private Map<String, String> map;
 
     @MappingConfigurationProperty("gloam2.map2")
-    private Map<String,Mock3Properties> map2;
+    private Map<String, Mock3Properties> map2;
 
-    public MockProperties(){
+    public MockProperties() {
         list = new ArrayList<>();
         list.add("ss");
         list.add("dfgd3");
         list.add("sdfsd");
         map = new HashMap<>();
-        map.put("a","123");
-        map.put("b","3657");
-        map.put("c","343");
+        map.put("a", "123");
+        map.put("b", "3657");
+        map.put("c", "343");
     }
-    public static class Mock2{
+
+    public static class Mock2 {
 
         @MappingConfigurationProperty("t2")
         private Integer t3 = 2333;

@@ -22,8 +22,8 @@ public class Mock2Properties {
 
     private DataSize dataSize;
 
-    private Map<String,String> map;
-    private Map<String,Mock3Properties> map2;
+    private Map<String, String> map;
+    private Map<String, Mock3Properties> map2;
     private List<String> list;
 
 }
