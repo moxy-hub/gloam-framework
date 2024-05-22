@@ -1,13 +1,10 @@
 package com.gloamframework.test.core;
 
-import com.gloamframework.property.annotation.GloamConfigurationProperties;
+import com.gloamframework.property.annotation.MappingConfigurationProperties;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 import org.springframework.util.unit.DataSize;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author 晓龙
@@ -15,7 +12,7 @@ import java.util.Map;
  * @protectName gloam-framework
  * @date 2024年05月12日 16:25
  */
-@GloamConfigurationProperties
+@MappingConfigurationProperties
 @ConfigurationProperties("gloam2")
 @Data
 @Component

@@ -1,7 +1,7 @@
 package com.gloamframework.core.logging.properties;
 
 
-import com.gloamframework.property.annotation.GloamConfigurationProperties;
+import com.gloamframework.property.annotation.MappingConfigurationProperties;
 import com.gloamframework.property.annotation.MappingConfigurationProperty;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -19,7 +19,7 @@ import java.util.Map;
  */
 @ConfigurationProperties("gloam.logging")
 @Data
-@GloamConfigurationProperties
+@MappingConfigurationProperties
 public class LoggingProperties {
 
     /**

@@ -1,7 +1,7 @@
 package com.gloamframework.property;
 
 import cn.hutool.core.util.StrUtil;
-import com.gloamframework.property.annotation.GloamConfigurationProperties;
+import com.gloamframework.property.annotation.MappingConfigurationProperties;
 import com.gloamframework.property.convertor.PropertyConvertorFactory;
 import com.gloamframework.property.exception.MappingPropertyException;
 import com.gloamframework.property.exception.MappingPropertyScannerException;
@@ -71,12 +71,18 @@ public class DefaultPropertyMapper extends AbstractPropertyMapper {
             if (configurationProperties == null) {
                 throw new MappingPropertyException("资源:{} 获取注解@ConfigurationProperties失败,在使用@MappingConfigurationProperty没有使用@ConfigurationProperties注解", mappingClass);
             }
+
+            MappingConfigurationProperties mappingConfigurationProperties = AnnotationUtils.findAnnotation(mappingClass, MappingConfigurationProperties.class);
+            if (mappingConfigurationProperties == null) {
+                throw new MappingPropertyException("资源:{} 获取注解@MappingConfigurationProperties失败,逻辑错误->请联系框架开发人员", mappingClass);
+            }
             // 获取前缀
             String prefix = StrUtil.isBlank(configurationProperties.prefix()) ? "" : configurationProperties.prefix();
+            String mappingPrefix = StrUtil.isBlank(mappingConfigurationProperties.mappingPrefix()) ? "" : mappingConfigurationProperties.mappingPrefix();
             // 匹配标识到的配置类路径
             propertyPathAssembler.assemblePath(
                     prefix,
-                    null,
+                    mappingPrefix,
                     mappingClass,
                     (originPropertyPath, mappingProperPath, propertyType, defaultFieldValue, mappingConfigurationProperty) -> {
                         if (propertyConvertorFactory.canConvert(propertyType)) {
@@ -97,7 +103,7 @@ public class DefaultPropertyMapper extends AbstractPropertyMapper {
         // 扫描符合要求的包
         try {
             ResourceCentre resourceCentre = ResourceCentreFactory.ofSingleDefault(classLoader, log);
-            return resourceCentre.getResourcesClassesByAnnotation(GloamConfigurationProperties.GloamConfigurationResource, GloamConfigurationProperties.class);
+            return resourceCentre.getResourcesClassesByAnnotation(MappingConfigurationProperties.GloamConfigurationResource, MappingConfigurationProperties.class);
         } catch (IOException e) {
             throw new MappingPropertyScannerException("获取资源失败", "配置重写映射失败", e);
         }

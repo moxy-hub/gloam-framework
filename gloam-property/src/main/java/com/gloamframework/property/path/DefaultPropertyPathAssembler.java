@@ -76,10 +76,15 @@ public class DefaultPropertyPathAssembler implements PropertyPathAssembler {
      * 具体的字段解析与凭借
      */
     private void assemblePath(String originalPath, String mappingPath, Field field, Object mappingObject, Object defaultValue, MappingConfigurationProperty mappingConfigurationProperty, PathAnalysisAcquirer pathAnalysisAcquirer) {
+        // 处理注解的映射路径，如果为空，则映射属性名
+        String mappingFor = mappingConfigurationProperty.mappingFor();
+        if (StrUtil.isBlank(mappingFor)) {
+            mappingFor = this.convertFieldName2ConfigName(field.getName());
+        }
         // 处理路径
         String originPropertyPath = originalPath + this.convertFieldName2ConfigName(field.getName());
         // 目标路径
-        String mappingProperPath = StrUtil.isBlank(mappingPath) ? mappingConfigurationProperty.mappingFor() : mappingPath + mappingConfigurationProperty.mappingFor();
+        String mappingProperPath = StrUtil.isBlank(mappingPath) ? mappingFor : mappingPath + mappingFor;
         Class<?> propertyType = field.getType();
         // 嵌套类型递归解析
         if (AnnotationUtils.findAnnotation(field, NestedConfigurationProperty.class) != null) {

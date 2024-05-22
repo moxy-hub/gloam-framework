@@ -1,6 +1,7 @@
 package com.gloamframework.test.proerty;
 
 import com.gloamframework.test.proerty.mock.Mock2Properties;
+import com.gloamframework.test.proerty.mock.source.MappingProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,8 +23,11 @@ public class TestPropertyMapper {
     @Autowired
     private Mock2Properties mockProperties;
 
+    @Autowired
+    private MappingProperties mappingProperties;
+
     @Test
     public void testMapping(){
-        System.out.println(mockProperties);
+        System.out.println(mappingProperties);
     }
 }
