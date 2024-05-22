@@ -6,16 +6,16 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * @author 晓龙
- * @version 1.8.271
- * @protectName gloam-framework
- * @date 2024年05月22日 15:46
+ * 添加@MappingConfigurationProperties注解，并指定前缀为映射的前缀
  */
-@ConfigurationProperties("gloam.source")
 @MappingConfigurationProperties("gloam.mapping")
+@ConfigurationProperties("gloam.source")
 @Data
 public class SourceProperties {
 
+    /**
+     * 添加@MappingConfigurationProperty表示当前属性进行映射
+     */
     @MappingConfigurationProperty
     private String testMapping = "success";
 
