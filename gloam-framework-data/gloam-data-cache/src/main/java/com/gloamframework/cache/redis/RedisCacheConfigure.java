@@ -55,8 +55,7 @@ public class RedisCacheConfigure {
         if (CollectionUtil.isNotEmpty(cacheNamesProp)) {
             cacheNames = cacheNamesProp.toArray(new String[]{});
         }
-        return new DynamicRedisCacheManager(RedisCacheWriter.nonLockingRedisCacheWriter(redisConnectionFactory), this.determineConfiguration(cacheProperties, redisCacheConfiguration), cacheNames);
-
+        return new DynamicRedisCacheManager(new DynamicRedisCacheWriter(RedisCacheWriter.nonLockingRedisCacheWriter(redisConnectionFactory), redisConnectionFactory, cacheProperties), this.determineConfiguration(cacheProperties, redisCacheConfiguration), cacheNames);
     }
 
     private RedisCacheConfiguration determineConfiguration(CacheProperties cacheProperties, ObjectProvider<RedisCacheConfiguration> redisCacheConfiguration) {

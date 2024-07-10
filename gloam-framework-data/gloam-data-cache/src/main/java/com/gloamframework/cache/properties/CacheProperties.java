@@ -14,6 +14,7 @@ import java.util.List;
 @Data
 public class CacheProperties {
 
+    private int scanCount = 100;
     /**
      * 默认使用redis的方式进行缓存
      */
