@@ -2,7 +2,6 @@ package com.gloamframework.data.mybatis.flex.listener;
 
 import com.gloamframework.data.mybatis.flex.properties.FillListenerProperties;
 import com.gloamframework.data.mybatis.flex.util.ObjectUtils;
-import com.gloamframework.web.context.WebContext;
 import com.mybatisflex.annotation.UpdateListener;
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,10 +24,8 @@ public class GloamUpdateListener extends AbstractListener implements UpdateListe
         FillListenerProperties fillListenerProperties = super.obtainProperties();
         LocalDateTime currentTime = LocalDateTime.now();
         ObjectUtils.fillField(metaObject, fillListenerProperties.getUpdateTimeField(), currentTime);
-        Object authenticatedUser = WebContext.getAuthenticatedUser();
-        if (Objects.nonNull(authenticatedUser)) {
-            // 当前登录用户不为空，更新人为空，则当前登录用户为更新人
-            ObjectUtils.fillField(metaObject, fillListenerProperties.getUpdaterField(), String.valueOf(authenticatedUser));
+        if (fillListenerProperties.isWebEnv()) {
+            GloamWebUserListener.fillWebUser(metaObject, true, fillListenerProperties);
         }
     }
 }

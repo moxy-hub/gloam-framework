@@ -18,4 +18,9 @@ public class FillListenerProperties {
 
     private String updaterField = "updater";
 
+    /**
+     * 是否为WEB环境，web环境下创建者和更新者才会被填充，并确保项目中有gloam-web依赖
+     */
+    private boolean webEnv = true;
+
 }
