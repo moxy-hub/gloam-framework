@@ -20,7 +20,7 @@ public @interface Debouncing {
     /**
      * 间隔时间(ms)，小于此时间视为重复提交
      */
-    int interval() default 10000;
+    int interval() default 5000;
 
     /**
      * 提示消息
