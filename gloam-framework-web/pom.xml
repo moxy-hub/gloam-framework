@@ -21,6 +21,7 @@
         <module>gloam-web-security</module>
         <module>gloam-web-envelope</module>
         <module>gloam-web-xss</module>
+        <module>gloam-web-debouncing</module>
     </modules>
 
     <dependencyManagement>
@@ -74,6 +75,12 @@
             <dependency>
                 <groupId>com.gloamframework.web</groupId>
                 <artifactId>gloam-web-xss</artifactId>
+                <version>${gloam.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.gloamframework.web</groupId>
+                <artifactId>gloam-web-debouncing</artifactId>
                 <version>${gloam.version}</version>
             </dependency>
 
