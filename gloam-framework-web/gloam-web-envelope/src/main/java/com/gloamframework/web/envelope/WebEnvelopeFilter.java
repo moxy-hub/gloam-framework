@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.Objects;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -87,8 +88,10 @@ public class WebEnvelopeFilter extends GloamOncePerRequestFilter {
         log.debug("请求:{} # {} 由信封加密保护，开始解密", request.getMethod(), request.getRequestURL());
         // 解密
         this.analysis(serviceCode, requestBody, ((data, aes) -> {
-            // 解密数据
-            data = aes.decryptStr(data);
+            if (StringUtils.isNotBlank(data)) {
+                // 在数据不为空的情况下解密数据，为空则是在返回值加密
+                data = aes.decryptStr(data);
+            }
             // 在trace下进行记录，防止在debug中把解密后的参数泄漏
             log.trace("解密请求信封 -> 请求:{} # {} 解密后参数:{}", request.getMethod(), request.getRequestURL(), data);
             WebEnvelopeRequestWrapper requestWrapper = new WebEnvelopeRequestWrapper(request, data);
@@ -107,11 +110,11 @@ public class WebEnvelopeFilter extends GloamOncePerRequestFilter {
         } catch (JSONException jsonException) {
             throw new EnvelopeAnalysisException("请求信封格式不正确", jsonException);
         }
-        String encryptAesKey, data;
-        if (envelopeData == null || StringUtils.isAnyBlank(encryptAesKey = envelopeData.getKey(), data = envelopeData.getData())) {
+        String encryptAesKey;
+        if (Objects.isNull(envelopeData) || StringUtils.isBlank(encryptAesKey = envelopeData.getKey())) {
             throw new EnvelopeAnalysisException("解析信封失败,请检查信封是否为空或其结果不正确或为null");
         }
-        analysisEnvelope.analysis(data, getValidAes(serviceCode, encryptAesKey));
+        analysisEnvelope.analysis(envelopeData.getData(), getValidAes(serviceCode, encryptAesKey));
     }
 
     /**

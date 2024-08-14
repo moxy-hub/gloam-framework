@@ -1,5 +1,7 @@
 package com.gloamframework.web.envelope.wrapper;
 
+import org.apache.commons.lang3.StringUtils;
+
 import javax.servlet.ReadListener;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -15,7 +17,7 @@ public class WebEnvelopeRequestWrapper extends HttpServletRequestWrapper {
 
     public WebEnvelopeRequestWrapper(HttpServletRequest request, String body) {
         super(request);
-        this.body = body;
+        this.body = StringUtils.isBlank(body) ? StringUtils.EMPTY : body;
     }
 
     @Override
@@ -53,5 +55,4 @@ public class WebEnvelopeRequestWrapper extends HttpServletRequestWrapper {
             }
         };
     }
-
 }

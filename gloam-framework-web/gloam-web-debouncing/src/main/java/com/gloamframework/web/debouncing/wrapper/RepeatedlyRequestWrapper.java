@@ -1,13 +1,15 @@
 package com.gloamframework.web.debouncing.wrapper;
 
-import lombok.Cleanup;
+import cn.hutool.extra.servlet.ServletUtil;
 
 import javax.servlet.ReadListener;
 import javax.servlet.ServletInputStream;
-import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -22,11 +24,11 @@ public class RepeatedlyRequestWrapper extends HttpServletRequestWrapper {
         super(request);
         request.setCharacterEncoding(StandardCharsets.UTF_8.name());
         // 读取body
-        body = this.getBodyString(request);
+        body = ServletUtil.getBody(request);
     }
 
     @Override
-    public BufferedReader getReader() throws IOException {
+    public BufferedReader getReader() {
         return new BufferedReader(new InputStreamReader(getInputStream()));
     }
 
@@ -64,17 +66,6 @@ public class RepeatedlyRequestWrapper extends HttpServletRequestWrapper {
 
             }
         };
-    }
-
-    private String getBodyString(ServletRequest request) throws IOException {
-        StringBuilder sb = new StringBuilder();
-        @Cleanup InputStream inputStream = request.getInputStream();
-        @Cleanup BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-        String line;
-        while ((line = reader.readLine()) != null) {
-            sb.append(line);
-        }
-        return sb.toString();
     }
 
 }
