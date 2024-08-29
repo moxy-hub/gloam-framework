@@ -541,7 +541,6 @@ public class DataPermissionDatabaseInterceptor extends FlexJsqlParserSupport imp
     /**
      * SQL 解析上下文，方便透传 {@link DataPermissionRule} 规则
      *
-     * @author 芋道源码
      */
     static final class ContextHolder {
 

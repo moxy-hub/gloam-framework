@@ -55,7 +55,6 @@ public class DataPermissionAnnotationInterceptor implements MethodInterceptor {
         if (dataPermission != null) {
             return dataPermission != DATA_PERMISSION_NULL ? dataPermission : null;
         }
-
         // 2.1 从方法中获取
         dataPermission = AnnotationUtils.findAnnotation(method, DataPermission.class);
         // 2.2 从类上获取
