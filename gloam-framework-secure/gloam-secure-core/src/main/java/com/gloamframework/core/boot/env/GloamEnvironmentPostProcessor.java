@@ -56,13 +56,13 @@ public class GloamEnvironmentPostProcessor implements EnvironmentPostProcessor, 
             return;
         }
         log.info("welcome to use gloam framework");
-        // 初始化packages
-        GloamAutoScannerPackages.doRegister(application.getClassLoader());
         Class<?> mainApplicationClass = application.getMainApplicationClass();
         if (Objects.nonNull(mainApplicationClass)) {
             // 添加项目启动路径
             GloamAutoScannerPackages.addPackage(mainApplicationClass.getPackage().getName());
         }
+        // 初始化packages
+        GloamAutoScannerPackages.doRegister(application.getClassLoader());
         // 配置转换器
         GloamConverterDiscover gloamConverterDiscover = new GloamConverterDiscover(environment.getConversionService(), application.getClassLoader());
         log.trace("create GloamConverterDiscover with conversionService:" + environment.getConversionService().getClass().getName());
