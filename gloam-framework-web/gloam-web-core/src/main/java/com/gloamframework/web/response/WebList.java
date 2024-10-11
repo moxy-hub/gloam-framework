@@ -1,6 +1,7 @@
 package com.gloamframework.web.response;
 
 import io.swagger.annotations.ApiModel;
+import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import java.util.Collection;
  * @author 晓龙
  */
 @ApiModel(description = "LIST类型响应对象")
+@NoArgsConstructor
 public class WebList<T> extends Result<Collection<T>> {
 
     private WebList(Collection<T> data, Integer status, boolean success, String message, Object... params) {

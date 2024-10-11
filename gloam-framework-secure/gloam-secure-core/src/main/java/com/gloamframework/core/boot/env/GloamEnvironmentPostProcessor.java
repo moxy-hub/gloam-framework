@@ -50,30 +50,24 @@ public class GloamEnvironmentPostProcessor implements EnvironmentPostProcessor, 
 
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
-        // 设置banner
-        application.setBanner(GLOAM_BANNER);
-        if (this.checkStartup()) {
-            return;
+        /*
+         * 由于多种环境，会导致这里的环境进行两次调用，导致gloom启动了两次，必须要保证各种环境中正确的处理配置文件，所以在每中环境中都需要加载一份配置文件
+         */
+        if (!this.checkStartup()) {
+            // 如果没启动过，就进行启动
+            this.initGloam(application);
         }
-        log.info("welcome to use gloam framework");
-        Class<?> mainApplicationClass = application.getMainApplicationClass();
-        if (Objects.nonNull(mainApplicationClass)) {
-            // 添加项目启动路径
-            GloamAutoScannerPackages.addPackage(mainApplicationClass.getPackage().getName());
-        }
-        // 初始化packages
-        GloamAutoScannerPackages.doRegister(application.getClassLoader());
         // 配置转换器
         GloamConverterDiscover gloamConverterDiscover = new GloamConverterDiscover(environment.getConversionService(), application.getClassLoader());
-        log.trace("create GloamConverterDiscover with conversionService:" + environment.getConversionService().getClass().getName());
+        log.trace("create GloamConverterDiscover with conversionService:" + environment.getConversionService().getClass().getName() + " for env:" + environment.getClass());
         // 执行注册
         gloamConverterDiscover.doRegister(GloamAutoScannerPackages.getPackageArrays());
         // 创建映射对象转换器
         MappingPropertyDefinitionConversion mappingPropertyDefinitionConversion = new GloamMappingPropertyDefinitionConversion(environment);
-        log.trace("create GloamMappingPropertyDefinitionConversion with env:" + environment.getClass().getName());
+        log.trace("create GloamMappingPropertyDefinitionConversion with env:" + environment.getClass().getName() + " for env:" + environment.getClass());
         // 创建映射服务
         MappingProperty mappingProperty = new GloamMappingProperty(environment, mappingPropertyDefinitionConversion, application.getClassLoader());
-        log.trace("create GloamMappingProperty with env:" + environment.getClass().getName() + " and classLoader:" + application.getClassLoader().getClass().getName());
+        log.trace("create GloamMappingProperty with env:" + environment.getClass().getName() + " and classLoader:" + application.getClassLoader().getClass().getName() + " for env:" + environment.getClass());
         // 收集对应的映射定义
         definitions = mappingProperty.collectMappingPropertyDefinitions(GloamAutoScannerPackages.getPackageArrays());
         // 执行映射
@@ -94,6 +88,19 @@ public class GloamEnvironmentPostProcessor implements EnvironmentPostProcessor, 
     @Override
     public void onApplicationEvent(@SuppressWarnings("all") ApplicationEnvironmentPreparedEvent event) {
         GloamLog.replayTo(GloamEnvironmentPostProcessor.class);
+    }
+
+    private void initGloam(SpringApplication application) {
+        // 设置banner
+        application.setBanner(GLOAM_BANNER);
+        log.info("welcome to use gloam framework");
+        Class<?> mainApplicationClass = application.getMainApplicationClass();
+        if (Objects.nonNull(mainApplicationClass)) {
+            // 添加项目启动路径
+            GloamAutoScannerPackages.addPackage(mainApplicationClass.getPackage().getName());
+        }
+        // 初始化packages
+        GloamAutoScannerPackages.doRegister(application.getClassLoader());
     }
 
 }

@@ -1,5 +1,6 @@
 package com.gloamframework.web.covert;
 
+import cn.hutool.core.util.StrUtil;
 import com.gloamframework.common.error.GloamInternalException;
 import org.springframework.core.convert.converter.Converter;
 
@@ -16,6 +17,9 @@ public class Timestamp2LocalDateTimeConverter implements Converter<String, Local
 
     @Override
     public LocalDateTime convert(String source) {
+        if (StrUtil.isBlank(source)){
+            return null;
+        }
         long timestamp;
         try {
             timestamp = Long.parseLong(source);

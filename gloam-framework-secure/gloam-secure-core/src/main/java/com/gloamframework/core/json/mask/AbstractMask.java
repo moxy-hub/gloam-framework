@@ -14,7 +14,7 @@ import java.io.IOException;
  */
 @AllArgsConstructor
 @Slf4j
-abstract class AbstractMask extends JsonSerializer<String> {
+public abstract class AbstractMask extends JsonSerializer<String> {
 
     /**
      * 脱敏字符

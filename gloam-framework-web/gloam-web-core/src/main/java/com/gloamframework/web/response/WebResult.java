@@ -1,6 +1,7 @@
 package com.gloamframework.web.response;
 
 import io.swagger.annotations.ApiModel;
+import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 
 /**
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus;
  * @author 晓龙
  */
 @ApiModel(description = "单对象类型响应对象")
+@NoArgsConstructor
 public class WebResult<T> extends Result<T> {
 
     private WebResult(T data, Integer status, boolean success, String message, Object... params) {
