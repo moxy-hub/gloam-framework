@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.gloamframework</groupId>
         <artifactId>gloam-framework</artifactId>
-        <version>DragonBall.SR2</version>
+        <version>DragonBall.SR2.7</version>
     </parent>
 
     <artifactId>gloam-scanner</artifactId>

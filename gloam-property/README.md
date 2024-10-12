@@ -45,11 +45,14 @@
   >
   > - 关于如何将配置在spring中激活这里不进行展示，相关问题可以直接百度
 
-  
 
-- 现在我们希望把source类的配置映射在mapping类中，让两个类进行关联，使得我们修改source类的配置，则mapping类中会进行生效，所以此时我们注解的作用就来了，因为我们是希望将source的配置映射在mapping中，所以我们只需要在source类中进行配置
+-
 
-- 在source类上添加注解`@MappingConfigurationProperties`，用来标记当前配置是需要进行映射的，并在需要映射的属性上添加注解 `@MappingConfigurationProperty`来标记当前属性需要进行映射，一个简单的映射就此结束
+现在我们希望把source类的配置映射在mapping类中，让两个类进行关联，使得我们修改source类的配置，则mapping类中会进行生效，所以此时我们注解的作用就来了，因为我们是希望将source的配置映射在mapping中，所以我们只需要在source类中进行配置
+
+- 在source类上添加注解`@MappingConfigurationProperties`
+  ，用来标记当前配置是需要进行映射的，并在需要映射的属性上添加注解 `@MappingConfigurationProperty`
+  来标记当前属性需要进行映射，一个简单的映射就此结束
 
   ```java
   /**
@@ -127,21 +130,17 @@
   }
   ```
 
-- 我们在编写完测试类后，对source的值进行修改试试，可以通过application.properties进行设置，或者在类中直接给默认值，在我们相关启动后，source类的配置总能映射到mapping类中，我们在项目中可以通过mapping类进行获取
+-
 
-
+我们在编写完测试类后，对source的值进行修改试试，可以通过application.properties进行设置，或者在类中直接给默认值，在我们相关启动后，source类的配置总能映射到mapping类中，我们在项目中可以通过mapping类进行获取
 
 ## 在Spring中的作用
-
-
 
 ## 接入方式
 
 ### gloam框架
 
 ### 其他框架
-
-
 
 ## 注解
 
@@ -150,8 +149,6 @@
 ### MappingConfigurationProperty
 
 ### 注解配合实现自由映射
-
-
 
 ## 复杂类型的映射
 
@@ -163,8 +160,6 @@
 
 ### 自定义对象
 
-
-
 ## 扩展-配置转换器
 
 ### 内置转换器
@@ -172,8 +167,6 @@
 ### 自定义实现转换器
 
 ### 通过注解注册转换器
-
-
 
 ## 常见问题
 
@@ -189,7 +182,9 @@
 
 - **GloamScanner配置**
 
-  > gloam-property的实现基于gloam-scanner扫描机制，如果您的映射没有生效，可能是gloam-scanner的扫描机制并没有扫描到您的包，gloam-scanner默认的扫描范围为com.gloamframework，当然如果您使用的是gloam框架，默认的扫描地址还会添加spring boot启动类所对应的包。
+  >
+  gloam-property的实现基于gloam-scanner扫描机制，如果您的映射没有生效，可能是gloam-scanner的扫描机制并没有扫描到您的包，gloam-scanner默认的扫描范围为com.gloamframework，当然如果您使用的是gloam框架，默认的扫描地址还会添加spring
+  boot启动类所对应的包。
   >
   > 如果您在使用gloam-property封装starter，那么切记是需要注册gloam-scanner的包扫描，相关具体方式可参考gloam-scanner文档
 

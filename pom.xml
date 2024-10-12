@@ -6,17 +6,15 @@
 
     <groupId>com.gloamframework</groupId>
     <artifactId>gloam-framework</artifactId>
-    <version>DragonBall.SR2</version>
+    <version>DragonBall.SR2.7</version>
     <packaging>pom</packaging>
     <description>glaom framework is base on spring framework which can help you make project more quickly</description>
 
     <modules>
         <module>gloam-common</module>
-        <module>gloam-core</module>
+        <module>gloam-framework-support</module>
         <module>gloam-property</module>
         <module>gloam-async</module>
-        <module>gloam-storage</module>
-        <module>gloam-webmvc</module>
         <module>gloam-scanner</module>
     </modules>
 
@@ -53,7 +51,7 @@
         <spring.cloud.version>2021.0.9</spring.cloud.version>
         <spring.boot.version>2.7.17</spring.boot.version>
         <spring.cloud.alibaba.version>2021.0.5.0</spring.cloud.alibaba.version>
-        <gloam.version>DragonBall.SR2</gloam.version>
+        <gloam.version>DragonBall.SR2.7</gloam.version>
     </properties>
 
     <dependencies>
@@ -117,10 +115,17 @@
                 <version>${gloam.version}</version>
             </dependency>
 
+            <!-- 同步工具包-->
+            <dependency>
+                <groupId>com.gloamframework</groupId>
+                <artifactId>gloam-async</artifactId>
+                <version>${gloam.version}</version>
+            </dependency>
+
             <!-- 核心环境包-->
             <dependency>
                 <groupId>com.gloamframework</groupId>
-                <artifactId>gloam-core</artifactId>
+                <artifactId>gloam-framework-support</artifactId>
                 <version>${gloam.version}</version>
             </dependency>
 
