@@ -32,7 +32,6 @@ public class GloamEnvironmentProcessor implements EnvironmentPostProcessor, Orde
      */
     private static final Banner GLOAM_BANNER = new GloamBanner();
 
-
     /**
      * 设置环境设置触发优先级
      */
@@ -43,20 +42,13 @@ public class GloamEnvironmentProcessor implements EnvironmentPostProcessor, Orde
 
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
-        // 设置banner
-        application.setBanner(GLOAM_BANNER);
-        if (this.checkStartup()) {
-            return;
+        if (!this.checkStartup()) {
+            // 如果没启动过，就进行启动
+            this.initGloam(application);
         }
-        log.info("Welcome to use gloam framework");
-        // 初始化资源扫描
-        Class<?> mainApplicationClass = application.getMainApplicationClass();
-        if (Objects.nonNull(mainApplicationClass)) {
-            // 添加项目启动路径
-            ResourcePackagesRegister.registerPackages(mainApplicationClass.getPackage().getName());
-        }
-        PropertyMapper propertyMapper = new DefaultPropertyMapper(log, environment, "eee", application.getClassLoader());
-        log.trace("Create PropertyMapper with env:" + environment.getClass().getName());
+        String springEnvName = environment.getClass().getName();
+        PropertyMapper propertyMapper = new DefaultPropertyMapper(log, environment, "gloam-env-4-" + springEnvName, application.getClassLoader());
+        log.trace("Create PropertyMapper with env:" + springEnvName);
         // 执行映射
         propertyMapper.mapping();
     }
@@ -77,4 +69,15 @@ public class GloamEnvironmentProcessor implements EnvironmentPostProcessor, Orde
         log.replayTo(GloamEnvironmentProcessor.class);
     }
 
+    private void initGloam(SpringApplication application) {
+        // 设置banner
+        application.setBanner(GLOAM_BANNER);
+        log.info("Welcome to use gloam framework");
+        // 初始化资源扫描
+        Class<?> mainApplicationClass = application.getMainApplicationClass();
+        if (Objects.nonNull(mainApplicationClass)) {
+            // 添加项目启动路径
+            ResourcePackagesRegister.registerPackages(mainApplicationClass.getPackage().getName());
+        }
+    }
 }
