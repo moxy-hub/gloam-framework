@@ -42,6 +42,9 @@ public class GloamEnvironmentProcessor implements EnvironmentPostProcessor, Orde
 
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
+        /*
+         * 由于多种环境，会导致这里的环境进行两次调用，导致gloom启动了两次，必须要保证各种环境中正确的处理配置文件，所以在每中环境中都需要加载一份配置文件
+         */
         if (!this.checkStartup()) {
             // 如果没启动过，就进行启动
             this.initGloam(application);
