@@ -16,6 +16,7 @@ import java.security.NoSuchAlgorithmException;
 @Slf4j
 public class RsaService {
 
+    private static final long DEFAULT_RSA_EXPIRE_TTL = 24 * 60 * 60L;
     private static final String RSA_KEY = "RSA_KEY:%s";
 
     @Autowired
@@ -67,7 +68,8 @@ public class RsaService {
             log.debug("init rsa keypair success");
             // 序列化密钥对
             String rsaKey = getServiceRSAKey(serviceCode);
-            cacheManager.getCache().put(rsaKey, new ExpireValue(rsaKeypair));
+            // 设置过期时间
+            cacheManager.getCache().put(rsaKey, new ExpireValue(rsaKeypair, DEFAULT_RSA_EXPIRE_TTL));
             log.debug("cache rsa : {}", rsaKey);
             return rsaKeypair;
         } catch (NoSuchAlgorithmException e) {
