@@ -19,7 +19,7 @@ public class RsaService {
     /**
      * todo 默认的失效时间，目前版本可能存在，在失效临界值的时候出现，外部请求和内部校验使用两套密钥对的问题，需要在后续版本进行优化
      */
-    private static final long DEFAULT_RSA_EXPIRE_TTL = 24 * 60 * 60L;
+    private static final long DEFAULT_RSA_EXPIRE_TTL = 24 * 60 * 60 * 1000L;
     private static final String RSA_KEY = "RSA_KEY:%s";
 
     @Autowired
