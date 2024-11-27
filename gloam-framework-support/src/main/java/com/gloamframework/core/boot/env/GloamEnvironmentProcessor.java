@@ -1,8 +1,12 @@
 package com.gloamframework.core.boot.env;
 
+import cn.hutool.core.collection.CollectionUtil;
+import com.gloamframework.core.boot.GloamContext;
+import com.gloamframework.core.boot.GloamKeys;
 import com.gloamframework.core.boot.banner.GloamBanner;
 import com.gloamframework.property.DefaultPropertyMapper;
-import com.gloamframework.property.PropertyMapper;
+import com.gloamframework.property.PropertyMapperCollector;
+import com.gloamframework.property.PropertyMapperDefinitionSet;
 import com.gloamframework.scanner.ResourcePackagesRegister;
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
@@ -50,10 +54,18 @@ public class GloamEnvironmentProcessor implements EnvironmentPostProcessor, Orde
             this.initGloam(application);
         }
         String springEnvName = environment.getClass().getName();
-        PropertyMapper propertyMapper = new DefaultPropertyMapper(log, environment, "gloam-env-4-" + springEnvName, application.getClassLoader());
+        PropertyMapperCollector propertyMapper = new DefaultPropertyMapper(log, environment, "gloam-env-4-" + springEnvName, application.getClassLoader());
         log.trace("Create PropertyMapper with env:" + springEnvName);
         // 执行映射
-        propertyMapper.mapping();
+        PropertyMapperDefinitionSet mappingPropertyDefinitions = propertyMapper.collectMappingPropertyDefinitions();
+        if (CollectionUtil.isEmpty(mappingPropertyDefinitions)) {
+            log.info("No mappingPropertyDefinition found,skip mapping");
+            return;
+        }
+        // 在上下中将定义存下来
+        GloamContext.put(GloamKeys.MAPPING_DEFINITIONS_KEY, mappingPropertyDefinitions);
+        log.debug("Start mapping configuration properties whit annotation @MappingConfigurationProperty");
+        propertyMapper.mapping(mappingPropertyDefinitions);
     }
 
     private synchronized boolean checkStartup() {

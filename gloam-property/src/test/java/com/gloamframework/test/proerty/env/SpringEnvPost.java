@@ -2,6 +2,7 @@ package com.gloamframework.test.proerty.env;
 
 import com.gloamframework.property.DefaultPropertyMapper;
 import com.gloamframework.property.PropertyMapper;
+import com.gloamframework.property.PropertyMapperCollector;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
 import org.springframework.boot.env.EnvironmentPostProcessor;
@@ -24,9 +25,9 @@ public class SpringEnvPost implements EnvironmentPostProcessor, ApplicationListe
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
         // 实例化配置映射，将日志传入用于内部日志的打印，将spring的环境传入，命名映射后配置在环境中存储的namespace，传入类加载器
-        PropertyMapper propertyMapper = new DefaultPropertyMapper(deferredLog, environment, "test-mapping", application.getClassLoader());
+        PropertyMapperCollector propertyMapper = new DefaultPropertyMapper(deferredLog, environment, "test-mapping", application.getClassLoader());
         // 执行映射
-        propertyMapper.mapping();
+        propertyMapper.mapping(propertyMapper.collectMappingPropertyDefinitions());
     }
 
     @Override

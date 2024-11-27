@@ -60,8 +60,8 @@ public class DefaultPropertyMapper extends AbstractPropertyMapper {
      * 实现配置收集方法，集成内部的路径装配器和转换工厂，对定义对象进行处理
      */
     @Override
-    public Set<PropertyMapperDefinition> collectMappingPropertyDefinitions() {
-        Set<PropertyMapperDefinition> definitions = new HashSet<>();
+    public PropertyMapperDefinitionSet collectMappingPropertyDefinitions() {
+        PropertyMapperDefinitionSet definitions = new PropertyMapperDefinitionSet();
         // 收集注解标识到到配置类
         Set<Class<?>> classWithGloamConfigurationProperties = this.scannerClassWithGloamConfigurationProperties();
         // 遍历重写类，进行映射

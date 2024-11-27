@@ -9,7 +9,6 @@ import org.springframework.core.env.MapPropertySource;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * 当前抽象类是对统一的定义对象在Spring环境中进行映射替换
@@ -38,13 +37,10 @@ public abstract class AbstractPropertyMapper implements PropertyMapperCollector 
      * 实现对映射的替换，将实现类中获取到的定义对象，映射在Spring环境中
      */
     @Override
-    public void mapping() {
-        Set<PropertyMapperDefinition> mappingPropertyDefinitions = this.collectMappingPropertyDefinitions();
+    public void mapping(PropertyMapperDefinitionSet mappingPropertyDefinitions) {
         if (CollectionUtil.isEmpty(mappingPropertyDefinitions)) {
-            log.info("No mappingPropertyDefinition found,skip mapping");
             return;
         }
-        log.debug("Start mapping configuration properties whit annotation @MappingConfigurationProperty");
         MapPropertySource propertySource = (MapPropertySource) environment.getPropertySources().get(environmentNamespace);
         if (propertySource == null) {
             propertySource = new MapPropertySource(environmentNamespace, new HashMap<>());

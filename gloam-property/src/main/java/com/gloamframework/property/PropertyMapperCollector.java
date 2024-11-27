@@ -13,6 +13,6 @@ public interface PropertyMapperCollector extends PropertyMapper {
     /**
      * 收集资源中心中的标注了@GloamConfigurationProperties注解的资源中使用@MappingConfigurationProperty标识的字段为MappingPropertyDefinition
      */
-    Set<PropertyMapperDefinition> collectMappingPropertyDefinitions();
+    PropertyMapperDefinitionSet collectMappingPropertyDefinitions();
 
 }
