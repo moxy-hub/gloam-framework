@@ -1,7 +1,6 @@
 package com.gloamframework.test.proerty.env;
 
 import com.gloamframework.property.DefaultPropertyMapper;
-import com.gloamframework.property.PropertyMapper;
 import com.gloamframework.property.PropertyMapperCollector;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;

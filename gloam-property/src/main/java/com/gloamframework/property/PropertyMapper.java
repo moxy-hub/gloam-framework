@@ -2,8 +2,6 @@ package com.gloamframework.property;
 
 import com.gloamframework.property.annotation.MappingConfigurationProperties;
 
-import java.util.Set;
-
 /**
  * 配置映射接口,通过该接口，可以实现将@{@link MappingConfigurationProperties}注解的类中
  * 标注了@{@link com.gloamframework.property.annotation.MappingConfigurationProperty}注解的字段进行映射，将spring中的配置进行替换
