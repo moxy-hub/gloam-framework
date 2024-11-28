@@ -1,7 +1,9 @@
 package com.gloamframework.core.boot;
 
 import com.gloamframework.common.error.GloamNonSupportedFunctionException;
+import com.gloamframework.common.lang.function.ProcessWithRes;
 import com.gloamframework.core.lang.exception.GloamIllegalArgumentException;
+import com.gloamframework.core.lang.exception.GloamIllegalStateException;
 
 import java.util.Map;
 import java.util.Objects;
@@ -37,4 +39,17 @@ public class GloamContext {
         return key.transform(bean);
     }
 
+    public static <T> T getOrDefault(GloamObjectKey<T> key, T defaultObj) {
+        T obj = get(key);
+        return Objects.nonNull(obj) ? obj : defaultObj;
+    }
+
+    public static <T> T getOrDefaultByFunction(GloamObjectKey<T> key, ProcessWithRes<T> processFunction) {
+        T obj = get(key);
+        try {
+            return Objects.nonNull(obj) ? obj : processFunction.doProcess();
+        } catch (Throwable e) {
+            throw new GloamIllegalStateException(e);
+        }
+    }
 }

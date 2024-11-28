@@ -55,7 +55,7 @@ public class JsonConfigure {
         objectMappers.forEach(objectMapper -> objectMapper.registerModule(javaTimeModule));
         // 设置 objectMapper 到 JsonUtils {
         JsonUtils.init(CollUtil.getFirst(objectMappers));
-        log.info("[Jackson]:初始化配置成功");
+        log.info("[Gloam]:Jackson初始化配置成功");
         return new JsonUtils();
     }
 }

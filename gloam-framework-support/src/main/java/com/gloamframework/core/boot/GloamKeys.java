@@ -11,8 +11,14 @@ import com.gloamframework.property.PropertyMapperDefinitionSet;
 public class GloamKeys {
 
     /**
+     * gloam的环境配置变量名
+     */
+    public static final GloamObjectKey<String> GLOAM_ENV_NAME_SPACE = GloamObjectKey.of("GLOAM_ENV_NAME_SPACE", String.class);
+
+    /**
      * mapping配置映射的定义集合存储key
      */
     public static final GloamObjectKey<PropertyMapperDefinitionSet> MAPPING_DEFINITIONS_KEY = GloamObjectKey.of("MAPPING_DEFINITIONS_KEY", PropertyMapperDefinitionSet.class);
+
 
 }
