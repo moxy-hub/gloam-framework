@@ -1,4 +1,4 @@
-package com.gloamframework.core.boot;
+package com.gloamframework.core.boot.context;
 
 import com.gloamframework.property.PropertyMapperDefinitionSet;
 

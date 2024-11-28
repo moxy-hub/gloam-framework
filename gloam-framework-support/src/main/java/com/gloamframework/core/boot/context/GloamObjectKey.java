@@ -1,4 +1,4 @@
-package com.gloamframework.core.boot;
+package com.gloamframework.core.boot.context;
 
 import com.gloamframework.common.error.GloamNonSupportedFunctionException;
 import com.gloamframework.common.lang.StringUtil;

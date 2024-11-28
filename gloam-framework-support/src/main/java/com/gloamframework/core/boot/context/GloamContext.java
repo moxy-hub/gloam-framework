@@ -1,9 +1,13 @@
-package com.gloamframework.core.boot;
+package com.gloamframework.core.boot.context;
 
 import com.gloamframework.common.error.GloamNonSupportedFunctionException;
 import com.gloamframework.common.lang.function.ProcessWithRes;
 import com.gloamframework.core.lang.exception.GloamIllegalArgumentException;
 import com.gloamframework.core.lang.exception.GloamIllegalStateException;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
 
 import java.util.Map;
 import java.util.Objects;
@@ -17,9 +21,22 @@ import java.util.concurrent.ConcurrentHashMap;
  * @protectName gloam-framework
  * @date 2024年11月27日 09:44
  */
+@Slf4j
 public class GloamContext {
 
     private static final Map<String, Object> CONTENT_BEANS = new ConcurrentHashMap<>();
+
+    private static ApplicationContext applicationContext;
+
+    @EventListener
+    public void contextRefreshedEvent(ContextRefreshedEvent contextRefreshedEvent) {
+        applicationContext = contextRefreshedEvent.getApplicationContext();
+        log.info("[Gloam]:Spring上下文工具已准备就绪 --> com.gloamframework.core.boot.context.SpringContext");
+    }
+
+    public static ApplicationContext obtainSpringContext() {
+        return applicationContext;
+    }
 
     public static <T> void put(GloamObjectKey<T> key, T bean) {
         if (Objects.isNull(key) || Objects.isNull(bean)) {

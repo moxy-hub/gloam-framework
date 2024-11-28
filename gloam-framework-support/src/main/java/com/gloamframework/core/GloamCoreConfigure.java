@@ -1,6 +1,6 @@
 package com.gloamframework.core;
 
-import com.gloamframework.core.boot.context.SpringContext;
+import com.gloamframework.core.boot.context.GloamContext;
 import com.gloamframework.core.json.JsonConfigure;
 import com.gloamframework.core.logging.properties.LoggingProperties;
 import org.springframework.beans.factory.annotation.Configurable;
@@ -21,8 +21,8 @@ import org.springframework.context.annotation.Import;
 public class GloamCoreConfigure {
 
     @Bean
-    public SpringContext springContext() {
-        return new SpringContext();
+    public GloamContext gloamContext() {
+        return new GloamContext();
     }
 
 }
