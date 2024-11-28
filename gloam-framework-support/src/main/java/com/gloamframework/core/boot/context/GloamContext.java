@@ -31,7 +31,7 @@ public class GloamContext {
     @EventListener
     public void contextRefreshedEvent(ContextRefreshedEvent contextRefreshedEvent) {
         applicationContext = contextRefreshedEvent.getApplicationContext();
-        log.info("[Gloam]:Spring上下文工具已准备就绪 --> com.gloamframework.core.boot.context.SpringContext");
+        log.info("[Gloam]:Spring上下文工具已准备就绪 --> com.gloamframework.core.boot.context.GloamContext#obtainSpringContext()");
     }
 
     public static ApplicationContext obtainSpringContext() {
