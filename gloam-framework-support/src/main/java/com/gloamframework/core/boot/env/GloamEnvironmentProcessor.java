@@ -92,7 +92,8 @@ public class GloamEnvironmentProcessor implements EnvironmentPostProcessor, Orde
     @Override
     public void onApplicationEvent(@SuppressWarnings("unused") ApplicationEnvironmentPreparedEvent event) {
         if (!initMapped) {
-            log.replayTo(GloamEnvironmentProcessor.class);
+            // 调整log日志，在项目启动回放后正常输出日志
+            log.switchTo(GloamEnvironmentProcessor.class);
             initMapped = true;
         }
     }
