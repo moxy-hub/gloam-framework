@@ -1,5 +1,6 @@
 package com.gloamframework.test.core;
 
+import com.gloamframework.test.core.aop.TestAopBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,5 +18,10 @@ public class CoreApplication {
     @Autowired
     public void testMock(Mock2Properties mockProperties) {
         System.out.println(mockProperties);
+    }
+
+    @Autowired
+    public void testAop(TestAopBean testAopBean) {
+        testAopBean.test();
     }
 }
