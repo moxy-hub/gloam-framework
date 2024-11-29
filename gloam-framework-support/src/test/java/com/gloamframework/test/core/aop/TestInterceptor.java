@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class TestInterceptor extends ClassMethodAnnotationPointcutInterceptor<TestAopAnnotation> {
+
     public TestInterceptor() {
         super(TestAopAnnotation.class);
     }

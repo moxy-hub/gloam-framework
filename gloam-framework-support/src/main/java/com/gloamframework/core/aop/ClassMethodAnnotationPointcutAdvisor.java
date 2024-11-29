@@ -37,8 +37,8 @@ public abstract class ClassMethodAnnotationPointcutAdvisor extends AbstractPoint
     }
 
     private Pointcut buildPointcut(Class<? extends Annotation> annotationClass, boolean checkInherited) {
-        Pointcut classPointcut = new AnnotationMatchingPointcut(annotationClass, true);
-        Pointcut methodPointcut = new AnnotationMatchingPointcut(null, annotationClass, true);
+        Pointcut classPointcut = new AnnotationMatchingPointcut(annotationClass, checkInherited);
+        Pointcut methodPointcut = new AnnotationMatchingPointcut(null, annotationClass, checkInherited);
         return new ComposablePointcut(classPointcut).union(methodPointcut);
     }
 
