@@ -35,6 +35,7 @@
     </licenses>
 
     <distributionManagement>
+        <!-- 市民云私有库：https://gitlab.eshiyun.info/nexus/content/repositories/zjk-release/-->
         <repository>
             <id>maven-nexus</id>
             <name>Gloam Release Repository</name>
