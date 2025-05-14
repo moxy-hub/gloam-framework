@@ -10,6 +10,7 @@ import com.gloamframework.property.DefaultPropertyMapper;
 import com.gloamframework.property.PropertyMapperCollector;
 import com.gloamframework.property.PropertyMapperDefinitionSet;
 import com.gloamframework.scanner.ResourcePackagesRegister;
+import com.gloamframework.ssh.CommonSSHProxyConnect;
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
@@ -76,6 +77,8 @@ public class GloamEnvironmentProcessor implements EnvironmentPostProcessor, Orde
         GloamContext.put(GloamKeys.MAPPING_DEFINITIONS_KEY, mappingPropertyDefinitions);
         log.debug("Start mapping configuration properties whit annotation @MappingConfigurationProperty");
         propertyMapper.mapping(mappingPropertyDefinitions);
+        // 启动ssh
+        new CommonSSHProxyConnect(environment, log).openSSHProxy();
     }
 
     private synchronized boolean checkStartup() {
