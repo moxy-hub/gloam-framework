@@ -5,6 +5,7 @@ import com.gloamframework.property.annotation.MappingConfigurationProperty;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.util.unit.DataSize;
 
 /**
@@ -17,6 +18,7 @@ import org.springframework.util.unit.DataSize;
 @ConfigurationProperties("gloam")
 @Data
 @Component
+@Service
 public class MockProperties {
 
     @MappingConfigurationProperty("gloam2.data-size")

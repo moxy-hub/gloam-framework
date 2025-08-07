@@ -36,28 +36,28 @@
     </licenses>
 
     <distributionManagement>
-        <!-- 市民云私有库：https://gitlab.eshiyun.info/nexus/content/repositories/zjk-release/-->
-        <!--        <repository>-->
-        <!--            <id>maven-nexus</id>-->
-        <!--            <name>Gloam Release Repository</name>-->
-        <!--            <url>http://192.168.1.136:8081/repository/wdzh-mix/</url>-->
-        <!--        </repository>-->
-        <!--        <snapshotRepository>-->
-        <!--            <id>maven-nexus</id>-->
-        <!--            <name>Gloam Snapshot Repository</name>-->
-        <!--            <url>http://192.168.1.136:8081/repository/wdzh-mix/</url>-->
-        <!--        </snapshotRepository>-->
+<!--         市民云私有库：https://gitlab.eshiyun.info/nexus/content/repositories/zjk-release/-->
+                <repository>
+                    <id>maven-nexus</id>
+                    <name>Gloam Release Repository</name>
+                    <url>http://192.168.1.136:8081/repository/wdzh-mix/</url>
+                </repository>
+                <snapshotRepository>
+                    <id>maven-nexus</id>
+                    <name>Gloam Snapshot Repository</name>
+                    <url>http://192.168.1.136:8081/repository/wdzh-mix/</url>
+                </snapshotRepository>
 
-        <repository>
-            <id>maven-nexus</id>
-            <name>Gloam Release Repository</name>
-            <url>https://gitlab.eshiyun.info/nexus/content/repositories/zjk-release/</url>
-        </repository>
-        <snapshotRepository>
-            <id>maven-nexus</id>
-            <name>Gloam Snapshot Repository</name>
-            <url>https://gitlab.eshiyun.info/nexus/content/repositories/zjk-release/</url>
-        </snapshotRepository>
+<!--        <repository>-->
+<!--            <id>maven-nexus</id>-->
+<!--            <name>Gloam Release Repository</name>-->
+<!--            <url>https://gitlab.eshiyun.info/nexus/content/repositories/zjk-release/</url>-->
+<!--        </repository>-->
+<!--        <snapshotRepository>-->
+<!--            <id>maven-nexus</id>-->
+<!--            <name>Gloam Snapshot Repository</name>-->
+<!--            <url>https://gitlab.eshiyun.info/nexus/content/repositories/zjk-release/</url>-->
+<!--        </snapshotRepository>-->
 
     </distributionManagement>
 

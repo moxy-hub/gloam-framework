@@ -1,5 +1,6 @@
 package com.gloamframework.core;
 
+import com.gloamframework.core.bean.GloamBeanConfigure;
 import com.gloamframework.core.boot.context.GloamContext;
 import com.gloamframework.core.boot.properties.GloamSpringProperties;
 import com.gloamframework.core.json.JsonConfigure;
@@ -18,7 +19,7 @@ import org.springframework.context.annotation.Import;
 @Configurable
 @EnableAspectJAutoProxy(exposeProxy = true, proxyTargetClass = true)
 @EnableConfigurationProperties({GloamSpringProperties.class, LoggingProperties.class})
-@Import(JsonConfigure.class)
+@Import({JsonConfigure.class, GloamBeanConfigure.class})
 public class GloamCoreConfigure {
 
     @Bean
