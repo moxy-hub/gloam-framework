@@ -82,7 +82,8 @@ public abstract class AbstractCacheTokenManager extends AbstractTokenManager {
         String tokenJSON = response.getHeader(tokenProperties.getHeader());
         Token token = JSON.parseObject(tokenJSON, Token.class);
         TokenInfo tokenInfo = new TokenInfo().setToken(token).setDevice(device).setValidCount(-1);
-        cacheManager.getCache().put(this.generateCacheKey(subject, device, platform), tokenInfo, tokenProperties.getRefreshTokenExpire());
+        // 使用json格式存储，防止不同版本导致的反序列化失败
+        cacheManager.getCache().put(this.generateCacheKey(subject, device, platform), JSON.toJSONString(tokenInfo), tokenProperties.getRefreshTokenExpire());
     }
 
     @Override
@@ -110,11 +111,12 @@ public abstract class AbstractCacheTokenManager extends AbstractTokenManager {
             throw new TokenAuthenticateException("Token认证失败");
         }
         // 获取缓存token
-        TokenInfo tokenInfo = cacheManager.getCache().get(this.generateCacheKey(subject, device, platform), TokenInfo.class);
-        if (tokenInfo == null) {
+        String tokenInfoJson = cacheManager.getCache().get(this.generateCacheKey(subject, device, platform), String.class);
+        if (StrUtil.isBlank(tokenInfoJson)) {
             log.error("token认证: 在缓存中没有查询到相应的token，是否已过期");
             throw new TokenAuthenticateException("无效token");
         }
+        TokenInfo tokenInfo = JSON.parseObject(tokenInfoJson, TokenInfo.class);
         // 判断token内容
         if (!StrUtil.equals(userToken.getAccessToken(), tokenInfo.token.getAccessToken())) {
             throw new TokenAuthenticateException("登录用户不一致，请重新登录");
@@ -136,10 +138,12 @@ public abstract class AbstractCacheTokenManager extends AbstractTokenManager {
     public void kickOff(String subject, Device device, String platform) {
         String cacheKey = this.generateCacheKey(subject, device, platform);
         // 在缓存中修改token信息
-        TokenInfo tokenInfo = cacheManager.getCache().get(cacheKey, TokenInfo.class);
-        if (tokenInfo == null) {
+        String tokenInfoJson = cacheManager.getCache().get(this.generateCacheKey(subject, device, platform), String.class);
+        if (StrUtil.isBlank(tokenInfoJson)) {
+            log.error("token认证: 在缓存中没有查询到相应的token，是否已过期");
             throw new TokenKickOffException("当前用户不在线");
         }
+        TokenInfo tokenInfo = JSON.parseObject(tokenInfoJson, TokenInfo.class);
         tokenInfo.setKickOff(true);
         cacheManager.getCache().put(cacheKey, JSON.toJSONString(tokenInfo), tokenProperties.getAuthentication().getKickOffTime());
     }
